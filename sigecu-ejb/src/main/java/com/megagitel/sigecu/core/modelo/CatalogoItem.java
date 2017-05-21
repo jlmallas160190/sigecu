@@ -5,18 +5,42 @@
  */
 package com.megagitel.sigecu.core.modelo;
 
+import java.io.Serializable;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+
 /**
  *
  * @author jorgemalla
  */
-public class CatalogoItem {
+@Entity
+@Table(name = "core_catalogo_item")
+public class CatalogoItem implements Serializable {
 
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    private Integer id;
+    @NotNull
+    @Size(min = 1, max = 25)
+    @Column(name = "codigo", unique = true)
     private String codigo;
+    @NotNull
+    @Size(min = 1, max = 250)
+    @Column(name = "nombre")
     private String nombre;
+    @NotNull
+    @Size(min = 1, max = 250)
+    @Column(name = "descripcion")
     private String descripcion;
+    @JoinColumn(name = "catalogo_id", referencedColumnName = "id")
+    @ManyToOne
     private Catalogo catalogo;
+    @Column(name = "eliminado", columnDefinition = "tinyint(1) default 1")
     private Boolean eliminado;
+
+    public CatalogoItem() {
+    }
 
     public CatalogoItem(String codigo, String nombre, String descripcion,
             Catalogo catalogo, Boolean eliminado) {
@@ -27,11 +51,11 @@ public class CatalogoItem {
         this.eliminado = eliminado;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

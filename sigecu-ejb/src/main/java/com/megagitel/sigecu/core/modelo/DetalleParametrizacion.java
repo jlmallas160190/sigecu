@@ -6,49 +6,58 @@
 package com.megagitel.sigecu.core.modelo;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
  * @author jorgemalla
  */
 @Entity
-@Table(name = "core_catalogo")
-public class Catalogo implements Serializable {
+@Table(name = "core_detalle_parametrizacion")
+public class DetalleParametrizacion implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer id;
     @NotNull
-    @Size(min = 1, max = 25)
+    @Size(min = 1, max = 50)
     @Column(name = "codigo", unique = true)
     private String codigo;
     @NotNull
     @Size(min = 1, max = 250)
     @Column(name = "nombre")
     private String nombre;
-    @NotNull
-    @Size(min = 1, max = 250)
     @Column(name = "descripcion")
     private String descripcion;
     @NotNull
-    @Column(name = "eliminado")
-    private Boolean eliminado;
-    @OneToMany(mappedBy = "catalogo")
-    private List<CatalogoItem> catalogoItems;
+    @Size(min = 1, max = 250)
+    @Column(name = "valor")
+    private String valor;
+    @JoinColumn(name = "parametrizacion_id", referencedColumnName = "id")
+    @ManyToOne
+    private Parametrizacion parametrizacion;
 
-    public Catalogo() {
+    public DetalleParametrizacion() {
     }
 
-    public Catalogo(String codigo, String nombre, String descripcion) {
+    public DetalleParametrizacion(String codigo, String nombre, String descripcion,
+            String valor, Parametrizacion parametrizacion) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.catalogoItems=new ArrayList<>();
+        this.valor = valor;
+        this.parametrizacion = parametrizacion;
     }
 
     public Integer getId() {
@@ -83,20 +92,20 @@ public class Catalogo implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Boolean getEliminado() {
-        return eliminado;
+    public String getValor() {
+        return valor;
     }
 
-    public void setEliminado(Boolean eliminado) {
-        this.eliminado = eliminado;
+    public void setValor(String valor) {
+        this.valor = valor;
     }
 
-    public List<CatalogoItem> getCatalogoItems() {
-        return catalogoItems;
+    public Parametrizacion getParametrizacion() {
+        return parametrizacion;
     }
 
-    public void setCatalogoItems(List<CatalogoItem> catalogoItems) {
-        this.catalogoItems = catalogoItems;
+    public void setParametrizacion(Parametrizacion parametrizacion) {
+        this.parametrizacion = parametrizacion;
     }
 
 }
