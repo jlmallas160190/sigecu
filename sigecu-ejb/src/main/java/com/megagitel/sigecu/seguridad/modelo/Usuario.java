@@ -47,7 +47,7 @@ public class Usuario implements Serializable {
     private Boolean superUsuario;
     @Column(name = "token")
     private String token;
-    @Column(name = "eliminado", columnDefinition = "tinyint(1) default 1")
+    @Column(name = "eliminado", columnDefinition = "boolean default false")
     private Boolean eliminado;
     @JoinColumn(name = "persona_id", referencedColumnName = "id")
     @OneToOne

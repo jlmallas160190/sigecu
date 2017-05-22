@@ -36,7 +36,7 @@ public class CatalogoItem implements Serializable {
     @JoinColumn(name = "catalogo_id", referencedColumnName = "id")
     @ManyToOne
     private Catalogo catalogo;
-    @Column(name = "eliminado", columnDefinition = "tinyint(1) default 1")
+    @Column(name = "eliminado", columnDefinition = "boolean default false")
     private Boolean eliminado;
 
     public CatalogoItem() {

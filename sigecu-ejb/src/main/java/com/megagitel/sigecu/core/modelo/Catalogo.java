@@ -35,8 +35,7 @@ public class Catalogo implements Serializable {
     @Size(min = 1, max = 250)
     @Column(name = "descripcion")
     private String descripcion;
-    @NotNull
-    @Column(name = "eliminado")
+    @Column(name = "eliminado", columnDefinition = "boolean default false")
     private Boolean eliminado;
     @OneToMany(mappedBy = "catalogo")
     private List<CatalogoItem> catalogoItems;

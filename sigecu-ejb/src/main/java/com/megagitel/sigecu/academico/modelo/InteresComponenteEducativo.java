@@ -28,7 +28,7 @@ public class InteresComponenteEducativo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer id;
-    @Column(name = "eliminado", columnDefinition = "tinyint(1) default 1")
+    @Column(name = "eliminado", columnDefinition = "boolean default false")
     private Boolean eliminado;
     @JoinColumn(name = "componente_educativo_id", referencedColumnName = "id")
     @ManyToOne

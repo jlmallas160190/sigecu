@@ -39,7 +39,7 @@ public class GrupoComponenteEducativo implements Serializable {
     private String nombre;
     @Column(name = "descripcion")
     private String descripcion;
-    @Column(name = "eliminado", columnDefinition = "tinyint(1) default 1")
+    @Column(name = "eliminado", columnDefinition = "boolean default false")
     private Boolean eliminado;
     @OneToMany(mappedBy = "grupoComponenteEducativo")
     private List<GrupoComponenteEducativo> grupoComponenteEducativos;
