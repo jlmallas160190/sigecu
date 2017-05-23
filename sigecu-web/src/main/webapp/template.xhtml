@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="css/default.css"/>
+        <h:outputStylesheet name="css/cssLayout.css"/>
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+        <f:view>
+            <title>
+                <ui:insert name="title">
+                </ui:insert>
+            </title>
+        </f:view>
+    </h:head>
+
+    <h:body>
+        <div id="top">
+            <ui:insert name="top">
+                <h:form>
+                    <p:toolbar>
+
+                        <f:facet name="right">
+                            <p:menuButton value="Options">
+                                <p:menuitem value="#{btn.RegistarUsuario}" icon="ui-icon-person"/>
+                            </p:menuButton>
+                        </f:facet>
+                    </p:toolbar>
+                </h:form>
+            </ui:insert>
+        </div>
+
+        <div class="ui-g-3" >
+            <ui:insert name="left"></ui:insert>
+        </div>
+        <div class="ui-g-5" >
+            <ui:insert name="content"></ui:insert>
+        </div>
+        <div class="ui-g-3" >
+            <ui:insert name="right"></ui:insert>
+        </div>
+
+        <div id="bottom">
+            <ui:insert name="bottom"></ui:insert>
+        </div>
+
+    </h:body>
+
+</html>

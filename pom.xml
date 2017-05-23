@@ -10,5 +10,6 @@
     </properties>
   <modules>
     <module>sigecu-ejb</module>
+    <module>sigecu-web</module>
   </modules>
 </project>

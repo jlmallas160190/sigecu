@@ -5,7 +5,7 @@
  */
 package com.megagitel.sigecu.academico.ejb;
 
-import com.megagitel.sigecu.core.modelo.Persona;
+import com.megagitel.sigecu.academico.modelo.Estudiante;
 import com.megagitel.sigecu.dao.AbstractDao;
 import java.io.Serializable;
 import javax.ejb.Stateless;
@@ -15,9 +15,10 @@ import javax.ejb.Stateless;
  * @author jorgemalla
  */
 @Stateless
-public class PersonaService extends AbstractDao<Persona> implements Serializable{
+public class EstudianteService extends AbstractDao<Estudiante> implements Serializable {
 
-    public PersonaService() {
-        super(Persona.class);
+    public EstudianteService() {
+        super(Estudiante.class);
     }
+
 }
