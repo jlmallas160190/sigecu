@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <body>
+        <ui:composition template="./../../template.xhtml">
+            <ui:define name="title">
+                #{lbl.registroUsuario}
+            </ui:define>
+            <ui:define name="top"></ui:define>
+            <ui:define name="content">
+                <h:form>
+                    <p:panel header="#{lbl.registroUsuario}">
+                        <div class="ui-fluid">
+                            <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
+                                <h:outputLabel value="#{lbl.primerNombre}"></h:outputLabel>
+                                <p:inputText id="primerNombre" placeholder="#{lbl.primerNombre}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.primerNombre}">
+                                    <p:ajax event="keyup" update="msgPrimerNombre"/>
+                                </p:inputText>
+                                <p:message id="msgPrimerNombre" display="icon" for="primerNombre"/>
+                                <h:outputLabel value="#{lbl.segundoNombre}"></h:outputLabel>
+                                <p:inputText id="segundoNombre" placeholder="#{lbl.segundoNombre}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.segundoNombre}">
+                                    <p:ajax event="keyup" update="msgSegundoNombre"/>
+                                </p:inputText>
+                                <p:message id="msgSegundoNombre" display="icon" for="segundoNombre"/>
+                                <h:outputLabel value="#{lbl.primerApellido}"></h:outputLabel>
+                                <p:inputText id="primerApellido" placeholder="#{lbl.primerApellido}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.primerApellido}">
+                                    <p:ajax event="keyup" update="msgPrimerApellido"/>
+                                </p:inputText>
+                                <p:message id="msgPrimerApellido" display="icon" for="primerApellido"/>
+                                <h:outputLabel value="#{lbl.segundoApellido}"></h:outputLabel>
+                                <p:inputText id="segundoApellido" placeholder="#{lbl.segundoApellido}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.segundoApellido}">
+                                    <p:ajax event="keyup" update="msgSegundoApellido"/>
+                                </p:inputText>
+                                <p:message id="msgSegundoApellido" display="icon" for="segundoApellido"/>
+                                <h:outputLabel value="#{lbl.tipoIdentificacion}"></h:outputLabel>
+                                <p:selectOneMenu id="tipoIdentificacion">
+                                    <p:ajax event="change" update="msgTipoIdentificacion"/>
+                                </p:selectOneMenu>
+                                <p:message id="msgTipoIdentificacion" display="icon" for="tipoIdentificacion"/>
+                                <h:outputLabel value="#{lbl.numeroIdentificacion}"></h:outputLabel>
+                                <p:inputText id="numeroIdentificacion" placeholder="#{lbl.numeroIdentificacion}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.numeroIdentificacion}">
+                                    <p:ajax event="keyup" update="msgNumeroIdentificacion"/>
+                                </p:inputText>
+                                <p:message id="msgNumeroIdentificacion" display="icon" for="numeroIdentificacion"/>
+                                <h:outputLabel value="#{lbl.email}"></h:outputLabel>
+                                <p:inputText id="email" placeholder="#{lbl.email}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.email}">
+                                    <p:ajax event="keyup" update="msgEmail"/>
+                                </p:inputText>
+                                <p:message id="msgEmail" display="icon" for="email"/>
+                                <h:outputLabel value="#{lbl.celular}"></h:outputLabel>
+                                <p:inputText id="celular" placeholder="#{lbl.celular}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.celular}">
+                                    <p:ajax event="keyup" update="msgCelular"/>
+                                </p:inputText>
+                                <p:message id="msgCelular" display="icon" for="celular"/>
+                                <p:outputLabel  value="#{lbl.fechaNacimiento}" />
+                                <p:calendar id="fechaNacimiento" value="#{usuarioController.usuario.persona.fechaNacimiento}" showOn="button">
+                                </p:calendar>
+                                <p:message id="msgFechaNacimiento" display="icon" for="fechaNacimiento"/>
+                                <h:outputLabel value="#{lbl.pais}"></h:outputLabel>
+                                <p:selectOneMenu id="pais">
+                                    <p:ajax event="change" update="msgPais"/>
+                                </p:selectOneMenu>
+                                <p:message id="msgPais" display="icon" for="pais"/>
+                                <h:outputLabel value="#{lbl.ciudad}"></h:outputLabel>
+                                <p:inputText id="ciudad" placeholder="#{lbl.ciudad}" style="text-transform: uppercase" value="#{usuarioController.direccion.ciudad}">
+                                    <p:ajax event="keyup" update="msgCelular"/>
+                                </p:inputText>
+                                <p:message id="msgCelular" display="icon" for="celular"/>
+                                <h:outputLabel value="#{lbl.estadoCivil}"></h:outputLabel>
+                                <p:selectOneMenu id="estadoCivil">
+                                    <p:ajax event="change" update="msgEstadoCivil"/>
+                                </p:selectOneMenu>
+                                <p:message id="msgEstadoCivil" display="icon" for="estadoCivil"/>
+                                <h:outputLabel value="#{lbl.genero}"></h:outputLabel>
+                                <p:selectOneMenu id="genero">
+                                    <p:ajax event="change" update="msgGenero"/>
+                                </p:selectOneMenu>
+                                <p:message id="msgGenero" display="icon" for="genero"/>
+                                <h:outputLabel value="#{lbl.nivelInstruccion}"></h:outputLabel>
+                                <p:selectOneMenu id="nivelInstruccion">
+                                    <p:ajax event="change" update="msgNivelInstruccion"/>
+                                </p:selectOneMenu>
+                                <p:message id="msgNivelInstruccion" display="icon" for="nivelInstruccion"/>
+                                <h:inputHidden/>
+                                <div class="g-recaptcha" data-sitekey="6LdSiSIUAAAAAFOoW0LUIWRKK1aFcLdyjcFC2-0b"></div> 
+                            </p:panelGrid>
+                            <f:facet name="footer">
+                                <h:panelGrid columns="1">
+                                    <p:commandButton id="btn" value="#{btn.registrar}" update="@form" icon="ui-icon-disk" 
+                                                     action="#{usuarioController.guardar}"/>
+                                </h:panelGrid>
+                            </f:facet>
+                        </div>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -11,29 +11,31 @@
     <h:body>
         <ui:composition template="./template.xhtml">
             <ui:define name="title">
-                <h:outputText value="#{lbl.Autenticacion}"/>
+                <h:outputText value="#{lbl.autenticacion}"/>
             </ui:define>
 
             <ui:define name="content">
                 <h:form>
-                    <p:panel id="header" header="#{lbl.Autenticacion}">
+                    <p:panel id="header" header="#{lbl.autenticacion}">
                         <p:messages id="msg" showDetail="true"/>
-                        <h:panelGrid   columns="3">
-                            <h:outputLabel value="#{lbl.Usuario}"></h:outputLabel>
-                            <p:inputText id="nombre" placeholder="#{lbl.Usuario}" style="text-transform: none" value="#{loginController.usuario.nombre}">
-                                <p:ajax event="keyup" update="msgNombre"/>
-                            </p:inputText>
-                            <p:message id="msgNombre" display="icon" for="nombre"/>
-                            <h:outputLabel value="#{lbl.Clave}"></h:outputLabel>
-                            <p:password id="clave" placeholder="#{lbl.Clave}" style="text-transform: none" value="#{loginController.usuario.clave}">
-                                <p:ajax event="keyup" update="msgClave"/>
+                        <div class="ui-fluid">
+                            <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
+                                <h:outputLabel value="#{lbl.usuario}"></h:outputLabel>
+                                <p:inputText id="nombre" placeholder="#{lbl.usuario}" style="text-transform: none" value="#{loginController.usuario.nombre}">
+                                    <p:ajax event="keyup" update="msgNombre"/>
+                                </p:inputText>
+                                <p:message id="msgNombre" display="icon" for="nombre"/>
+                                <h:outputLabel value="#{lbl.clave}"></h:outputLabel>
+                                <p:password id="clave" placeholder="#{lbl.clave}" style="text-transform: none" value="#{loginController.usuario.clave}">
+                                    <p:ajax event="keyup" update="msgClave"/>
                                 </p:password>
-                            <p:message id="msgClave" display="icon" for="clave"/>
-                        </h:panelGrid>
-                        <div class="g-recaptcha" data-sitekey="6LdSiSIUAAAAAFOoW0LUIWRKK1aFcLdyjcFC2-0b"></div> 
+                                <p:message id="msgClave" display="icon" for="clave"/>
+                                <div class="g-recaptcha" data-sitekey="6LdSiSIUAAAAAFOoW0LUIWRKK1aFcLdyjcFC2-0b"></div> 
+                            </p:panelGrid>
+                        </div>
                         <f:facet name="footer">
                             <h:panelGrid columns="1">
-                                <p:commandButton id="btn" value="#{btn.Autenticar}"  update="@form"  icon="ui-icon-locked" 
+                                <p:commandButton id="btn" value="#{btn.Autenticar}" update="@form" icon="ui-icon-locked" 
                                                  action="#{loginController.autenticar()}"/>
                             </h:panelGrid>
                         </f:facet>

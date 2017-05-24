@@ -35,16 +35,23 @@ public class Direccion implements Serializable {
     private Integer tipoDireccion;
     @Column(name = "telefono")
     private String telefono;
+    @NotNull
+    @Column(name = "pais")
+    private Integer pais;
+    @NotNull
+    @Column(name = "ciudad")
+    private String ciudad;
 
     public Direccion() {
     }
 
     public Direccion(String descripcion, String referencia, Integer tipoDireccion,
-            String telefono) {
+            String telefono, String ciudad, Integer pais) {
         this.descripcion = descripcion;
         this.referencia = referencia;
         this.tipoDireccion = tipoDireccion;
         this.telefono = telefono;
+        this.pais = pais;
     }
 
     public Long getId() {
@@ -85,6 +92,14 @@ public class Direccion implements Serializable {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
     }
 
 }

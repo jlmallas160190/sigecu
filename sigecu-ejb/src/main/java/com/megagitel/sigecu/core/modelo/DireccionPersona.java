@@ -30,8 +30,8 @@ public class DireccionPersona extends Direccion {
     }
 
     public DireccionPersona(Persona persona, String descripcion, String referencia,
-            Integer tipoDireccion, String telefono) {
-        super(descripcion, referencia, tipoDireccion, telefono);
+            Integer tipoDireccion, String telefono, String ciudad, Integer pais) {
+        super(descripcion, referencia, tipoDireccion, telefono, ciudad, pais);
         this.persona = persona;
     }
 
