@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.megagitel.sigecu.seguridad;
+package com.megagitel.sigecu.seguridad.controller;
 
 import com.megagitel.sigecu.core.modelo.Direccion;
 import com.megagitel.sigecu.seguridad.modelo.Usuario;

@@ -67,9 +67,9 @@
                                 <p:message id="msgPais" display="icon" for="pais"/>
                                 <h:outputLabel value="#{lbl.ciudad}"></h:outputLabel>
                                 <p:inputText id="ciudad" placeholder="#{lbl.ciudad}" style="text-transform: uppercase" value="#{usuarioController.direccion.ciudad}">
-                                    <p:ajax event="keyup" update="msgCelular"/>
+                                    <p:ajax event="keyup" update="msgCiudad"/>
                                 </p:inputText>
-                                <p:message id="msgCelular" display="icon" for="celular"/>
+                                <p:message id="msgCiudad" display="icon" for="celular"/>
                                 <h:outputLabel value="#{lbl.estadoCivil}"></h:outputLabel>
                                 <p:selectOneMenu id="estadoCivil">
                                     <p:ajax event="change" update="msgEstadoCivil"/>
@@ -90,7 +90,7 @@
                             </p:panelGrid>
                             <f:facet name="footer">
                                 <h:panelGrid columns="1">
-                                    <p:commandButton id="btn" value="#{btn.registrar}" update="@form" icon="ui-icon-disk" 
+                                    <p:commandButton id="btn" value="#{btn.registrar}" update="@form" icon="fa fa-save" 
                                                      action="#{usuarioController.guardar}"/>
                                 </h:panelGrid>
                             </f:facet>

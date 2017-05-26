@@ -24,7 +24,7 @@ public class Catalogo implements Serializable {
     @Basic(optional = false)
     private Integer id;
     @NotNull
-    @Size(min = 1, max = 25)
+    @Size(min = 1, max = 50)
     @Column(name = "codigo", unique = true)
     private String codigo;
     @NotNull
