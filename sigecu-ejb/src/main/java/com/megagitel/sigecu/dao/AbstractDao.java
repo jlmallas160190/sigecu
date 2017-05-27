@@ -8,6 +8,7 @@ package com.megagitel.sigecu.dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -64,4 +65,13 @@ public abstract class AbstractDao<T> {
         return ((Long) q.getSingleResult()).intValue();
     }
 
+    public <E> List<E> findByNamedQueryWithLimit(final String namedQueryName, final int limit, final Object... params) {
+        Query query = em.createNamedQuery(namedQueryName);
+        int i = 1;
+        for (Object p : params) {
+            query.setParameter(i++, p);
+        }
+        query.setMaxResults(limit);
+        return query.getResultList();
+    }
 }

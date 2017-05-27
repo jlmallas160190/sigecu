@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.megagitel.sigecu.academico.ejb;
+package com.megagitel.sigecu.seguridad.ejb;
 
-import com.megagitel.sigecu.core.modelo.Persona;
 import com.megagitel.sigecu.dao.AbstractDao;
+import com.megagitel.sigecu.seguridad.modelo.Usuario;
 import java.io.Serializable;
 import javax.ejb.Stateless;
 
@@ -15,9 +15,10 @@ import javax.ejb.Stateless;
  * @author jorgemalla
  */
 @Stateless
-public class PersonaService extends AbstractDao<Persona> implements Serializable{
+public class UsuarioService extends AbstractDao<Usuario> implements Serializable {
 
-    public PersonaService() {
-        super(Persona.class);
+    public UsuarioService() {
+        super(Usuario.class);
     }
+
 }

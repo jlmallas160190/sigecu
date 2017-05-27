@@ -17,6 +17,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -28,6 +30,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "seguridad_grupo_usuario")
+@NamedQueries({
+    @NamedQuery(name = "GrupoUsuario.findByCodigo", query = "select g FROM GrupoUsuario g where g.codigo=?1 ORDER BY g.codigo DESC")})
 public class GrupoUsuario implements Serializable {
 
     @Id
@@ -49,14 +53,17 @@ public class GrupoUsuario implements Serializable {
     @JoinColumn(name = "institucion_id", referencedColumnName = "id")
     @ManyToOne
     private Institucion institucion;
+    @Column(name = "eliminado", columnDefinition = "boolean default false")
+    private Boolean eliminado;
 
     public GrupoUsuario() {
     }
 
-    public GrupoUsuario(String codigo, String descripcion, String nombre) {
+    public GrupoUsuario(String codigo, String descripcion, String nombre, Boolean eliminado) {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.nombre = nombre;
+        this.eliminado = eliminado;
         this.usuarios = new ArrayList<>();
     }
 
@@ -106,6 +113,14 @@ public class GrupoUsuario implements Serializable {
 
     public void setInstitucion(Institucion institucion) {
         this.institucion = institucion;
+    }
+
+    public Boolean getEliminado() {
+        return eliminado;
+    }
+
+    public void setEliminado(Boolean eliminado) {
+        this.eliminado = eliminado;
     }
 
 }

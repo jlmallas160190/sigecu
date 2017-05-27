@@ -37,7 +37,9 @@
                                 </p:inputText>
                                 <p:message id="msgSegundoApellido" display="icon" for="segundoApellido"/>
                                 <h:outputLabel value="#{lbl.tipoIdentificacion}"></h:outputLabel>
-                                <p:selectOneMenu id="tipoIdentificacion">
+                                <p:selectOneMenu id="tipoIdentificacion" value="#{usuarioController.usuario.persona.tipoIdentificacion}" converter="#{catalogoItemConverter}">
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{lbl.seleccioneTipoIdentificacion}"/>
+                                    <f:selectItems itemLabel="#{item.nombre}" itemValue="#{item.codigo}" var="item" value="#{usuarioController.tiposDocumento}"/>
                                     <p:ajax event="change" update="msgTipoIdentificacion"/>
                                 </p:selectOneMenu>
                                 <p:message id="msgTipoIdentificacion" display="icon" for="tipoIdentificacion"/>
@@ -47,21 +49,25 @@
                                 </p:inputText>
                                 <p:message id="msgNumeroIdentificacion" display="icon" for="numeroIdentificacion"/>
                                 <h:outputLabel value="#{lbl.email}"></h:outputLabel>
-                                <p:inputText id="email" placeholder="#{lbl.email}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.email}">
+                                <p:inputText id="email" placeholder="#{lbl.email}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.email}" validator="emailValidator">
                                     <p:ajax event="keyup" update="msgEmail"/>
                                 </p:inputText>
                                 <p:message id="msgEmail" display="icon" for="email"/>
                                 <h:outputLabel value="#{lbl.celular}"></h:outputLabel>
-                                <p:inputText id="celular" placeholder="#{lbl.celular}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.celular}">
+                                <p:inputText id="celular" placeholder="#{lbl.celular}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.celular}" >
                                     <p:ajax event="keyup" update="msgCelular"/>
                                 </p:inputText>
                                 <p:message id="msgCelular" display="icon" for="celular"/>
                                 <p:outputLabel  value="#{lbl.fechaNacimiento}" />
-                                <p:calendar id="fechaNacimiento" value="#{usuarioController.usuario.persona.fechaNacimiento}" showOn="button">
+                                <p:calendar id="fechaNacimiento" value="#{usuarioController.usuario.persona.fechaNacimiento}" showOn="button" 
+                                            navigator="true" pattern="yyyy-MMM-dd">
                                 </p:calendar>
                                 <p:message id="msgFechaNacimiento" display="icon" for="fechaNacimiento"/>
                                 <h:outputLabel value="#{lbl.pais}"></h:outputLabel>
-                                <p:selectOneMenu id="pais">
+                                <p:selectOneMenu id="pais" value="#{usuarioController.direccion.pais}" converter="#{catalogoItemConverter}" 
+                                                 effect="fade" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{lbl.seleccionePais}"/>
+                                    <f:selectItems itemLabel="#{item.nombre}" itemValue="#{item.codigo}" var="item" value="#{usuarioController.paises}"/>
                                     <p:ajax event="change" update="msgPais"/>
                                 </p:selectOneMenu>
                                 <p:message id="msgPais" display="icon" for="pais"/>
@@ -71,17 +77,26 @@
                                 </p:inputText>
                                 <p:message id="msgCiudad" display="icon" for="celular"/>
                                 <h:outputLabel value="#{lbl.estadoCivil}"></h:outputLabel>
-                                <p:selectOneMenu id="estadoCivil">
+                                <p:selectOneMenu id="estadoCivil" value="#{usuarioController.usuario.persona.estadoCivil}" converter="#{catalogoItemConverter}"
+                                                 effect="fade" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{lbl.seleccioneEstadoCivil}"/>
+                                    <f:selectItems itemLabel="#{item.nombre}" itemValue="#{item.codigo}" var="item" value="#{usuarioController.estadosCiviles}"/>
                                     <p:ajax event="change" update="msgEstadoCivil"/>
                                 </p:selectOneMenu>
                                 <p:message id="msgEstadoCivil" display="icon" for="estadoCivil"/>
                                 <h:outputLabel value="#{lbl.genero}"></h:outputLabel>
-                                <p:selectOneMenu id="genero">
+                                <p:selectOneMenu id="genero" value="#{usuarioController.usuario.persona.genero}" converter="#{catalogoItemConverter}" 
+                                                 effect="fade" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{lbl.seleccioneGenero}"/>
+                                    <f:selectItems itemLabel="#{item.nombre}" itemValue="#{item.codigo}" var="item" value="#{usuarioController.generos}"/>
                                     <p:ajax event="change" update="msgGenero"/>
                                 </p:selectOneMenu>
                                 <p:message id="msgGenero" display="icon" for="genero"/>
                                 <h:outputLabel value="#{lbl.nivelInstruccion}"></h:outputLabel>
-                                <p:selectOneMenu id="nivelInstruccion">
+                                <p:selectOneMenu id="nivelInstruccion" value="#{usuarioController.usuario.persona.nivelInstuccion}" converter="#{catalogoItemConverter}" 
+                                                 effect="fade" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{lbl.seleccioneNivelInstruccion}"/>
+                                    <f:selectItems itemLabel="#{item.nombre}" itemValue="#{item.codigo}" var="item" value="#{usuarioController.nivelesInstruccion}"/>
                                     <p:ajax event="change" update="msgNivelInstruccion"/>
                                 </p:selectOneMenu>
                                 <p:message id="msgNivelInstruccion" display="icon" for="nivelInstruccion"/>
@@ -90,8 +105,8 @@
                             </p:panelGrid>
                             <f:facet name="footer">
                                 <h:panelGrid columns="1">
-                                    <p:commandButton id="btn" value="#{btn.registrar}" update="@form" icon="fa fa-save" 
-                                                     action="#{usuarioController.guardar}"/>
+                                    <p:commandButton id="btn" value="#{btn.registrar}"  icon="fa fa-save" immediate="true"
+                                                     action="#{usuarioController.guardar()}"/>
                                 </h:panelGrid>
                             </f:facet>
                         </div>

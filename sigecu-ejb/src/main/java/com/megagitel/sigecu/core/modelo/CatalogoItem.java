@@ -15,6 +15,9 @@ import javax.validation.constraints.*;
  */
 @Entity
 @Table(name = "core_catalogo_item")
+@NamedQueries({
+    @NamedQuery(name = "CatalogoItem.findByCodigo", query = "select c FROM CatalogoItem c where c.codigo=?1 ORDER BY c.codigo DESC")
+    ,@NamedQuery(name = "CatalogoItem.findByCatalogo", query = "select c FROM CatalogoItem c where c.catalogo.codigo=?1 ORDER BY c.codigo DESC")})
 public class CatalogoItem implements Serializable {
 
     @Id

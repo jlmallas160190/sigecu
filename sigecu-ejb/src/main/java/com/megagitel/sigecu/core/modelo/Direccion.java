@@ -102,4 +102,12 @@ public class Direccion implements Serializable {
         this.ciudad = ciudad;
     }
 
+    public Integer getPais() {
+        return pais;
+    }
+
+    public void setPais(Integer pais) {
+        this.pais = pais;
+    }
+
 }

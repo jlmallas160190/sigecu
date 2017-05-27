@@ -7,6 +7,7 @@ package com.megagitel.sigecu.database;
 
 import com.megagitel.sigecu.core.modelo.Catalogo;
 import com.megagitel.sigecu.core.modelo.CatalogoItem;
+import com.megagitel.sigecu.seguridad.modelo.GrupoUsuario;
 import com.megagitel.sigecu.seguridad.modelo.Usuario;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -48,6 +49,7 @@ public class SetupService implements Serializable {
             this.getSuperUsuario();
             this.cargarCatalogos(properties.getProperty("rutaCatalogos"));
             this.cargarCatalogoItem(properties.getProperty("rutaCatalogosItems"));
+            this.cargarGruposUsuario(properties.getProperty("rutaGruposUsuarios"));
         } catch (IOException e) {
             try {
                 throw e;
@@ -145,7 +147,6 @@ public class SetupService implements Serializable {
         } catch (Exception e) {
             throw e;
         }
-
     }
 
     private void cargarCatalogoItem(String archivo) {
@@ -196,6 +197,54 @@ public class SetupService implements Serializable {
             catalogoItem.setEliminado(Boolean.FALSE);
             catalogoItem.setCatalogo(catalogo);
             getEm().persist(catalogoItem);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    private void cargarGruposUsuario(String archivo) {
+        BufferedReader br = null;
+        String linea = "";
+        String separador = ";";
+        try {
+            br = new BufferedReader(new FileReader(archivo));
+            while ((linea = br.readLine()) != null) {
+                String[] grupoUsuario = linea.split(separador);
+                getGrupoUsuario(grupoUsuario);
+            }
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+    }
+
+    private GrupoUsuario getGrupoUsuario(String[] grupo) {
+        GrupoUsuario singleResult = null;
+        try {
+            Query query = getEm().createQuery("SELECT g FROM GrupoUsuario g WHERE" + ""
+                    + " (g.codigo=:codigo)");
+            query.setParameter("codigo", grupo[0]);
+            singleResult = (GrupoUsuario) query.getSingleResult();
+        } catch (NoResultException e) {
+            this.crearGrupoUsuario(grupo);
+        }
+        return singleResult;
+    }
+
+    private void crearGrupoUsuario(String[] grupo) {
+        try {
+            GrupoUsuario grupoUsuario = new GrupoUsuario();
+            grupoUsuario.setCodigo(grupo[0]);
+            grupoUsuario.setNombre(grupo[1]);
+            grupoUsuario.setDescripcion(grupo[1]);
+            grupoUsuario.setEliminado(Boolean.FALSE);
+            getEm().persist(grupoUsuario);
         } catch (Exception e) {
             throw e;
         }

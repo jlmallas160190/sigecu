@@ -9,6 +9,7 @@ import com.megagitel.sigecu.core.modelo.Persona;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +18,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -28,6 +31,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "seguridad_usuario")
+@NamedQueries({
+    @NamedQuery(name = "Usuario.findByNombre", query = "select u FROM Usuario u where u.nombre=?1 ORDER BY u.nombre DESC")})
 public class Usuario implements Serializable {
 
     @Id
@@ -50,7 +55,7 @@ public class Usuario implements Serializable {
     @Column(name = "eliminado", columnDefinition = "boolean default false")
     private Boolean eliminado;
     @JoinColumn(name = "persona_id", referencedColumnName = "id")
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Persona persona;
     @JoinColumn(name = "grupo_usuario_id", referencedColumnName = "id")
     @ManyToOne

@@ -63,19 +63,20 @@ public class Persona implements Serializable {
     @NotNull
     @Column(name = "genero")
     private Integer genero;
-    @OneToMany(mappedBy = "persona")
+    @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DireccionPersona> direccionPersonas;
     @OneToOne(mappedBy = "persona")
     private Usuario usuario;
 
     public Persona() {
+        this.direccionPersonas = new ArrayList<>();
     }
 
     public Persona(Long id, String numeroIdentificacion, String primerNombre,
             String segundoNombre, String primerApellido, String segundoApellido,
             String email, Date fechaNacimiento, Integer tipoIdentificacion,
             Integer estadoCivil, Integer nivelInstuccion, Integer genero,
-            String celular,Usuario usuario) {
+            String celular, Usuario usuario) {
         this.id = id;
         this.numeroIdentificacion = numeroIdentificacion;
         this.primerNombre = primerNombre;
@@ -90,7 +91,7 @@ public class Persona implements Serializable {
         this.nivelInstuccion = nivelInstuccion;
         this.genero = genero;
         this.direccionPersonas = new ArrayList<>();
-        this.usuario=usuario;
+        this.usuario = usuario;
     }
 
     public Long getId() {
