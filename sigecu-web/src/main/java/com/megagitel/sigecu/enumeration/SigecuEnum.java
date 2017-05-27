@@ -16,6 +16,8 @@ public enum SigecuEnum {
     NIVEL_INSTRUCCION("NIVEL_INSTRUCCION"),
     PAIS("PAIS"),
     GENERO("TIPO_SEXO"),
+    CEDULA("8"),
+    TIPO_DIRECCION_DOCIMICILIO("DOMICILIO"),
     ESTUDIANTE("ESTUDIANTE");
 
     private String tipo;

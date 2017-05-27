@@ -65,7 +65,7 @@ public class Persona implements Serializable {
     private Integer genero;
     @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DireccionPersona> direccionPersonas;
-    @OneToOne(mappedBy = "persona")
+    @OneToOne(mappedBy = "persona", cascade = CascadeType.ALL)
     private Usuario usuario;
 
     public Persona() {

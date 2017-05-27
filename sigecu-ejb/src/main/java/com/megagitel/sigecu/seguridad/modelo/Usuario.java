@@ -55,7 +55,7 @@ public class Usuario implements Serializable {
     @Column(name = "eliminado", columnDefinition = "boolean default false")
     private Boolean eliminado;
     @JoinColumn(name = "persona_id", referencedColumnName = "id")
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private Persona persona;
     @JoinColumn(name = "grupo_usuario_id", referencedColumnName = "id")
     @ManyToOne

@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <body>
         <ui:composition template="./../../template.xhtml">
             <ui:define name="title">
@@ -15,6 +16,7 @@
                 <h:form>
                     <p:panel header="#{lbl.registroUsuario}">
                         <div class="ui-fluid">
+                            <p:messages id="msg"/>
                             <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
                                 <h:outputLabel value="#{lbl.primerNombre}"></h:outputLabel>
                                 <p:inputText id="primerNombre" placeholder="#{lbl.primerNombre}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.primerNombre}">
@@ -45,6 +47,9 @@
                                 <p:message id="msgTipoIdentificacion" display="icon" for="tipoIdentificacion"/>
                                 <h:outputLabel value="#{lbl.numeroIdentificacion}"></h:outputLabel>
                                 <p:inputText id="numeroIdentificacion" placeholder="#{lbl.numeroIdentificacion}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.numeroIdentificacion}">
+                                    <c:if test="#{usuarioController.validarCedula()}">
+                                        <f:validator validatorId="numeroIdentificacionValidator"/>
+                                    </c:if>
                                     <p:ajax event="keyup" update="msgNumeroIdentificacion"/>
                                 </p:inputText>
                                 <p:message id="msgNumeroIdentificacion" display="icon" for="numeroIdentificacion"/>
@@ -53,29 +58,11 @@
                                     <p:ajax event="keyup" update="msgEmail"/>
                                 </p:inputText>
                                 <p:message id="msgEmail" display="icon" for="email"/>
-                                <h:outputLabel value="#{lbl.celular}"></h:outputLabel>
-                                <p:inputText id="celular" placeholder="#{lbl.celular}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.celular}" >
-                                    <p:ajax event="keyup" update="msgCelular"/>
-                                </p:inputText>
-                                <p:message id="msgCelular" display="icon" for="celular"/>
                                 <p:outputLabel  value="#{lbl.fechaNacimiento}" />
                                 <p:calendar id="fechaNacimiento" value="#{usuarioController.usuario.persona.fechaNacimiento}" showOn="button" 
-                                            navigator="true" pattern="yyyy-MMM-dd">
+                                            navigator="true" locale="es" pattern="dd/MM/yyyy">
                                 </p:calendar>
                                 <p:message id="msgFechaNacimiento" display="icon" for="fechaNacimiento"/>
-                                <h:outputLabel value="#{lbl.pais}"></h:outputLabel>
-                                <p:selectOneMenu id="pais" value="#{usuarioController.direccion.pais}" converter="#{catalogoItemConverter}" 
-                                                 effect="fade" filter="true" filterMatchMode="startsWith">
-                                    <f:selectItem noSelectionOption="true" itemLabel="#{lbl.seleccionePais}"/>
-                                    <f:selectItems itemLabel="#{item.nombre}" itemValue="#{item.codigo}" var="item" value="#{usuarioController.paises}"/>
-                                    <p:ajax event="change" update="msgPais"/>
-                                </p:selectOneMenu>
-                                <p:message id="msgPais" display="icon" for="pais"/>
-                                <h:outputLabel value="#{lbl.ciudad}"></h:outputLabel>
-                                <p:inputText id="ciudad" placeholder="#{lbl.ciudad}" style="text-transform: uppercase" value="#{usuarioController.direccion.ciudad}">
-                                    <p:ajax event="keyup" update="msgCiudad"/>
-                                </p:inputText>
-                                <p:message id="msgCiudad" display="icon" for="celular"/>
                                 <h:outputLabel value="#{lbl.estadoCivil}"></h:outputLabel>
                                 <p:selectOneMenu id="estadoCivil" value="#{usuarioController.usuario.persona.estadoCivil}" converter="#{catalogoItemConverter}"
                                                  effect="fade" filter="true" filterMatchMode="startsWith">
@@ -100,12 +87,35 @@
                                     <p:ajax event="change" update="msgNivelInstruccion"/>
                                 </p:selectOneMenu>
                                 <p:message id="msgNivelInstruccion" display="icon" for="nivelInstruccion"/>
+                                <h:outputLabel value="#{lbl.pais}"></h:outputLabel>
+                                <p:selectOneMenu id="pais" value="#{usuarioController.direccion.pais}" converter="#{catalogoItemConverter}" 
+                                                 effect="fade" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{lbl.seleccionePais}"/>
+                                    <f:selectItems itemLabel="#{item.nombre}" itemValue="#{item.codigo}" var="item" value="#{usuarioController.paises}"/>
+                                    <p:ajax event="change" update="msgPais"/>
+                                </p:selectOneMenu>
+                                <p:message id="msgPais" display="icon" for="pais"/>
+                                <h:outputLabel value="#{lbl.ciudad}"></h:outputLabel>
+                                <p:inputText id="ciudad" placeholder="#{lbl.ciudad}" style="text-transform: uppercase" value="#{usuarioController.direccion.ciudad}">
+                                    <p:ajax event="keyup" update="msgCiudad"/>
+                                </p:inputText>
+                                <p:message id="msgCiudad" display="icon" for="ciudad"/>
+                                <h:outputLabel value="#{lbl.direccion}"></h:outputLabel>
+                                <p:inputText id="direccion" placeholder="#{lbl.direccion}" style="text-transform: uppercase" value="#{usuarioController.direccion.referencia}">
+                                    <p:ajax event="keyup" update="msgDireccion"/>
+                                </p:inputText>
+                                <p:message id="msgDireccion" display="icon" for="direccion"/>
+                                <h:outputLabel value="#{lbl.celular}"></h:outputLabel>
+                                <p:inputText id="celular" placeholder="#{lbl.celular}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.celular}" >
+                                    <p:ajax event="keyup" update="msgCelular"/>
+                                </p:inputText>
+                                <p:message id="msgCelular" display="icon" for="celular"/>
                                 <h:inputHidden/>
                                 <div class="g-recaptcha" data-sitekey="6LdSiSIUAAAAAFOoW0LUIWRKK1aFcLdyjcFC2-0b"></div> 
                             </p:panelGrid>
                             <f:facet name="footer">
                                 <h:panelGrid columns="1">
-                                    <p:commandButton id="btn" value="#{btn.registrar}"  icon="fa fa-save" immediate="true"
+                                    <p:commandButton id="btn" value="#{btn.registrar}"  icon="fa fa-save" update="@form" process="@form"
                                                      action="#{usuarioController.guardar()}"/>
                                 </h:panelGrid>
                             </f:facet>

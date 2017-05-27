@@ -19,16 +19,19 @@ import javax.faces.validator.ValidatorException;
  *
  * @author jorgemalla
  */
-@FacesValidator("emailValidator")
+@FacesValidator("numeroIdentificacionValidator")
 @RequestScoped
-public class EmailValidator implements Validator {
-    
+public class NumeroIdentificacionValidator implements Validator {
+
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
-        if (!ValidadorCampos.esEmail(value.toString())) {
-            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, I18nUtil.getMessages("email.novalid"),
-                    null));
+        if (value != null) {
+            String numeroIdentificacion = String.valueOf(value).trim();
+            if (!ValidadorCampos.esNumeroIdentificacionNacional(numeroIdentificacion)) {
+                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, I18nUtil.getMessages("numeroIdentificacion.novalid"),
+                        null));
+            }
         }
     }
-    
+
 }
