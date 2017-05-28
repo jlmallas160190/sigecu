@@ -9,7 +9,6 @@ import com.megagitel.sigecu.core.modelo.Persona;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,6 +21,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -32,7 +32,9 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "seguridad_usuario")
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findByNombre", query = "select u FROM Usuario u where u.nombre=?1 ORDER BY u.nombre DESC")})
+    @NamedQuery(name = "Usuario.findByNombre", query = "select u FROM Usuario u where u.nombre=?1 ORDER BY u.nombre DESC")
+    ,@NamedQuery(name = "Usuario.findByToken", query = "select u FROM Usuario u where u.token=?1 ORDER BY u.nombre DESC")
+    ,@NamedQuery(name = "Usuario.findByEmail", query = "select u FROM Usuario u where u.persona.email=?1 ORDER BY u.nombre DESC")})
 public class Usuario implements Serializable {
 
     @Id
@@ -40,11 +42,11 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     private Integer id;
     @NotNull
-    @Size(min = 1, max = 250)
+    @Size(min = 1, max = 255)
     @Column(name = "nombre", unique = true)
     private String nombre;
     @NotNull
-    @Size(min = 1, max = 250)
+    @Size(min = 1, max = 255)
     @Column(name = "clave")
     private String clave;
     @NotNull
@@ -62,6 +64,8 @@ public class Usuario implements Serializable {
     private GrupoUsuario grupoUsuario;
     @ManyToMany(mappedBy = "usuarios")
     private List<Menu> menus;
+    @Transient
+    private String confirmaClave;
 
     public Usuario() {
     }
@@ -147,6 +151,14 @@ public class Usuario implements Serializable {
 
     public void setEliminado(Boolean eliminado) {
         this.eliminado = eliminado;
+    }
+
+    public String getConfirmaClave() {
+        return confirmaClave;
+    }
+
+    public void setConfirmaClave(String confirmaClave) {
+        this.confirmaClave = confirmaClave;
     }
 
 }

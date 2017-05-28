@@ -7,6 +7,8 @@ package com.megagitel.sigecu.database;
 
 import com.megagitel.sigecu.core.modelo.Catalogo;
 import com.megagitel.sigecu.core.modelo.CatalogoItem;
+import com.megagitel.sigecu.core.modelo.DetalleParametrizacion;
+import com.megagitel.sigecu.core.modelo.Parametrizacion;
 import com.megagitel.sigecu.seguridad.modelo.GrupoUsuario;
 import com.megagitel.sigecu.seguridad.modelo.Usuario;
 import java.io.BufferedReader;
@@ -35,10 +37,10 @@ import org.apache.shiro.crypto.hash.Sha256Hash;
  */
 @Stateless
 public class SetupService implements Serializable {
-
+    
     @PersistenceContext
     private EntityManager em;
-
+    
     public void init() {
         Properties properties = new Properties();
         InputStream input = null;
@@ -47,9 +49,11 @@ public class SetupService implements Serializable {
             input = SetupService.class.getClassLoader().getResourceAsStream(filename);
             properties.load(input);
             this.getSuperUsuario();
+            this.getParametrizacion();
             this.cargarCatalogos(properties.getProperty("rutaCatalogos"));
             this.cargarCatalogoItem(properties.getProperty("rutaCatalogosItems"));
             this.cargarGruposUsuario(properties.getProperty("rutaGruposUsuarios"));
+            this.cargarDetallesParametrizacion(properties.getProperty("rutaDetallesParam"));
         } catch (IOException e) {
             try {
                 throw e;
@@ -58,7 +62,7 @@ public class SetupService implements Serializable {
             }
         }
     }
-
+    
     private void crearUsuario() {
         try {
             Usuario usuario = new Usuario();
@@ -73,9 +77,9 @@ public class SetupService implements Serializable {
         } catch (Exception e) {
             throw e;
         }
-
+        
     }
-
+    
     private Usuario getSuperUsuario() {
         Usuario singleResult = null;
         try {
@@ -87,7 +91,7 @@ public class SetupService implements Serializable {
         }
         return singleResult;
     }
-
+    
     private void cargarCatalogos(String archivo) {
         BufferedReader br = null;
         String linea = "";
@@ -109,7 +113,7 @@ public class SetupService implements Serializable {
             }
         }
     }
-
+    
     private Catalogo getCatalogo(String[] catalogo) {
         Catalogo singleResult = null;
         try {
@@ -122,7 +126,7 @@ public class SetupService implements Serializable {
         }
         return singleResult;
     }
-
+    
     private Catalogo buscarCatalogo(String codigo) {
         List<Catalogo> catalogos = new ArrayList<>();
         try {
@@ -135,7 +139,7 @@ public class SetupService implements Serializable {
         }
         return !catalogos.isEmpty() ? catalogos.get(0) : null;
     }
-
+    
     private void crearCatalogo(String[] catalogo) {
         try {
             Catalogo catalog = new Catalogo();
@@ -148,7 +152,7 @@ public class SetupService implements Serializable {
             throw e;
         }
     }
-
+    
     private void cargarCatalogoItem(String archivo) {
         BufferedReader br = null;
         String linea = "";
@@ -170,7 +174,7 @@ public class SetupService implements Serializable {
             }
         }
     }
-
+    
     private CatalogoItem getCatalogoItem(String[] catalogoItemStr) {
         CatalogoItem singleResult = null;
         try {
@@ -183,7 +187,7 @@ public class SetupService implements Serializable {
         }
         return singleResult;
     }
-
+    
     private void crearCatalogoItem(String[] catalogoItemStr) {
         try {
             Catalogo catalogo = this.buscarCatalogo(catalogoItemStr[2]);
@@ -201,7 +205,7 @@ public class SetupService implements Serializable {
             throw e;
         }
     }
-
+    
     private void cargarGruposUsuario(String archivo) {
         BufferedReader br = null;
         String linea = "";
@@ -223,7 +227,7 @@ public class SetupService implements Serializable {
             }
         }
     }
-
+    
     private GrupoUsuario getGrupoUsuario(String[] grupo) {
         GrupoUsuario singleResult = null;
         try {
@@ -236,7 +240,7 @@ public class SetupService implements Serializable {
         }
         return singleResult;
     }
-
+    
     private void crearGrupoUsuario(String[] grupo) {
         try {
             GrupoUsuario grupoUsuario = new GrupoUsuario();
@@ -249,13 +253,102 @@ public class SetupService implements Serializable {
             throw e;
         }
     }
-
+    
+    private void crearParametrizacion() {
+        try {
+            Parametrizacion parametrizacion = new Parametrizacion();
+            parametrizacion.setCodigo("SIGECU");
+            parametrizacion.setDescripcion("SIGECU");
+            parametrizacion.setNombre("SIGECU");
+            getEm().persist(parametrizacion);
+        } catch (Exception e) {
+        }
+    }
+    
+    private Parametrizacion getParametrizacion() {
+        Parametrizacion singleResult = null;
+        try {
+            Query query = getEm().createQuery("SELECT u FROM Parametrizacion u WHERE" + ""
+                    + " (u.codigo='SIGECU')");
+            singleResult = (Parametrizacion) query.getSingleResult();
+        } catch (NoResultException e) {
+            this.crearParametrizacion();
+        }
+        return singleResult;
+    }
+    
+    private void cargarDetallesParametrizacion(String archivo) {
+        BufferedReader br = null;
+        String linea = "";
+        String separador = ";";
+        try {
+            br = new BufferedReader(new FileReader(archivo));
+            while ((linea = br.readLine()) != null) {
+                String[] detalle = linea.split(separador);
+                getDetalleParametrizacion(detalle);
+            }
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+    }
+    
+    private DetalleParametrizacion getDetalleParametrizacion(String[] detalle) {
+        DetalleParametrizacion singleResult = null;
+        try {
+            Query query = getEm().createQuery("SELECT c FROM DetalleParametrizacion c WHERE" + ""
+                    + " (c.codigo=:codigo)");
+            query.setParameter("codigo", detalle[0]);
+            singleResult = (DetalleParametrizacion) query.getSingleResult();
+        } catch (NoResultException e) {
+            this.crearDetalleParametrizacion(detalle);
+        }
+        return singleResult;
+    }
+    
+    private void crearDetalleParametrizacion(String[] detalle) {
+        try {
+            Parametrizacion parametrizacion = this.buscarParametrizacion(detalle[3]);
+            if (parametrizacion == null) {
+                return;
+            }
+            DetalleParametrizacion detalleParam = new DetalleParametrizacion();
+            detalleParam.setCodigo(detalle[0]);
+            detalleParam.setNombre(detalle[1]);
+            detalleParam.setValor(detalle[2]);
+            detalleParam.setDescripcion(detalle[1]);
+            detalleParam.setParametrizacion(parametrizacion);
+            getEm().persist(detalleParam);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+    
+    private Parametrizacion buscarParametrizacion(String codigo) {
+        List<Parametrizacion> parametrizacions = new ArrayList<>();
+        try {
+            Query query = getEm().createQuery("SELECT c FROM Parametrizacion c WHERE" + ""
+                    + " (c.codigo=:codigo)");
+            query.setParameter("codigo", codigo);
+            parametrizacions = query.getResultList();
+        } catch (Exception e) {
+            throw e;
+        }
+        return !parametrizacions.isEmpty() ? parametrizacions.get(0) : null;
+    }
+    
     public EntityManager getEm() {
         return em;
     }
-
+    
     public void setEm(EntityManager em) {
         this.em = em;
     }
-
+    
 }

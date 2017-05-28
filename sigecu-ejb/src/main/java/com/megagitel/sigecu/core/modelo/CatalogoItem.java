@@ -29,11 +29,11 @@ public class CatalogoItem implements Serializable {
     @Column(name = "codigo", unique = true)
     private String codigo;
     @NotNull
-    @Size(min = 1, max = 250)
+    @Size(min = 1, max = 255)
     @Column(name = "nombre")
     private String nombre;
     @NotNull
-    @Size(min = 1, max = 250)
+    @Size(min = 1, max = 255)
     @Column(name = "descripcion")
     private String descripcion;
     @JoinColumn(name = "catalogo_id", referencedColumnName = "id")

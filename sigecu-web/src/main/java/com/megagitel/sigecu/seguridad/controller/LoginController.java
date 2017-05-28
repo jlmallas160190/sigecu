@@ -6,26 +6,32 @@
 package com.megagitel.sigecu.seguridad.controller;
 
 import com.megagitel.sigecu.seguridad.modelo.Usuario;
+import com.ocpsoft.pretty.faces.annotation.URLMapping;
+import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import java.io.Serializable;
-import javax.annotation.Resource;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.transaction.UserTransaction;
 
 /**
  *
  * @author jorgemalla
  */
 @Named
-@RequestScoped
+@ViewScoped
 public class LoginController implements Serializable {
 
-    @Resource
-    private UserTransaction userTransaction;
     private Usuario usuario;
 
     public void autenticar() {
 
+    }
+
+    public String resetPassword() {
+        try {
+            
+        } catch (Exception e) {
+        }
+        return "pretty:login";
     }
 
     public Usuario getUsuario() {
@@ -38,13 +44,4 @@ public class LoginController implements Serializable {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-
-    public UserTransaction getUserTransaction() {
-        return userTransaction;
-    }
-
-    public void setUserTransaction(UserTransaction userTransaction) {
-        this.userTransaction = userTransaction;
-    }
-
 }

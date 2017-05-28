@@ -19,22 +19,22 @@
                             <p:messages id="msg"/>
                             <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
                                 <h:outputLabel value="#{lbl.primerNombre}"></h:outputLabel>
-                                <p:inputText id="primerNombre" placeholder="#{lbl.primerNombre}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.primerNombre}">
+                                <p:inputText id="primerNombre" placeholder="#{lbl.primerNombre}" value="#{usuarioController.usuario.persona.primerNombre}">
                                     <p:ajax event="keyup" update="msgPrimerNombre"/>
                                 </p:inputText>
                                 <p:message id="msgPrimerNombre" display="icon" for="primerNombre"/>
                                 <h:outputLabel value="#{lbl.segundoNombre}"></h:outputLabel>
-                                <p:inputText id="segundoNombre" placeholder="#{lbl.segundoNombre}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.segundoNombre}">
+                                <p:inputText id="segundoNombre" placeholder="#{lbl.segundoNombre}"  value="#{usuarioController.usuario.persona.segundoNombre}">
                                     <p:ajax event="keyup" update="msgSegundoNombre"/>
                                 </p:inputText>
                                 <p:message id="msgSegundoNombre" display="icon" for="segundoNombre"/>
                                 <h:outputLabel value="#{lbl.primerApellido}"></h:outputLabel>
-                                <p:inputText id="primerApellido" placeholder="#{lbl.primerApellido}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.primerApellido}">
+                                <p:inputText id="primerApellido" placeholder="#{lbl.primerApellido}" value="#{usuarioController.usuario.persona.primerApellido}">
                                     <p:ajax event="keyup" update="msgPrimerApellido"/>
                                 </p:inputText>
                                 <p:message id="msgPrimerApellido" display="icon" for="primerApellido"/>
                                 <h:outputLabel value="#{lbl.segundoApellido}"></h:outputLabel>
-                                <p:inputText id="segundoApellido" placeholder="#{lbl.segundoApellido}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.segundoApellido}">
+                                <p:inputText id="segundoApellido" placeholder="#{lbl.segundoApellido}" value="#{usuarioController.usuario.persona.segundoApellido}">
                                     <p:ajax event="keyup" update="msgSegundoApellido"/>
                                 </p:inputText>
                                 <p:message id="msgSegundoApellido" display="icon" for="segundoApellido"/>
@@ -46,7 +46,7 @@
                                 </p:selectOneMenu>
                                 <p:message id="msgTipoIdentificacion" display="icon" for="tipoIdentificacion"/>
                                 <h:outputLabel value="#{lbl.numeroIdentificacion}"></h:outputLabel>
-                                <p:inputText id="numeroIdentificacion" placeholder="#{lbl.numeroIdentificacion}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.numeroIdentificacion}">
+                                <p:inputText id="numeroIdentificacion" placeholder="#{lbl.numeroIdentificacion}" value="#{usuarioController.usuario.persona.numeroIdentificacion}">
                                     <c:if test="#{usuarioController.validarCedula()}">
                                         <f:validator validatorId="numeroIdentificacionValidator"/>
                                     </c:if>
@@ -54,7 +54,7 @@
                                 </p:inputText>
                                 <p:message id="msgNumeroIdentificacion" display="icon" for="numeroIdentificacion"/>
                                 <h:outputLabel value="#{lbl.email}"></h:outputLabel>
-                                <p:inputText id="email" placeholder="#{lbl.email}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.email}" validator="emailValidator">
+                                <p:inputText id="email" placeholder="#{lbl.email}"  value="#{usuarioController.usuario.persona.email}" validator="emailValidator">
                                     <p:ajax event="keyup" update="msgEmail"/>
                                 </p:inputText>
                                 <p:message id="msgEmail" display="icon" for="email"/>
@@ -96,22 +96,22 @@
                                 </p:selectOneMenu>
                                 <p:message id="msgPais" display="icon" for="pais"/>
                                 <h:outputLabel value="#{lbl.ciudad}"></h:outputLabel>
-                                <p:inputText id="ciudad" placeholder="#{lbl.ciudad}" style="text-transform: uppercase" value="#{usuarioController.direccion.ciudad}">
+                                <p:inputText id="ciudad" placeholder="#{lbl.ciudad}"  value="#{usuarioController.direccion.ciudad}">
                                     <p:ajax event="keyup" update="msgCiudad"/>
                                 </p:inputText>
                                 <p:message id="msgCiudad" display="icon" for="ciudad"/>
                                 <h:outputLabel value="#{lbl.direccion}"></h:outputLabel>
-                                <p:inputText id="direccion" placeholder="#{lbl.direccion}" style="text-transform: uppercase" value="#{usuarioController.direccion.referencia}">
+                                <p:inputText id="direccion" placeholder="#{lbl.direccion}" value="#{usuarioController.direccion.referencia}">
                                     <p:ajax event="keyup" update="msgDireccion"/>
                                 </p:inputText>
                                 <p:message id="msgDireccion" display="icon" for="direccion"/>
                                 <h:outputLabel value="#{lbl.celular}"></h:outputLabel>
-                                <p:inputText id="celular" placeholder="#{lbl.celular}" style="text-transform: uppercase" value="#{usuarioController.usuario.persona.celular}" >
+                                <p:inputText id="celular" placeholder="#{lbl.celular}" value="#{usuarioController.usuario.persona.celular}" >
                                     <p:ajax event="keyup" update="msgCelular"/>
                                 </p:inputText>
                                 <p:message id="msgCelular" display="icon" for="celular"/>
                                 <h:inputHidden/>
-                                <div class="g-recaptcha" data-sitekey="6LdSiSIUAAAAAFOoW0LUIWRKK1aFcLdyjcFC2-0b"></div> 
+                                <p:captcha label="Captcha" language="es"/>
                             </p:panelGrid>
                             <f:facet name="footer">
                                 <h:panelGrid columns="1">

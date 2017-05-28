@@ -10,7 +10,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet name="css/default.css"/>
         <h:outputStylesheet name="css/cssLayout.css"/>
-        <script src='https://www.google.com/recaptcha/api.js'></script>
         <f:view>
             <title>
                 <ui:insert name="title">
@@ -25,9 +24,7 @@
                 <h:form>
                     <p:toolbar>
                         <f:facet name="right">
-                            <p:menuButton value="Options">
-                                <p:menuitem value="#{btn.RegistarUsuario}" action="pretty:registroUsuario" icon="fa fa-user"/>
-                            </p:menuButton>
+                            <p:commandButton value="#{btn.RegistarUsuario}" action="pretty:registroUsuario" icon="fa fa-user"/>
                         </f:facet>
                     </p:toolbar>
                 </h:form>

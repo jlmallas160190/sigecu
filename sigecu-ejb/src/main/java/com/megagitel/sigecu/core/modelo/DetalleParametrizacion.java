@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,6 +26,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "core_detalle_parametrizacion")
+@NamedQueries({
+    @NamedQuery(name = "DetalleParametrizacion.findByCodigo", query = "select c FROM DetalleParametrizacion c where c.codigo=?1 ORDER BY c.codigo DESC")})
 public class DetalleParametrizacion implements Serializable {
 
     @Id

@@ -43,7 +43,7 @@ public class Persona implements Serializable {
     @Column(name = "segundo_apellido")
     private String segundoApellido;
     @NotNull
-    @Size(min = 1, max = 250)
+    @Size(min = 1, max = 255)
     @Column(name = "email")
     private String email;
     @Column(name = "celular")

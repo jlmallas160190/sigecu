@@ -6,15 +6,18 @@
 package com.megagitel.sigecu.seguridad.controller;
 
 import com.megagitel.sigecu.core.ejb.CatalogoItemService;
+import com.megagitel.sigecu.core.ejb.DetalleParametrizacionService;
 import com.megagitel.sigecu.core.ejb.PersonaService;
 import com.megagitel.sigecu.core.modelo.CatalogoItem;
+import com.megagitel.sigecu.core.modelo.DetalleParametrizacion;
 import com.megagitel.sigecu.core.modelo.DireccionPersona;
 import com.megagitel.sigecu.core.modelo.Persona;
+import com.megagitel.sigecu.dto.MailDto;
 import com.megagitel.sigecu.seguridad.ejb.GrupoUsuarioService;
-import com.megagitel.sigecu.seguridad.ejb.UsuarioService;
 import com.megagitel.sigecu.seguridad.modelo.GrupoUsuario;
 import com.megagitel.sigecu.seguridad.modelo.Usuario;
 import com.megagitel.sigecu.enumeration.SigecuEnum;
+import com.megagitel.sigecu.util.EmailService;
 import com.megagitel.sigecu.util.I18nUtil;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
@@ -28,6 +31,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Sha256Hash;
@@ -49,7 +53,7 @@ public class UsuarioController implements Serializable {
     @EJB
     private CatalogoItemService catalogoItemService;
     @EJB
-    private UsuarioService usuarioService;
+    private DetalleParametrizacionService detalleParametrizacionService;
     @EJB
     private GrupoUsuarioService grupoUsuarioService;
     @EJB
@@ -85,6 +89,7 @@ public class UsuarioController implements Serializable {
 
     public String guardar() {
         try {
+
             if (this.usuario.getId() == null) {
                 List<GrupoUsuario> grupoUsuarios = this.grupoUsuarioService.findByNamedQueryWithLimit("GrupoUsuario.findByCodigo", 0, SigecuEnum.ESTUDIANTE.getTipo());
                 GrupoUsuario grupoUsuario = !grupoUsuarios.isEmpty() ? grupoUsuarios.get(0) : null;
@@ -96,9 +101,7 @@ public class UsuarioController implements Serializable {
                     return "";
                 }
                 this.usuario.setNombre(this.usuario.getPersona().getEmail());
-                RandomNumberGenerator rng = new SecureRandomNumberGenerator();
-                Object salt = rng.nextBytes();
-                String result = new Sha256Hash(this.usuario.getPersona().getNumeroIdentificacion(), salt, 1024).toBase64();
+                String result = new Sha256Hash(this.usuario.getPersona().getNumeroIdentificacion()).toBase64();
                 this.usuario.setClave(result);
                 this.usuario.setEliminado(Boolean.FALSE);
                 this.usuario.setSuperUsuario(Boolean.FALSE);
@@ -107,6 +110,14 @@ public class UsuarioController implements Serializable {
                 this.direccion.setDescripcion(this.direccion.getReferencia());
                 this.direccion.setTipoDireccion(tipoDireccion.getId());
                 this.usuario.getPersona().getDireccionPersonas().add(direccion);
+                this.usuario.getPersona().setUsuario(usuario);
+                direccion.setPersona(usuario.getPersona());
+                boolean send = this.sendTokenResetPassword();
+                if (!send) {
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, I18nUtil.getMessages("email.nosend"), null);
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    return "";
+                }
                 this.personaService.create(usuario.getPersona());
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, I18nUtil.getMessages("com.megagitel.sigecu.seguridad.usuario.grabarExitoso"), null);
                 FacesContext.getCurrentInstance().addMessage(null, message);
@@ -119,11 +130,33 @@ public class UsuarioController implements Serializable {
         return "pretty:login";
     }
 
+    private boolean sendTokenResetPassword() {
+        try {
+            MailDto mailDto = new MailDto();
+            List<DetalleParametrizacion> detallesToken = this.detalleParametrizacionService.findByNamedQueryWithLimit("DetalleParametrizacion.findByCodigo", 0, SigecuEnum.DETALLE_PARAM_TOKEN_RESET_PASSWORD.getTipo());
+            DetalleParametrizacion detalleParametrizacionToken = !detallesToken.isEmpty() ? detallesToken.get(0) : null;
+            List<DetalleParametrizacion> detallesHost = this.detalleParametrizacionService.findByNamedQueryWithLimit("DetalleParametrizacion.findByCodigo", 0, SigecuEnum.DETALLE_PARAM_HOST.getTipo());
+            DetalleParametrizacion detalleParametrizacionHost = !detallesHost.isEmpty() ? detallesHost.get(0) : null;
+            if (detalleParametrizacionToken == null || detalleParametrizacionHost == null) {
+                return false;
+            }
+            mailDto.setDestino(this.usuario.getPersona().getEmail());
+            HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            String url = req.getContextPath();
+            mailDto.setMensaje(detalleParametrizacionToken.getValor() + "/" + url + "/" + detalleParametrizacionToken.getValor() + "/" + this.usuario.getToken());
+            return EmailService.enviar(mailDto);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
     public boolean validarCedula() {
         if (usuario.getPersona().getTipoIdentificacion() == null) {
             return false;
         }
-        return Integer.parseInt(SigecuEnum.CEDULA.getTipo()) == usuario.getPersona().getTipoIdentificacion();
+        List<CatalogoItem> cedulas = this.catalogoItemService.findByNamedQueryWithLimit("CatalogoItem.findByCodigo", 0, SigecuEnum.TIPO_DOCUMENTO_CEDULA.getTipo());
+        CatalogoItem cedula = !cedulas.isEmpty() ? cedulas.get(0) : null;
+        return cedula != null ? Objects.equals(cedula.getId(), usuario.getPersona().getTipoIdentificacion()) : false;
     }
 
     public Usuario getUsuario() {

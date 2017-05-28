@@ -25,7 +25,7 @@ public class Institucion implements Serializable {
     @Basic(optional = false)
     private Long id;
     @NotNull
-    @Size(min = 1, max = 250)
+    @Size(min = 1, max = 255)
     @Column(name = "nombre")
     private String nombre;
     @Column(name = "descripcion")
@@ -41,7 +41,7 @@ public class Institucion implements Serializable {
     @Column(name = "actividad_economica")
     private Integer actividadEconomica;
     @NotNull
-    @Size(min = 1, max = 250)
+    @Size(min = 1, max = 255)
     @Column(name = "email")
     private String email;
     @Column(name = "celular")

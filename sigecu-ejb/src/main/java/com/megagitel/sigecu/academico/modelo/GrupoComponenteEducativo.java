@@ -34,7 +34,7 @@ public class GrupoComponenteEducativo implements Serializable {
     @Basic(optional = false)
     private Integer id;
     @NotNull
-    @Size(min = 1, max = 250)
+    @Size(min = 1, max = 255)
     @Column(name = "nombre")
     private String nombre;
     @Column(name = "descripcion")

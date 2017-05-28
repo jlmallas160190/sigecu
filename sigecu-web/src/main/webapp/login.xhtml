@@ -30,13 +30,14 @@
                                     <p:ajax event="keyup" update="msgClave"/>
                                 </p:password>
                                 <p:message id="msgClave" display="icon" for="clave"/>
-                                <div class="g-recaptcha" data-sitekey="6LdSiSIUAAAAAFOoW0LUIWRKK1aFcLdyjcFC2-0b"></div> 
+                                <p:captcha label="Captcha" language="es"/>
                             </p:panelGrid>
                         </div>
                         <f:facet name="footer">
                             <h:panelGrid columns="1">
                                 <p:commandButton id="btn" value="#{btn.Autenticar}" update="@form" icon="fa fa-lock" 
                                                  action="#{loginController.autenticar()}"/>
+                                <p:commandLink value="#{lbl.password.forget}" action="pretty:olvidaClave" immediate="true"/>
                             </h:panelGrid>
                         </f:facet>
                     </p:panel> 

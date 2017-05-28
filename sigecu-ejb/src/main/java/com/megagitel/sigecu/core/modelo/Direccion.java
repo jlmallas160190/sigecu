@@ -23,11 +23,11 @@ public class Direccion implements Serializable {
     @Basic(optional = false)
     private Long id;
     @NotNull
-    @Size(min = 1, max = 250)
+    @Size(min = 1, max = 255)
     @Column(name = "descripcion")
     private String descripcion;
     @NotNull
-    @Size(min = 1, max = 250)
+    @Size(min = 1, max = 255)
     @Column(name = "referencia")
     private String referencia;
     @NotNull
