@@ -17,7 +17,7 @@
             <ui:define name="content">
                 <h:form>
                     <p:panel id="header" header="#{lbl.autenticacion}">
-                        <p:messages id="msg" showDetail="true"/>
+                        <p:messages id="msg"/>
                         <div class="ui-fluid">
                             <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
                                 <h:outputLabel value="#{lbl.usuario}"></h:outputLabel>
@@ -34,11 +34,13 @@
                             </p:panelGrid>
                         </div>
                         <f:facet name="footer">
-                            <h:panelGrid columns="1">
-                                <p:commandButton id="btn" value="#{btn.Autenticar}" update="@form" icon="fa fa-lock" 
-                                                 action="#{loginController.autenticar()}"/>
-                                <p:commandLink value="#{lbl.password.forget}" action="pretty:olvidaClave" immediate="true"/>
-                            </h:panelGrid>
+                            <div class="ui-fluid">
+                                <h:panelGrid columns="2"  columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">
+                                    <p:commandButton id="btn" value="#{btn.Autenticar}" update="@form" process="@form" immediate="true" icon="fa fa-lock" 
+                                                     action="#{loginController.autenticar()}"/>
+                                    <p:commandLink value="#{lbl['password.forget']}" action="pretty:olvidarClave" immediate="true"/>
+                                </h:panelGrid>
+                            </div>
                         </f:facet>
                     </p:panel> 
                 </h:form>

@@ -6,30 +6,58 @@
 package com.megagitel.sigecu.seguridad.controller;
 
 import com.megagitel.sigecu.seguridad.modelo.Usuario;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.megagitel.sigecu.util.I18nUtil;
 import java.io.Serializable;
-import javax.faces.view.ViewScoped;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 
 /**
  *
  * @author jorgemalla
  */
 @Named
-@ViewScoped
+@SessionScoped
 public class LoginController implements Serializable {
 
     private Usuario usuario;
 
-    public void autenticar() {
+    private Subject subject;
 
+    @PostConstruct
+    public void init() {
+        this.usuario = new Usuario();
     }
 
-    public String resetPassword() {
+    public String autenticar() {
         try {
-            
+            subject = SecurityUtils.getSubject();
+            UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(this.usuario.getNombre(), this.usuario.getClave());
+            subject.login(usernamePasswordToken);
+            if (subject.isAuthenticated()) {
+                return "pretty:inicio";
+            }
+        } catch (AuthenticationException e) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, I18nUtil.getMessages("apache.shiro.authenticationException"), null);
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "";
+        }
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, I18nUtil.getMessages("apache.shiro.authenticationException"), null);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        return "";
+    }
+
+    public String logout() {
+        try {
+            this.subject.logout();
         } catch (Exception e) {
+            throw e;
         }
         return "pretty:login";
     }
@@ -44,4 +72,13 @@ public class LoginController implements Serializable {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
 }

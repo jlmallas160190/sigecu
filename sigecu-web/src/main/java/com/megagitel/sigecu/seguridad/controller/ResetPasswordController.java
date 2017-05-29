@@ -18,7 +18,6 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -50,6 +49,7 @@ import org.apache.shiro.crypto.hash.Sha256Hash;
 public class ResetPasswordController implements Serializable {
 
     private Usuario usuario;
+    private String token;
 
     @EJB
     private UsuarioService usuarioService;
@@ -60,6 +60,7 @@ public class ResetPasswordController implements Serializable {
     public void init() {
         this.usuario = new Usuario();
         this.usuario.setPersona(new Persona());
+        this.token = "";
     }
 
     public String resetPassword() {
@@ -69,9 +70,6 @@ public class ResetPasswordController implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 return "";
             }
-            FacesContext context = FacesContext.getCurrentInstance();
-            Map<String, String> paramMap = context.getExternalContext().getRequestParameterMap();
-            String token = paramMap.get("token");
             if (token == null) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, I18nUtil.getMessages("token.incorrect"), null);
                 FacesContext.getCurrentInstance().addMessage(null, message);
@@ -84,9 +82,9 @@ public class ResetPasswordController implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 return "";
             }
-            String result = new Sha256Hash(this.usuario.getClave()).toBase64();
+            String result = new Sha256Hash(this.usuario.getClave()).toHex();
             usuarioReset.setClave(result);
-            this.usuarioService.create(usuarioReset);
+            this.usuarioService.edit(usuarioReset);
         } catch (Exception e) {
             throw e;
         }
@@ -114,12 +112,12 @@ public class ResetPasswordController implements Serializable {
             }
             RandomNumberGenerator rng = new SecureRandomNumberGenerator();
             Object random = rng.nextBytes();
-            String result = new Sha256Hash(random).toBase64();
-            usuarioOlvidarClave.setToken(result);
+            String result = new Sha256Hash(random.toString()).toBase64();
+            usuarioOlvidarClave.setToken(random.toString());
             mailDto.setDestino(this.usuario.getPersona().getEmail());
             HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
             String url = req.getContextPath();
-            mailDto.setMensaje(detalleParametrizacionToken.getValor() + "/" + url + "/" + detalleParametrizacionToken.getValor() + "/" + usuarioOlvidarClave.getToken());
+            mailDto.setMensaje(detalleParametrizacionHost.getValor() + "" + url + "/" + detalleParametrizacionToken.getValor() + "" + usuarioOlvidarClave.getToken());
             boolean send = EmailService.enviar(mailDto);
             if (!send) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, I18nUtil.getMessages("email.nosend"), null);
@@ -139,6 +137,14 @@ public class ResetPasswordController implements Serializable {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
 }

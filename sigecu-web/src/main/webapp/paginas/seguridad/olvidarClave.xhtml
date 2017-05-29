@@ -11,12 +11,12 @@
         <ui:composition template="./../../template.xhtml">
 
             <ui:define name="title">
-                #{lbl.password.forget}
+                #{lbl['password.forget']}
             </ui:define>
             <ui:define name="content">
                 <h:form>
                     <p:panel id="header" header="#{lbl.autenticacion}">
-                        <p:messages id="msg" showDetail="true"/>
+                        <p:messages id="msg"/>
                         <div class="ui-fluid">
                             <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
                                 <h:outputLabel value="#{lbl.email}"></h:outputLabel>

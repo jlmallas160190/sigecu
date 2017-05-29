@@ -21,6 +21,17 @@ public class ValidadorCampos {
         return email.matches(EMAIL_REGEX);
     }
 
+    public static boolean esPassword(final String password) {
+        return esPassword(password, 8);
+    }
+
+    public static boolean esPassword(final String password, final int length) {
+        if (password != null) {
+            return password.matches("^[a-zA-Z0-9!@#$%^&*\\s\\(\\)_\\+=-]{" + length + ",}$");
+        }
+        return false;
+    }
+
     public static boolean esNumeroIdentificacionNacional(String numeroIdentificacion) {
         int dig1;
         int operacion1;
@@ -40,8 +51,8 @@ public class ValidadorCampos {
         int operacion8;
         int dig9;
         int operacion9;
-        int suma = 0;
-        int respuesta = 0;
+        int suma;
+        int respuesta;
         int digVerificador;
         char A;
         int contador = 0;
