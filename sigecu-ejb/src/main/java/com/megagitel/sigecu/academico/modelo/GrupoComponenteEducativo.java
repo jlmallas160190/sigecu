@@ -34,6 +34,10 @@ public class GrupoComponenteEducativo implements Serializable {
     @Basic(optional = false)
     private Integer id;
     @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "codigo")
+    private String codigo;
+    @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "nombre")
     private String nombre;
@@ -130,6 +134,14 @@ public class GrupoComponenteEducativo implements Serializable {
 
     public void setComponenteEducativos(List<ComponenteEducativo> componenteEducativos) {
         this.componenteEducativos = componenteEducativos;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
 }

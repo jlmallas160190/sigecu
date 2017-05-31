@@ -37,10 +37,11 @@
                             <div class="ui-fluid">
                                 <h:panelGrid columns="2"  columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">
                                     <p:commandButton id="btn" value="#{btn.Autenticar}" update="@form" process="@form" immediate="true" icon="fa fa-lock" 
-                                                     action="#{loginController.autenticar()}"/>
+                                                     onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{loginController.autenticar()}"/>
                                     <p:commandLink value="#{lbl['password.forget']}" action="pretty:olvidarClave" immediate="true"/>
                                 </h:panelGrid>
                             </div>
+                            <ui:include src="/dialogLoading.xhtml"></ui:include>
                         </f:facet>
                     </p:panel> 
                 </h:form>

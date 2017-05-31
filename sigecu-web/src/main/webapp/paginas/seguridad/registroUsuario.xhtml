@@ -116,10 +116,11 @@
                             <f:facet name="footer">
                                 <h:panelGrid columns="1">
                                     <p:commandButton id="btn" value="#{btn.registrar}"  icon="fa fa-save" update="@form" process="@form"
-                                                     action="#{usuarioController.guardar()}"/>
+                                                     onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{usuarioController.guardar()}"/>
                                 </h:panelGrid>
                             </f:facet>
                         </div>
+                        <ui:include src="/../../dialogLoading.xhtml"></ui:include>
                     </p:panel>
                 </h:form>
             </ui:define>

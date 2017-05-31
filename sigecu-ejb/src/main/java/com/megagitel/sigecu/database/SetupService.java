@@ -5,6 +5,8 @@
  */
 package com.megagitel.sigecu.database;
 
+import com.megagitel.sigecu.academico.modelo.ComponenteEducativo;
+import com.megagitel.sigecu.academico.modelo.GrupoComponenteEducativo;
 import com.megagitel.sigecu.core.modelo.Catalogo;
 import com.megagitel.sigecu.core.modelo.CatalogoItem;
 import com.megagitel.sigecu.core.modelo.DetalleParametrizacion;
@@ -17,6 +19,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -37,10 +40,10 @@ import org.apache.shiro.crypto.hash.Sha256Hash;
  */
 @Stateless
 public class SetupService implements Serializable {
-    
+
     @PersistenceContext
     private EntityManager em;
-    
+
     public void init() {
         Properties properties = new Properties();
         InputStream input = null;
@@ -54,6 +57,8 @@ public class SetupService implements Serializable {
             this.cargarCatalogoItem(properties.getProperty("rutaCatalogosItems"));
             this.cargarGruposUsuario(properties.getProperty("rutaGruposUsuarios"));
             this.cargarDetallesParametrizacion(properties.getProperty("rutaDetallesParam"));
+            this.cargarGruposComponenteEducativo(properties.getProperty("rutaGruposComponentesEducativos"));
+            this.cargarComponenteEducativo(properties.getProperty("rutaComponentesEducativos"));
         } catch (IOException e) {
             try {
                 throw e;
@@ -62,7 +67,7 @@ public class SetupService implements Serializable {
             }
         }
     }
-    
+
     private void crearUsuario() {
         try {
             Usuario usuario = new Usuario();
@@ -77,9 +82,9 @@ public class SetupService implements Serializable {
         } catch (Exception e) {
             throw e;
         }
-        
+
     }
-    
+
     private Usuario getSuperUsuario() {
         Usuario singleResult = null;
         try {
@@ -91,7 +96,7 @@ public class SetupService implements Serializable {
         }
         return singleResult;
     }
-    
+
     private void cargarCatalogos(String archivo) {
         BufferedReader br = null;
         String linea = "";
@@ -113,7 +118,7 @@ public class SetupService implements Serializable {
             }
         }
     }
-    
+
     private Catalogo getCatalogo(String[] catalogo) {
         Catalogo singleResult = null;
         try {
@@ -126,7 +131,7 @@ public class SetupService implements Serializable {
         }
         return singleResult;
     }
-    
+
     private Catalogo buscarCatalogo(String codigo) {
         List<Catalogo> catalogos = new ArrayList<>();
         try {
@@ -139,7 +144,7 @@ public class SetupService implements Serializable {
         }
         return !catalogos.isEmpty() ? catalogos.get(0) : null;
     }
-    
+
     private void crearCatalogo(String[] catalogo) {
         try {
             Catalogo catalog = new Catalogo();
@@ -152,7 +157,7 @@ public class SetupService implements Serializable {
             throw e;
         }
     }
-    
+
     private void cargarCatalogoItem(String archivo) {
         BufferedReader br = null;
         String linea = "";
@@ -174,7 +179,7 @@ public class SetupService implements Serializable {
             }
         }
     }
-    
+
     private CatalogoItem getCatalogoItem(String[] catalogoItemStr) {
         CatalogoItem singleResult = null;
         try {
@@ -187,7 +192,7 @@ public class SetupService implements Serializable {
         }
         return singleResult;
     }
-    
+
     private void crearCatalogoItem(String[] catalogoItemStr) {
         try {
             Catalogo catalogo = this.buscarCatalogo(catalogoItemStr[2]);
@@ -205,7 +210,7 @@ public class SetupService implements Serializable {
             throw e;
         }
     }
-    
+
     private void cargarGruposUsuario(String archivo) {
         BufferedReader br = null;
         String linea = "";
@@ -227,7 +232,7 @@ public class SetupService implements Serializable {
             }
         }
     }
-    
+
     private GrupoUsuario getGrupoUsuario(String[] grupo) {
         GrupoUsuario singleResult = null;
         try {
@@ -240,7 +245,7 @@ public class SetupService implements Serializable {
         }
         return singleResult;
     }
-    
+
     private void crearGrupoUsuario(String[] grupo) {
         try {
             GrupoUsuario grupoUsuario = new GrupoUsuario();
@@ -253,7 +258,7 @@ public class SetupService implements Serializable {
             throw e;
         }
     }
-    
+
     private void crearParametrizacion() {
         try {
             Parametrizacion parametrizacion = new Parametrizacion();
@@ -264,7 +269,7 @@ public class SetupService implements Serializable {
         } catch (Exception e) {
         }
     }
-    
+
     private Parametrizacion getParametrizacion() {
         Parametrizacion singleResult = null;
         try {
@@ -276,7 +281,7 @@ public class SetupService implements Serializable {
         }
         return singleResult;
     }
-    
+
     private void cargarDetallesParametrizacion(String archivo) {
         BufferedReader br = null;
         String linea = "";
@@ -298,7 +303,7 @@ public class SetupService implements Serializable {
             }
         }
     }
-    
+
     private DetalleParametrizacion getDetalleParametrizacion(String[] detalle) {
         DetalleParametrizacion singleResult = null;
         try {
@@ -311,7 +316,7 @@ public class SetupService implements Serializable {
         }
         return singleResult;
     }
-    
+
     private void crearDetalleParametrizacion(String[] detalle) {
         try {
             Parametrizacion parametrizacion = this.buscarParametrizacion(detalle[3]);
@@ -329,7 +334,7 @@ public class SetupService implements Serializable {
             throw e;
         }
     }
-    
+
     private Parametrizacion buscarParametrizacion(String codigo) {
         List<Parametrizacion> parametrizacions = new ArrayList<>();
         try {
@@ -342,13 +347,128 @@ public class SetupService implements Serializable {
         }
         return !parametrizacions.isEmpty() ? parametrizacions.get(0) : null;
     }
-    
+
+    private void cargarGruposComponenteEducativo(String archivo) {
+        BufferedReader br = null;
+        String linea = "";
+        String separador = ";";
+        try {
+            br = new BufferedReader(new FileReader(archivo));
+            while ((linea = br.readLine()) != null) {
+                String[] grupoEducativo = linea.split(separador);
+                getGrupoComponenteEducativo(grupoEducativo);
+            }
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+    }
+
+    private GrupoComponenteEducativo getGrupoComponenteEducativo(String[] grupoComponente) {
+        GrupoComponenteEducativo singleResult = null;
+        try {
+            Query query = getEm().createQuery("SELECT c FROM GrupoComponenteEducativo c WHERE" + ""
+                    + " (c.codigo=:codigo)");
+            query.setParameter("codigo", grupoComponente[0]);
+            singleResult = (GrupoComponenteEducativo) query.getSingleResult();
+        } catch (NoResultException e) {
+            this.crearGrupoComponenteEducativo(grupoComponente);
+        }
+        return singleResult;
+    }
+
+    private void crearGrupoComponenteEducativo(String[] grupoComponente) {
+        try {
+            GrupoComponenteEducativo grupo = new GrupoComponenteEducativo();
+            grupo.setCodigo(grupoComponente[0]);
+            grupo.setNombre(grupoComponente[1]);
+            grupo.setEliminado(Boolean.FALSE);
+            grupo.setDescripcion(grupoComponente[2]);
+            getEm().persist(grupo);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    private void cargarComponenteEducativo(String archivo) {
+        BufferedReader br = null;
+        String linea = "";
+        String separador = ";";
+        try {
+            br = new BufferedReader(new FileReader(archivo));
+            while ((linea = br.readLine()) != null) {
+                String[] compoenteEducativo = linea.split(separador);
+                getComponenteEducativo(compoenteEducativo);
+            }
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+    }
+
+    private ComponenteEducativo getComponenteEducativo(String[] grupoComponente) {
+        ComponenteEducativo singleResult = null;
+        try {
+            Query query = getEm().createQuery("SELECT c FROM ComponenteEducativo c WHERE" + ""
+                    + " (c.codigo=:codigo)");
+            query.setParameter("codigo", grupoComponente[0]);
+            singleResult = (ComponenteEducativo) query.getSingleResult();
+        } catch (NoResultException e) {
+            this.crearComponenteEducativo(grupoComponente);
+        }
+        return singleResult;
+    }
+
+    private void crearComponenteEducativo(String[] componenteEducativo) {
+        try {
+            GrupoComponenteEducativo grupoComponenteEducativo = this.buscarGrupoComponenteEducativo(componenteEducativo[4]);
+            if (grupoComponenteEducativo == null) {
+                return;
+            }
+            ComponenteEducativo componente = new ComponenteEducativo();
+            componente.setCodigo(componenteEducativo[0]);
+            componente.setNombre(componenteEducativo[1]);
+            componente.setCreditos(new BigDecimal(componenteEducativo[3]));
+            componente.setDescripcion(componenteEducativo[2]);
+            componente.setGrupoComponenteEducativo(grupoComponenteEducativo);
+            componente.setEliminado(Boolean.FALSE);
+            getEm().persist(componente);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    private GrupoComponenteEducativo buscarGrupoComponenteEducativo(String codigo) {
+        List<GrupoComponenteEducativo> grupoComponenteEducativos = new ArrayList<>();
+        try {
+            Query query = getEm().createQuery("SELECT c FROM GrupoComponenteEducativo c WHERE" + ""
+                    + " (c.codigo=:codigo)");
+            query.setParameter("codigo", codigo);
+            grupoComponenteEducativos = query.getResultList();
+        } catch (Exception e) {
+            throw e;
+        }
+        return !grupoComponenteEducativos.isEmpty() ? grupoComponenteEducativos.get(0) : null;
+    }
+
     public EntityManager getEm() {
         return em;
     }
-    
+
     public void setEm(EntityManager em) {
         this.em = em;
     }
-    
+
 }

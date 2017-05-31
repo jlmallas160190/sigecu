@@ -30,11 +30,13 @@
                         <f:facet name="footer">
                             <h:panelGrid columns="1">
                                 <p:commandButton id="btn" value="#{btn.enviar}" update="@form" icon="fa fa-lock" 
+                                                 onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" 
                                                  action="#{resetPasswordController.olvidarClave()}"/>
 
                             </h:panelGrid>
                         </f:facet>
                     </p:panel> 
+                    <ui:include src="./../../dialogLoading.xhtml"></ui:include>
                 </h:form>
             </ui:define>
         </ui:composition>
