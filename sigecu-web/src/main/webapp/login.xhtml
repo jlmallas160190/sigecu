@@ -21,12 +21,12 @@
                         <div class="ui-fluid">
                             <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
                                 <h:outputLabel value="#{lbl.usuario}"></h:outputLabel>
-                                <p:inputText id="nombre" placeholder="#{lbl.usuario}" style="text-transform: none" value="#{loginController.usuario.nombre}">
+                                <p:inputText id="nombre" placeholder="#{lbl.usuario}"  value="#{loginController.usuario.nombre}">
                                     <p:ajax event="keyup" update="msgNombre"/>
                                 </p:inputText>
                                 <p:message id="msgNombre" display="icon" for="nombre"/>
                                 <h:outputLabel value="#{lbl.clave}"></h:outputLabel>
-                                <p:password id="clave" placeholder="#{lbl.clave}" style="text-transform: none" value="#{loginController.usuario.clave}">
+                                <p:password id="clave" placeholder="#{lbl.clave}"  value="#{loginController.usuario.clave}">
                                     <p:ajax event="keyup" update="msgClave"/>
                                 </p:password>
                                 <p:message id="msgClave" display="icon" for="clave"/>

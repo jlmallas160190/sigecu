@@ -55,6 +55,8 @@ public class ComponenteEducativo implements Serializable {
     private GrupoComponenteEducativo grupoComponenteEducativo;
     @OneToMany(mappedBy = "componenteEducativo")
     private List<InteresComponenteEducativo> interesComponenteEducativos;
+    @OneToMany(mappedBy = "componenteEducativo")
+    private List<OfertaComponenteEducativo> ofertaComponenteEducativos;
 
     public ComponenteEducativo() {
     }
@@ -130,6 +132,14 @@ public class ComponenteEducativo implements Serializable {
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
+    }
+
+    public List<OfertaComponenteEducativo> getOfertaComponenteEducativos() {
+        return ofertaComponenteEducativos;
+    }
+
+    public void setOfertaComponenteEducativos(List<OfertaComponenteEducativo> ofertaComponenteEducativos) {
+        this.ofertaComponenteEducativos = ofertaComponenteEducativos;
     }
 
 }

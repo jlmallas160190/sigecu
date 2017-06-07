@@ -20,7 +20,8 @@
     <context-param>
         <param-name>com.ocpsoft.pretty.BASE_PACKAGES</param-name>
         <param-value>
-            com.megagitel.sigecu.seguridad
+            com.megagitel.sigecu.seguridad.controller,
+            com.megagitel.sigecu.academico.controller
         </param-value>
     </context-param>
     <context-param>

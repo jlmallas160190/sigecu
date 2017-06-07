@@ -6,6 +6,7 @@
 package com.megagitel.sigecu.core.modelo;
 
 import com.megagitel.sigecu.academico.modelo.GrupoComponenteEducativo;
+import com.megagitel.sigecu.academico.modelo.OfertaAcademica;
 import com.megagitel.sigecu.seguridad.modelo.GrupoUsuario;
 import java.io.Serializable;
 import java.util.List;
@@ -24,6 +25,10 @@ public class Institucion implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Long id;
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "codigo")
+    private String codigo;
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "nombre")
@@ -50,6 +55,8 @@ public class Institucion implements Serializable {
     private List<GrupoComponenteEducativo> grupoComponenteEducativos;
     @OneToMany(mappedBy = "institucion")
     private List<GrupoUsuario> grupoUsuarios;
+    @OneToMany(mappedBy = "institucion")
+    private List<OfertaAcademica> ofertaAcademicas;
 
     public Institucion() {
     }
@@ -143,6 +150,22 @@ public class Institucion implements Serializable {
 
     public void setGrupoUsuarios(List<GrupoUsuario> grupoUsuarios) {
         this.grupoUsuarios = grupoUsuarios;
+    }
+
+    public List<OfertaAcademica> getOfertaAcademicas() {
+        return ofertaAcademicas;
+    }
+
+    public void setOfertaAcademicas(List<OfertaAcademica> ofertaAcademicas) {
+        this.ofertaAcademicas = ofertaAcademicas;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
 }

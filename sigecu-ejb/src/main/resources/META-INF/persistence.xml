@@ -1,29 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-    <persistence-unit name="sigecuPU" transaction-type="JTA">
-        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <jta-data-source>java:/SigecuDS</jta-data-source>
-        <class>com.megagitel.sigecu.core.modelo.Catalogo</class>
-        <class>com.megagitel.sigecu.core.modelo.CatalogoItem</class>
-        <class>com.megagitel.sigecu.core.modelo.Persona</class>
-        <class>com.megagitel.sigecu.academico.modelo.ComponenteEducativo</class>
-        <class>com.megagitel.sigecu.academico.modelo.Estudiante</class>
-        <class>com.megagitel.sigecu.academico.modelo.GrupoComponenteEducativo</class>
-        <class>com.megagitel.sigecu.academico.modelo.InteresComponenteEducativo</class>
-        <class>com.megagitel.sigecu.academico.modelo.Matricula</class>
-        <class>com.megagitel.sigecu.core.modelo.DetalleParametrizacion</class>
-        <class>com.megagitel.sigecu.core.modelo.Direccion</class>
-        <class>com.megagitel.sigecu.core.modelo.DireccionPersona</class>
-        <class>com.megagitel.sigecu.core.modelo.Institucion</class>
-        <class>com.megagitel.sigecu.core.modelo.Parametrizacion</class>
-        <class>com.megagitel.sigecu.seguridad.modelo.GrupoUsuario</class>
-        <class>com.megagitel.sigecu.seguridad.modelo.Menu</class>
-        <class>com.megagitel.sigecu.seguridad.modelo.Usuario</class>
-        <exclude-unlisted-classes>true</exclude-unlisted-classes>
-        <properties>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
-            <property name="hibernate.show_sql" value="false"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-        </properties>
-    </persistence-unit>
+  <persistence-unit name="sigecuPU" transaction-type="JTA">
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <jta-data-source>java:/SigecuDS</jta-data-source>
+    <class>com.megagitel.sigecu.core.modelo.Catalogo</class>
+    <class>com.megagitel.sigecu.core.modelo.CatalogoItem</class>
+    <class>com.megagitel.sigecu.core.modelo.Persona</class>
+    <class>com.megagitel.sigecu.academico.modelo.ComponenteEducativo</class>
+    <class>com.megagitel.sigecu.academico.modelo.Estudiante</class>
+    <class>com.megagitel.sigecu.academico.modelo.GrupoComponenteEducativo</class>
+    <class>com.megagitel.sigecu.academico.modelo.InteresComponenteEducativo</class>
+    <class>com.megagitel.sigecu.academico.modelo.Matricula</class>
+    <class>com.megagitel.sigecu.core.modelo.DetalleParametrizacion</class>
+    <class>com.megagitel.sigecu.core.modelo.Direccion</class>
+    <class>com.megagitel.sigecu.core.modelo.DireccionPersona</class>
+    <class>com.megagitel.sigecu.core.modelo.Institucion</class>
+    <class>com.megagitel.sigecu.core.modelo.Parametrizacion</class>
+    <class>com.megagitel.sigecu.seguridad.modelo.GrupoUsuario</class>
+    <class>com.megagitel.sigecu.seguridad.modelo.Menu</class>
+    <class>com.megagitel.sigecu.seguridad.modelo.Usuario</class>
+    <class>com.megagitel.sigecu.academico.modelo.OfertaAcademica</class>
+    <class>com.megagitel.sigecu.academico.modelo.OfertaComponenteEducativo</class>
+    <class>com.megagitel.sigecu.academico.modelo.OfertadorComponenteEducativo</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.show_sql" value="false"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+    </properties>
+  </persistence-unit>
 </persistence>

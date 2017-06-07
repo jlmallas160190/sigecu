@@ -10,7 +10,9 @@ import com.megagitel.sigecu.academico.modelo.GrupoComponenteEducativo;
 import com.megagitel.sigecu.core.modelo.Catalogo;
 import com.megagitel.sigecu.core.modelo.CatalogoItem;
 import com.megagitel.sigecu.core.modelo.DetalleParametrizacion;
+import com.megagitel.sigecu.core.modelo.Institucion;
 import com.megagitel.sigecu.core.modelo.Parametrizacion;
+import com.megagitel.sigecu.enumeration.SigecuEnum;
 import com.megagitel.sigecu.seguridad.modelo.GrupoUsuario;
 import com.megagitel.sigecu.seguridad.modelo.Usuario;
 import java.io.BufferedReader;
@@ -52,6 +54,7 @@ public class SetupService implements Serializable {
             input = SetupService.class.getClassLoader().getResourceAsStream(filename);
             properties.load(input);
             this.getSuperUsuario();
+            this.getInstitucion();
             this.getParametrizacion();
             this.cargarCatalogos(properties.getProperty("rutaCatalogos"));
             this.cargarCatalogoItem(properties.getProperty("rutaCatalogosItems"));
@@ -65,6 +68,33 @@ public class SetupService implements Serializable {
             } catch (IOException ex) {
                 Logger.getLogger(SetupService.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }
+
+    private Institucion getInstitucion() {
+        Institucion singleResult = null;
+        try {
+            Query query = getEm().createQuery("SELECT u FROM Institucion u WHERE" + ""
+                    + " (u.codigo='MEGAGITEL')");
+            singleResult = (Institucion) query.getSingleResult();
+        } catch (NoResultException e) {
+            this.crearInstitucion();
+        }
+        return singleResult;
+    }
+
+    private void crearInstitucion() {
+        try {
+            Institucion institucion = new Institucion();
+            institucion.setEmail("cursos@megagitel.com");
+            institucion.setCodigo("MEGAGITEL");
+            institucion.setNombre("Megagitel");
+            institucion.setNumeroIdentificacion("9999999999");
+            institucion.setActividadEconomica(this.buscarCatalogoItem(SigecuEnum.ACTIVIDAD_ECONOMICA_TELECOMUNICACIONES.getTipo()).getId());
+            institucion.setTipoIdentificacion(this.buscarCatalogoItem(SigecuEnum.TIPO_DOCUMENTO_CEDULA.getTipo()).getId());
+            getEm().persist(institucion);
+        } catch (Exception e) {
+            throw e;
         }
     }
 
@@ -253,6 +283,7 @@ public class SetupService implements Serializable {
             grupoUsuario.setNombre(grupo[1]);
             grupoUsuario.setDescripcion(grupo[1]);
             grupoUsuario.setEliminado(Boolean.FALSE);
+            grupoUsuario.setInstitucion(this.buscarInstitucion());
             getEm().persist(grupoUsuario);
         } catch (Exception e) {
             throw e;
@@ -461,6 +492,31 @@ public class SetupService implements Serializable {
             throw e;
         }
         return !grupoComponenteEducativos.isEmpty() ? grupoComponenteEducativos.get(0) : null;
+    }
+
+    private CatalogoItem buscarCatalogoItem(String codigo) {
+        CatalogoItem singleResult = null;
+        try {
+            Query query = getEm().createQuery("SELECT c FROM CatalogoItem c WHERE" + ""
+                    + " (c.codigo=:codigo)");
+            query.setParameter("codigo", codigo);
+            singleResult = (CatalogoItem) query.getSingleResult();
+        } catch (NoResultException e) {
+            throw e;
+        }
+        return singleResult;
+    }
+
+    private Institucion buscarInstitucion() {
+        Institucion singleResult = null;
+        try {
+            Query query = getEm().createQuery("SELECT u FROM Institucion u WHERE" + ""
+                    + " (u.codigo='MEGAGITEL')");
+            singleResult = (Institucion) query.getSingleResult();
+        } catch (NoResultException e) {
+            throw e;
+        }
+        return singleResult;
     }
 
     public EntityManager getEm() {
