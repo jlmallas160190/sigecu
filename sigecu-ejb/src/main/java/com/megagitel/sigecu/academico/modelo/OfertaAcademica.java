@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -33,10 +34,12 @@ public class OfertaAcademica implements Serializable {
     @Basic(optional = false)
     private Long id;
     @Temporal(javax.persistence.TemporalType.DATE)
+    @NotNull
     private Date fechaInicio;
+    @NotNull
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;
-    @Column(name = "descripcion")
+    @Column(name = "descripcion", columnDefinition = "text")
     private String descripcion;
     @ManyToOne
     private Institucion institucion;

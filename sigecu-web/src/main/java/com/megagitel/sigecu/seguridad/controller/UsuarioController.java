@@ -123,7 +123,7 @@ public class UsuarioController implements Serializable {
         } catch (Exception e) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, I18nUtil.getMessages("com.megagitel.sigecu.seguridad.usuario.grabarError"), null);
             FacesContext.getCurrentInstance().addMessage(null, message);
-            throw e;
+            return "";
         }
         return "pretty:login";
     }
@@ -141,7 +141,7 @@ public class UsuarioController implements Serializable {
             mailDto.setDestino(this.usuario.getPersona().getEmail());
             HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
             String url = req.getContextPath();
-            mailDto.setMensaje(detalleParametrizacionToken.getValor() + "/" + url + "/" + detalleParametrizacionToken.getValor() + "/" + this.usuario.getToken());
+            mailDto.setMensaje(detalleParametrizacionHost.getValor() + "" + url + "/" + detalleParametrizacionToken.getValor() + "/" + this.usuario.getToken());
             return EmailService.enviar(mailDto);
         } catch (Exception e) {
             throw e;

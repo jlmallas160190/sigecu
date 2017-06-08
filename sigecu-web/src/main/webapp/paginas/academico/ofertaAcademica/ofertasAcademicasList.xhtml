@@ -8,11 +8,12 @@
 
     <body>
 
-        <ui:composition template="./../../../template.xhtml">
+        <ui:composition template="./../../../index.xhtml">
 
             <ui:define name="title">
                 #{lbl['com.megagitel.sigecu.academico.ofertasAcademicas']}
             </ui:define>
+
             <ui:define name="top">
                 <h:form>
                     <p:toolbar>
@@ -32,7 +33,7 @@
                                      paginator="true" rows="#{ofertaAcademicaController.getDetalleParametrizacion('TABLE_ROWS', '50')}" 
                                      sortOrder="DESCENDING"
                                      reflow="true" 
-                                     rowKey="#{oferta.id}" 
+                                     rowKey="#{ofertaAcademica.id}" 
                                      resizableColumns="true" 
                                      id="dataTable" lazy="true">
                             <p:column headerText="#{lbl['com.megagitel.sigecu.fechaInicio']}" sortBy="#{ofertaAcademica.fechaInicio}"
@@ -44,10 +45,13 @@
                                 <h:outputText value="#{ofertaAcademica.fechaFin}"/>
                             </p:column>  
                             <p:column headerText="#{lbl['accion']}">
+                                <p:button outcome="pretty:ofertaAcademica" icon="fa fa-edit" >
+                                    <f:param name="ofertaAcademicaId" value="#{ofertaAcademica.id}" />
+                                </p:button>
                             </p:column>
                         </p:dataTable>
                         <f:facet name="footer">
-                            <p:commandButton value="#{btn['crear']}" update="@form" process="@form" immediate="true" icon="fa fa-lock" 
+                            <p:commandButton value="#{btn['crear']}" update="@form" process="@form" immediate="true" icon="fa fa-file-text" 
                                              onstart="PF('dlgLoading').show()" action="#{ofertaAcademicaController.crear()}" oncomplete="PF('dlgLoading').hide()"/>
                         </f:facet>
                     </p:panel>

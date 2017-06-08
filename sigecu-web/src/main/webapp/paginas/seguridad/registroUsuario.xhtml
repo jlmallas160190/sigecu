@@ -11,7 +11,6 @@
             <ui:define name="title">
                 #{lbl.registroUsuario}
             </ui:define>
-            <ui:define name="top"></ui:define>
             <ui:define name="content">
                 <h:form>
                     <p:panel header="#{lbl.registroUsuario}">
@@ -60,7 +59,7 @@
                                 <p:message id="msgEmail" display="icon" for="email"/>
                                 <p:outputLabel  value="#{lbl.fechaNacimiento}" />
                                 <p:calendar id="fechaNacimiento" value="#{usuarioController.usuario.persona.fechaNacimiento}" showOn="button" 
-                                            navigator="true" locale="es" pattern="dd/MM/yyyy">
+                                            navigator="true" locale="es"  pattern="dd/MM/yyyy">
                                 </p:calendar>
                                 <p:message id="msgFechaNacimiento" display="icon" for="fechaNacimiento"/>
                                 <h:outputLabel value="#{lbl.estadoCivil}"></h:outputLabel>
@@ -114,13 +113,14 @@
                                 <p:captcha label="Captcha" language="es"/>
                             </p:panelGrid>
                             <f:facet name="footer">
-                                <h:panelGrid columns="1">
+                                <h:panelGrid columns="1" styleClass="ui-panelgrid-blank">
                                     <p:commandButton id="btn" value="#{btn.registrar}"  icon="fa fa-save" update="@form" process="@form"
                                                      onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{usuarioController.guardar()}"/>
+                                    
                                 </h:panelGrid>
                             </f:facet>
                         </div>
-                        <ui:include src="/../../dialogLoading.xhtml"></ui:include>
+                        <ui:include src="/dialogLoading.xhtml"></ui:include>
                     </p:panel>
                 </h:form>
             </ui:define>

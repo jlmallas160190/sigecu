@@ -22,11 +22,11 @@
         <div id="top">
             <ui:insert name="top">
                 <h:form>
-                    <p:toolbar>
-                        <f:facet name="right">
-                            <p:commandButton value="#{btn.RegistarUsuario}" action="pretty:registroUsuario" icon="fa fa-user"/>
-                        </f:facet>
-                    </p:toolbar>
+                <p:toolbar>
+                    <f:facet name="right">
+                        <p:commandButton value="#{btn['com.megagitel.sigecu.login']}" icon="fa fa-home" action="pretty:login" immediate="true"/>
+                    </f:facet>
+                </p:toolbar>
                 </h:form>
             </ui:insert>
         </div>
@@ -34,7 +34,7 @@
         <div class="ui-g-3" >
             <ui:insert name="left"></ui:insert>
         </div>
-        <div class="ui-g-5" >
+        <div class="ui-g-6" >
             <ui:insert name="content"></ui:insert>
         </div>
         <div class="ui-g-3" >

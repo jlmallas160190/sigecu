@@ -8,17 +8,19 @@
 
     <body>
 
-        <ui:composition template="./../../../template.xhtml">
+        <ui:composition template="./../../../index.xhtml">
 
             <ui:define name="title">
-                title
+                #{lbl['com.megagitel.sigecu.ofertaAcademica.editar']}
             </ui:define>
-
-
-
+            <ui:define name="params">
+                <f:metadata>
+                    <f:viewParam name="ofertaAcademicaId" value="#{ofertaAcademicaController.ofertaAcademicaId}" />
+                </f:metadata>
+            </ui:define>
             <ui:define name="content">
                 <h:form>
-                    <p:panel id="header" header="#{lbl.autenticacion}">
+                    <p:panel id="header" header="#{lbl['com.megagitel.sigecu.ofertaAcademica.editar']}">
                         <p:messages id="msg"/>
                         <div class="ui-fluid">
                             <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
@@ -29,14 +31,15 @@
                                 <p:calendar id="fechaFin" placeholder="#{lbl['com.megagitel.sigecu.fechaFin']}"  value="#{ofertaAcademicaController.ofertaAcademica.fechaFin}">
                                 </p:calendar>
                                 <h:outputLabel value="#{lbl['com.megagitel.sigecu.descripcion']}"></h:outputLabel>
-                                <p:inputText id="descripcion" value="#{ofertaAcademicaController.ofertaAcademica.descripcion}"/>
+                                <p:editor id="descripcion" value="#{ofertaAcademicaController.ofertaAcademica.descripcion}"/>
                             </p:panelGrid>
                         </div>
                         <f:facet name="footer">
                             <div class="ui-fluid">
-                                <h:panelGrid  styleClass="ui-panelgrid-blank">
-                                    <p:commandButton id="btn" value="#{btn['guardar']}" update="@form" process="@form" immediate="true" icon="fa fa-disk" 
+                                <h:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">
+                                    <p:commandButton id="btn" value="#{btn['guardar']}" update="@form" process="@form"  icon="fa fa-save" 
                                                      onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{ofertaAcademicaController.guardar()}" />
+                                    <p:commandButton value="#{btn['regresar']}" icon="fa fa-arrow-left" action="pretty:ofertasAcademicas" immediate="true"/>
                                 </h:panelGrid>
                             </div>
                             <ui:include src="/dialogLoading.xhtml"></ui:include>
