@@ -5,8 +5,8 @@
  */
 package com.megagitel.sigecu.ui.model;
 
-import com.megagitel.sigecu.academico.ejb.OfertaAcademicaService;
-import com.megagitel.sigecu.academico.modelo.OfertaAcademica;
+import com.megagitel.sigecu.academico.ejb.OfertadorComponenteEducativoService;
+import com.megagitel.sigecu.academico.modelo.OfertadorComponenteEducativo;
 import com.megagitel.sigecu.util.QueryData;
 import com.megagitel.sigecu.util.QuerySortOrder;
 import java.io.Serializable;
@@ -22,25 +22,24 @@ import org.primefaces.model.SortOrder;
  *
  * @author jorgemalla
  */
-public class LazyOfertaAcademicaDataModel extends LazyDataModel<OfertaAcademica> implements Serializable {
+public class LazyOfertadorComponenteEducativoDataModel extends LazyDataModel<OfertadorComponenteEducativo> implements Serializable {
 
-    private OfertaAcademicaService ofertaAcademicaService;
-    private List<OfertaAcademica> resultado;
-
+    private OfertadorComponenteEducativoService ofertadorComponenteEducativoService;
+    private List<OfertadorComponenteEducativo> resultado;
     private String filtro;
     private Date start;
     private Date end;
     private static final int MAX_RESULTS = 1;
     private int firstResult = 0;
 
-    public LazyOfertaAcademicaDataModel(OfertaAcademicaService ofertaAcademicaService) {
+    public LazyOfertadorComponenteEducativoDataModel(OfertadorComponenteEducativoService oas) {
         setPageSize(MAX_RESULTS);
         this.resultado = new ArrayList<>();
-        this.ofertaAcademicaService = ofertaAcademicaService;
+        this.ofertadorComponenteEducativoService = oas;
     }
 
     @Override
-    public List<OfertaAcademica> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<OfertadorComponenteEducativo> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         int finPagination = first + pageSize;
         Date fechaActual = new Date(System.currentTimeMillis());
         QuerySortOrder order = QuerySortOrder.DESC;
@@ -57,18 +56,18 @@ public class LazyOfertaAcademicaDataModel extends LazyDataModel<OfertaAcademica>
                 range.put("end", fechaActual);
             }
         }
-        QueryData<OfertaAcademica> qData = this.ofertaAcademicaService.find(first, finPagination, sortField, order, _filters);
+        QueryData<OfertadorComponenteEducativo> qData = this.ofertadorComponenteEducativoService.find(first, finPagination, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();
     }
 
     @Override
-    public OfertaAcademica getRowData(String rowKey) {
-        return ofertaAcademicaService.find(Long.valueOf(rowKey));
+    public OfertadorComponenteEducativo getRowData(String rowKey) {
+        return ofertadorComponenteEducativoService.find(Long.valueOf(rowKey));
     }
 
     @Override
-    public Object getRowKey(OfertaAcademica entity) {
+    public Object getRowKey(OfertadorComponenteEducativo entity) {
         return entity.getId();
     }
 
@@ -85,23 +84,23 @@ public class LazyOfertaAcademicaDataModel extends LazyDataModel<OfertaAcademica>
     }
 
     public boolean isNextExists() {
-        return ofertaAcademicaService.count() > this.getPageSize() + firstResult;
+        return ofertadorComponenteEducativoService.count() > this.getPageSize() + firstResult;
     }
 
-    public List<OfertaAcademica> getResultado() {
+    public OfertadorComponenteEducativoService getOfertadorComponenteEducativoService() {
+        return ofertadorComponenteEducativoService;
+    }
+
+    public void setOfertadorComponenteEducativoService(OfertadorComponenteEducativoService ofertadorComponenteEducativoService) {
+        this.ofertadorComponenteEducativoService = ofertadorComponenteEducativoService;
+    }
+
+    public List<OfertadorComponenteEducativo> getResultado() {
         return resultado;
     }
 
-    public void setResultado(List<OfertaAcademica> resultado) {
+    public void setResultado(List<OfertadorComponenteEducativo> resultado) {
         this.resultado = resultado;
-    }
-
-    public OfertaAcademicaService getOfertaAcademicaService() {
-        return ofertaAcademicaService;
-    }
-
-    public void setOfertaAcademicaService(OfertaAcademicaService ofertaAcademicaService) {
-        this.ofertaAcademicaService = ofertaAcademicaService;
     }
 
     public String getFiltro() {
@@ -134,7 +133,6 @@ public class LazyOfertaAcademicaDataModel extends LazyDataModel<OfertaAcademica>
 
     public void setFirstResult(int firstResult) {
         this.firstResult = firstResult;
-        this.resultado = null;
     }
 
 }

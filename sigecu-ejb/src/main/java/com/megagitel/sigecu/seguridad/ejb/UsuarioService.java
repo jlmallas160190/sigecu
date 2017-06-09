@@ -20,5 +20,4 @@ public class UsuarioService extends AbstractDao<Usuario> implements Serializable
     public UsuarioService() {
         super(Usuario.class);
     }
-
 }

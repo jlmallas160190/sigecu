@@ -7,8 +7,4 @@
         <pattern value="/login"/>
         <view-id value="faces/login.xhtml"/>       
     </url-mapping>
-    <url-mapping id="inicio">
-        <pattern value="/inicio"/>
-        <view-id value="faces/index.xhtml"/>       
-    </url-mapping>
 </pretty-config>

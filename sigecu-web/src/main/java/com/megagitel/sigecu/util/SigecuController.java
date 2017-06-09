@@ -13,7 +13,7 @@ import javax.faces.context.FacesContext;
  *
  * @author jorgemalla
  */
-public abstract class HomeController {
+public abstract class SigecuController {
 
     private Date start;
     private Date end;
@@ -36,6 +36,11 @@ public abstract class HomeController {
 
     public void agregarMensajeExitoso(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, I18nUtil.getMessages(mensaje), null);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void agregarMensajeFatal(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, I18nUtil.getMessages(mensaje), null);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

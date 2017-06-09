@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?>
+<?xml version='1.0' encoding='UTF-8' ?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -15,37 +15,38 @@
             </ui:define>        
             <ui:define name="content">
                 <h:form>
-                    <p:panel id="pnlProyectos" header="#{lbl['com.megagitel.sigecu.academico.ofertasAcademicas']}" toggleable="true">
+                    <p:panel id="pnlProyectos" header="#{lbl['com.megagitel.sigecu.academico.ofertadorComponenteEducativo']}" toggleable="true">
                         <p:messages id="msg"/>
-                        <p:dataTable var="ofertaAcademica" 
-                                     value="#{ofertaAcademicaController.lazyOfertaAcademicaDataModel}" 
-                                     paginator="true" rows="#{ofertaAcademicaController.getDetalleParametrizacion('TABLE_ROWS', '50')}" 
+                        <p:dataTable var="ofertadorComponenteEducativo" 
+                                     value="#{ofertadorComponenteEducativoController.lazyOfertadorComponenteEducativoDataModel}" 
+                                     paginator="true" rows="50" 
                                      sortOrder="DESCENDING"
                                      reflow="true" 
-                                     rowKey="#{ofertaAcademica.id}" 
+                                     rowKey="#{ofertadorComponenteEducativo.id}" 
                                      resizableColumns="true" 
                                      id="dataTable" lazy="true">
-                            <p:column headerText="#{lbl['com.megagitel.sigecu.fechaInicio']}" sortBy="#{ofertaAcademica.fechaInicio}"
+                            <p:column headerText="#{lbl['nombre']}" sortBy="#{ofertadorComponenteEducativo.nombre}"
                                       styleClass="text-right">
-                                <h:outputText value="#{ofertaAcademica.fechaInicio}"/>
+                                <h:outputText value="#{ofertadorComponenteEducativo.nombre}"/>
                             </p:column>
-                            <p:column headerText="#{lbl['com.megagitel.sigecu.fechaFin']}" sortBy="#{ofertaAcademica.fechaFin}"
+                            <p:column headerText="#{lbl['descripcion']}" sortBy="#{ofertadorComponenteEducativo.descripcion}"
                                       styleClass="text-right">
-                                <h:outputText value="#{ofertaAcademica.fechaFin}"/>
+                                <h:outputText value="#{ofertadorComponenteEducativo.descripcion}"/>
                             </p:column>  
                             <p:column headerText="#{lbl['accion']}">
                                 <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank">
-                                <p:button outcome="pretty:ofertaAcademica" icon="fa fa-edit" >
-                                    <f:param name="ofertaAcademicaId" value="#{ofertaAcademica.id}" />
-                                </p:button>
-                                    <p:commandButton icon="fa fa-trash" onclick="if (!confirm('#{msg['remove.confirm']}')) return false;" update="@form"
-                                                     onstart="PF('dlgLoading').show()" action="#{ofertaAcademicaController.eliminar(ofertaAcademica)}" oncomplete="PF('dlgLoading').hide()"/>
+                                    <p:button outcome="pretty:ofertadorCompoenteEducativo" icon="fa fa-edit" >
+                                        <f:param name="ofertadorComponenteEducativoId" value="#{ofertadorComponenteEducativo.id}" />
+                                    </p:button>
+                                    <!--<p:commandButton icon="fa fa-trash" onclick="if (!confirm('#{msg['remove.confirm']}'))
+                                                return false;" update="@form"
+                                                     onstart="PF('dlgLoading').show()" action="#{ofertaAcademicaController.eliminar(ofertaAcademica)}" oncomplete="PF('dlgLoading').hide()"/>-->
                                 </p:panelGrid>
                             </p:column>
                         </p:dataTable>
                         <f:facet name="footer">
                             <p:commandButton value="#{btn['crear']}" update="@form" process="@form"  icon="fa fa-file-text" immediate="true"
-                                             onstart="PF('dlgLoading').show()" action="#{ofertaAcademicaController.crear()}" oncomplete="PF('dlgLoading').hide()"/>
+                                             onstart="PF('dlgLoading').show()" action="#{ofertadorComponenteEducativoController.crear()}" oncomplete="PF('dlgLoading').hide()"/>
                         </f:facet>
                     </p:panel>
                     <ui:include src="./../../../dialogLoading.xhtml"></ui:include>

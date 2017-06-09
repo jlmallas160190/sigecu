@@ -9,7 +9,7 @@ import com.megagitel.sigecu.seguridad.modelo.Usuario;
 import com.megagitel.sigecu.util.I18nUtil;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -23,12 +23,10 @@ import org.apache.shiro.subject.Subject;
  * @author jorgemalla
  */
 @Named
-@SessionScoped
+@RequestScoped
 public class LoginController implements Serializable {
 
     private Usuario usuario;
-
-    private Subject subject;
 
     @PostConstruct
     public void init() {
@@ -37,7 +35,7 @@ public class LoginController implements Serializable {
 
     public String autenticar() {
         try {
-            subject = SecurityUtils.getSubject();
+            Subject subject = SecurityUtils.getSubject();
             UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(this.usuario.getNombre(), this.usuario.getClave());
             subject.login(usernamePasswordToken);
             if (subject.isAuthenticated()) {
@@ -55,7 +53,8 @@ public class LoginController implements Serializable {
 
     public String logout() {
         try {
-            this.subject.logout();
+            Subject subject = SecurityUtils.getSubject();
+            subject.logout();
         } catch (Exception e) {
             throw e;
         }
@@ -71,14 +70,6 @@ public class LoginController implements Serializable {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-    }
-
-    public Subject getSubject() {
-        return subject;
-    }
-
-    public void setSubject(Subject subject) {
-        this.subject = subject;
     }
 
 }
