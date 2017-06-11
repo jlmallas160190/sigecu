@@ -8,6 +8,8 @@ package com.megagitel.sigecu.core.modelo;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -15,6 +17,8 @@ import javax.validation.constraints.*;
  */
 @Entity
 @Table(name = "core_catalogo_item")
+@Audited
+@AuditTable(value = "core_catalogo_item_aud", schema = "audit")
 @NamedQueries({
     @NamedQuery(name = "CatalogoItem.findByCodigo", query = "select c FROM CatalogoItem c where c.codigo=?1 ORDER BY c.codigo DESC")
     ,@NamedQuery(name = "CatalogoItem.findByCatalogo", query = "select c FROM CatalogoItem c where c.catalogo.codigo=?1 ORDER BY c.codigo DESC")})

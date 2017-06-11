@@ -24,6 +24,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -31,6 +33,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "seguridad_usuario")
+@Audited
+@AuditTable(value = "seguridad_usuario_aud", schema = "audit")
 @NamedQueries({
     @NamedQuery(name = "Usuario.findByNombre", query = "select u FROM Usuario u where u.nombre=?1 ORDER BY u.nombre DESC")
     ,@NamedQuery(name = "Usuario.findByToken", query = "select u FROM Usuario u where u.token=?1 ORDER BY u.nombre DESC")

@@ -10,6 +10,8 @@ import com.megagitel.sigecu.seguridad.modelo.Usuario;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -17,6 +19,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "academico_estudiante")
+@Audited
+@AuditTable(value = "academico_estudiante_aud", schema = "audit")
 public class Estudiante extends Persona {
 
     @OneToMany(mappedBy = "estudiante")

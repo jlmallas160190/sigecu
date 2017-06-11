@@ -8,6 +8,8 @@ package com.megagitel.sigecu.core.modelo;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -15,6 +17,8 @@ import javax.validation.constraints.*;
  */
 @Entity
 @Table(name = "core_direccion")
+@Audited
+@AuditTable(value = "core_direccion_aud", schema = "audit")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Direccion implements Serializable {
 

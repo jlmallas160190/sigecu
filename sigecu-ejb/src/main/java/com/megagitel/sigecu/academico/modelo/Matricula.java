@@ -18,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -25,6 +27,8 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "academico_matricula")
+@Audited
+@AuditTable(value = "academico_matricula_aud", schema = "audit")
 public class Matricula implements Serializable {
 
     @Id

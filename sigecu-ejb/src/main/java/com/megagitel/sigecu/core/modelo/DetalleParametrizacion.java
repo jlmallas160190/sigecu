@@ -19,6 +19,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -26,6 +28,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "core_detalle_parametrizacion")
+@AuditTable(value = "core_detalle_parametrizacion_aud", schema = "audit")
+@Audited
 @NamedQueries({
     @NamedQuery(name = "DetalleParametrizacion.findByCodigo", query = "select c FROM DetalleParametrizacion c where c.codigo=?1 ORDER BY c.codigo DESC")})
 public class DetalleParametrizacion implements Serializable {

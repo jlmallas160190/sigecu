@@ -32,8 +32,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import org.apache.shiro.crypto.RandomNumberGenerator;
-import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 
 /**
@@ -48,17 +46,17 @@ public class SetupService implements Serializable {
 
     public void init() {
         Properties properties = new Properties();
-        InputStream input = null;
+        InputStream input;
         try {
             String filename = "config.properties";
             input = SetupService.class.getClassLoader().getResourceAsStream(filename);
             properties.load(input);
-            this.getSuperUsuario();
-            this.getInstitucion();
-            this.getParametrizacion();
             this.cargarCatalogos(properties.getProperty("rutaCatalogos"));
             this.cargarCatalogoItem(properties.getProperty("rutaCatalogosItems"));
+            this.getInstitucion();
             this.cargarGruposUsuario(properties.getProperty("rutaGruposUsuarios"));
+            this.getSuperUsuario();
+            this.getParametrizacion();
             this.cargarDetallesParametrizacion(properties.getProperty("rutaDetallesParam"));
             this.cargarGruposComponenteEducativo(properties.getProperty("rutaGruposComponentesEducativos"));
             this.cargarComponenteEducativo(properties.getProperty("rutaComponentesEducativos"));
@@ -101,13 +99,14 @@ public class SetupService implements Serializable {
     private void crearUsuario() {
         try {
             Usuario usuario = new Usuario();
+            String[] data = {"ADMINISTRADOR"};
+            GrupoUsuario grupoUsuario = getGrupoUsuario(data);
             usuario.setNombre("administrador");
-            RandomNumberGenerator rng = new SecureRandomNumberGenerator();
-            Object salt = rng.nextBytes();
-            String result = new Sha256Hash("admin", salt, 1024).toBase64();
+            String result = new Sha256Hash("admin").toHex();
             usuario.setClave(result);
             usuario.setEliminado(Boolean.FALSE);
             usuario.setSuperUsuario(Boolean.TRUE);
+            usuario.setGrupoUsuario(grupoUsuario);
             getEm().persist(usuario);
         } catch (Exception e) {
             throw e;

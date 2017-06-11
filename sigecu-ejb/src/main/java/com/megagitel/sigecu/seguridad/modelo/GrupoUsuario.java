@@ -23,6 +23,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -30,6 +32,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "seguridad_grupo_usuario")
+@Audited
+@AuditTable(value = "seguridad_grupo_usuario_aud", schema = "audit" )
 @NamedQueries({
     @NamedQuery(name = "GrupoUsuario.findByCodigo", query = "select g FROM GrupoUsuario g where g.codigo=?1 ORDER BY g.codigo DESC")})
 public class GrupoUsuario implements Serializable {

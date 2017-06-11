@@ -16,10 +16,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 /**
  *
@@ -27,6 +32,11 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "academico_oferta_academica")
+@Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
+@AuditTable(value = "academico_oferta_academica_aud", schema = "audit")
+@NamedQueries({
+    @NamedQuery(name = "OfertaAcademica.findCurrent", query = "select c FROM OfertaAcademica c where ?1 BETWEEN c.fechaInicio and c.fechaFin")
+})
 public class OfertaAcademica implements Serializable {
 
     @Id

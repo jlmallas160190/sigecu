@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -19,6 +21,8 @@ import javax.validation.constraints.*;
  */
 @Entity
 @Table(name = "core_persona")
+@Audited
+@AuditTable(value = "core_persona_aud", schema = "audit")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Persona implements Serializable {
 

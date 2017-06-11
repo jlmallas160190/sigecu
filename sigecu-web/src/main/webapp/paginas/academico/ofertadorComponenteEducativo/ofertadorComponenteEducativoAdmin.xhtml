@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?>
+<?xml version='1.0' encoding='UTF-8' ?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -11,35 +11,34 @@
         <ui:composition template="./../../../index.xhtml">
 
             <ui:define name="title">
-                #{lbl['com.megagitel.sigecu.ofertaAcademica.editar']}
+                #{lbl['com.megagitel.sigecu.ofertadorComponenteEducativo.editar']}
             </ui:define>
             <ui:define name="params">
                 <f:metadata>
-                    <f:viewParam name="ofertaAcademicaId" value="#{ofertaAcademicaController.ofertaAcademicaId}" />
+                    <f:viewParam name="ofertadorComponenteEducativoId" value="#{ofertadorComponenteEducativoController.ofertadorComponenteEducativoId}" />
                 </f:metadata>
             </ui:define>
             <ui:define name="content">
                 <h:form>
-                    <p:panel id="header" header="#{lbl['com.megagitel.sigecu.ofertaAcademica.editar']}">
+                    <p:panel id="header" header="#{lbl['com.megagitel.sigecu.ofertadorComponenteEducativo.editar']}">
                         <p:messages id="msg"/>
                         <div class="ui-fluid">
-                            <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid" styleClass="ui-panelgrid-blank">
-                                <h:outputLabel value="#{lbl['com.megagitel.sigecu.fechaInicio']}"></h:outputLabel>
-                                <p:calendar id="fechaInicio" placeholder="#{lbl['com.megagitel.sigecu.fechaInicio']}"  value="#{ofertaAcademicaController.ofertaAcademica.fechaInicio}">
-                                </p:calendar>
-                                <h:outputLabel value="#{lbl['com.megagitel.sigecu.fechaFin']}"></h:outputLabel>
-                                <p:calendar id="fechaFin" placeholder="#{lbl['com.megagitel.sigecu.fechaFin']}"  value="#{ofertaAcademicaController.ofertaAcademica.fechaFin}">
-                                </p:calendar>
+                            <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
+                                <h:outputLabel value="#{lbl.nombre}"></h:outputLabel>
+                                <p:inputText id="nombre" placeholder="#{lbl.nombre}"  value="#{ofertadorComponenteEducativoController.ofertadorComponenteEducativo.nombre}">
+                                    <p:ajax event="keyup" update="msgEmail"/>
+                                </p:inputText>
+                                <p:message id="msgEmail" display="icon" for="nombre"/>
                                 <h:outputLabel value="#{lbl['com.megagitel.sigecu.descripcion']}"></h:outputLabel>
-                                <p:editor id="descripcion" value="#{ofertaAcademicaController.ofertaAcademica.descripcion}"/>
+                                <p:editor id="descripcion" value="#{ofertadorComponenteEducativoController.ofertadorComponenteEducativo.descripcion}"/>
                             </p:panelGrid>
                         </div>
                         <f:facet name="footer">
                             <div class="ui-fluid">
                                 <h:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">
                                     <p:commandButton id="btn" value="#{btn['guardar']}" update="@form" process="@form"  icon="fa fa-save" 
-                                                     onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{ofertaAcademicaController.guardar()}" />
-                                    <p:commandButton value="#{btn['regresar']}" icon="fa fa-arrow-left" action="pretty:ofertasAcademicas" immediate="true"/>
+                                                     onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{ofertadorComponenteEducativoController.guardar()}" />
+                                    <p:commandButton value="#{btn['regresar']}" icon="fa fa-arrow-left" action="pretty:ofertadoresComponentesEducativos" immediate="true"/>
                                 </h:panelGrid>
                             </div>
                             <ui:include src="/dialogLoading.xhtml"></ui:include>

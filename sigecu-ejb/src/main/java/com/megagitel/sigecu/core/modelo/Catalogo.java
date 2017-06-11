@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 /**
  *
@@ -17,6 +20,8 @@ import javax.validation.constraints.*;
  */
 @Entity
 @Table(name = "core_catalogo")
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+@AuditTable(value = "core_catalogo_aud", schema = "audit")
 public class Catalogo implements Serializable {
 
     @Id
@@ -47,7 +52,7 @@ public class Catalogo implements Serializable {
         this.codigo = codigo;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.catalogoItems=new ArrayList<>();
+        this.catalogoItems = new ArrayList<>();
     }
 
     public Integer getId() {

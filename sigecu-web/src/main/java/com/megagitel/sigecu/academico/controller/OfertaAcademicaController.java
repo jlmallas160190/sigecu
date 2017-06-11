@@ -91,7 +91,7 @@ public class OfertaAcademicaController extends SigecuController implements Seria
             Institucion institucion = usuario != null && usuario.getGrupoUsuario() != null && usuario.getGrupoUsuario().getInstitucion() != null
                     ? usuario.getGrupoUsuario().getInstitucion() : null;
             ofertaAcademica.setInstitucion(institucion);
-            if (this.ofertaAcademicaId == null) {
+            if (this.ofertaAcademica.getId() == null) {
                 this.ofertaAcademicaService.create(ofertaAcademica);
             } else {
                 this.ofertaAcademicaService.edit(ofertaAcademica);

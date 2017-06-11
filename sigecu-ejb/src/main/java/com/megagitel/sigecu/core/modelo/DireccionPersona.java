@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -16,6 +18,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "core_direccion_persona")
+@Audited
+@AuditTable(value = "core_direccion_persona_aud", schema = "audit")
 public class DireccionPersona extends Direccion {
 
     @JoinColumn(name = "persona_id", referencedColumnName = "id")

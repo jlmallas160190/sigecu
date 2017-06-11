@@ -17,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -24,6 +26,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "core_parametrizacion")
+@Audited
+@AuditTable(value = "core_parametrizacion_aud", schema = "audit")
 public class Parametrizacion implements Serializable {
 
     @Id

@@ -11,7 +11,7 @@
         <ui:composition template="./../../../index.xhtml">
 
             <ui:define name="title">
-                #{lbl['com.megagitel.sigecu.academico.ofertasAcademicas']}
+                #{lbl['com.megagitel.sigecu.academico.ofertadoresComponentesEducativos']}
             </ui:define>        
             <ui:define name="content">
                 <h:form>
@@ -35,7 +35,7 @@
                             </p:column>  
                             <p:column headerText="#{lbl['accion']}">
                                 <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank">
-                                    <p:button outcome="pretty:ofertadorCompoenteEducativo" icon="fa fa-edit" >
+                                    <p:button outcome="pretty:ofertadorComponenteEducativo" icon="fa fa-edit" >
                                         <f:param name="ofertadorComponenteEducativoId" value="#{ofertadorComponenteEducativo.id}" />
                                     </p:button>
                                     <!--<p:commandButton icon="fa fa-trash" onclick="if (!confirm('#{msg['remove.confirm']}'))

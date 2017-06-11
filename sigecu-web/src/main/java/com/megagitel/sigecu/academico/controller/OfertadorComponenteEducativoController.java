@@ -5,6 +5,7 @@
  */
 package com.megagitel.sigecu.academico.controller;
 
+import com.megagitel.sigecu.academico.ejb.OfertaAcademicaService;
 import com.megagitel.sigecu.academico.ejb.OfertadorComponenteEducativoService;
 import com.megagitel.sigecu.academico.modelo.OfertadorComponenteEducativo;
 import com.megagitel.sigecu.ui.model.LazyOfertadorComponenteEducativoDataModel;
@@ -12,6 +13,7 @@ import com.megagitel.sigecu.util.SigecuController;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import java.io.Serializable;
+import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
@@ -39,6 +41,8 @@ public class OfertadorComponenteEducativoController extends SigecuController imp
 
     @EJB
     private OfertadorComponenteEducativoService ofertadorComponenteEducativoService;
+    @EJB
+    private OfertaAcademicaService ofertaAcademicaService;
 
     private OfertadorComponenteEducativo ofertadorComponenteEducativo;
     private Long ofertadorComponenteEducativoId;
@@ -55,6 +59,10 @@ public class OfertadorComponenteEducativoController extends SigecuController imp
 
     public String guardar() {
         try {
+            if (this.ofertadorComponenteEducativo.getOfertaAcademica() == null) {
+                Date fechaActual = new Date();
+                this.ofertadorComponenteEducativo.setOfertaAcademica(this.ofertaAcademicaService.getOfertaAcademicaActual(fechaActual));
+            }
             if (this.ofertadorComponenteEducativo.getId() == null) {
                 this.ofertadorComponenteEducativoService.create(ofertadorComponenteEducativo);
             } else {
@@ -78,13 +86,13 @@ public class OfertadorComponenteEducativoController extends SigecuController imp
     }
 
     public OfertadorComponenteEducativo getOfertadorComponenteEducativo() {
+        if (ofertadorComponenteEducativoId != null && this.ofertadorComponenteEducativo.getId() == null) {
+            ofertadorComponenteEducativo = this.ofertadorComponenteEducativoService.find(ofertadorComponenteEducativoId);
+        }
         return ofertadorComponenteEducativo;
     }
 
     public void setOfertadorComponenteEducativo(OfertadorComponenteEducativo ofertadorComponenteEducativo) {
-        if (ofertadorComponenteEducativoId != null && this.ofertadorComponenteEducativo.getId() == null) {
-            ofertadorComponenteEducativo = this.ofertadorComponenteEducativoService.find(ofertadorComponenteEducativoId);
-        }
         this.ofertadorComponenteEducativo = ofertadorComponenteEducativo;
     }
 

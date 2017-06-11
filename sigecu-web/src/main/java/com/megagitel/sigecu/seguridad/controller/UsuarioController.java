@@ -99,7 +99,7 @@ public class UsuarioController implements Serializable {
                     return "";
                 }
                 this.usuario.setNombre(this.usuario.getPersona().getEmail());
-                String result = new Sha256Hash(this.usuario.getPersona().getNumeroIdentificacion()).toBase64();
+                String result = new Sha256Hash(this.usuario.getPersona().getNumeroIdentificacion()).toHex();
                 this.usuario.setClave(result);
                 this.usuario.setEliminado(Boolean.FALSE);
                 this.usuario.setSuperUsuario(Boolean.FALSE);
@@ -141,7 +141,7 @@ public class UsuarioController implements Serializable {
             mailDto.setDestino(this.usuario.getPersona().getEmail());
             HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
             String url = req.getContextPath();
-            mailDto.setMensaje(detalleParametrizacionHost.getValor() + "" + url + "/" + detalleParametrizacionToken.getValor() + "/" + this.usuario.getToken());
+            mailDto.setMensaje(detalleParametrizacionHost.getValor() + "" + url + "/" + detalleParametrizacionToken.getValor() + "" + this.usuario.getToken());
             return EmailService.enviar(mailDto);
         } catch (Exception e) {
             throw e;

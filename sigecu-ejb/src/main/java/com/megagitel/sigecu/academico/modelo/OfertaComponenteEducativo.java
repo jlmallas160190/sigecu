@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -20,6 +22,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "academico_oferta_componente_educativo")
+@Audited
+@AuditTable(value = "academico_oferta_componente_educativo_aud", schema = "audit")
 public class OfertaComponenteEducativo implements Serializable {
 
     @Id

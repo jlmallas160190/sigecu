@@ -12,6 +12,8 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 /**
  *
@@ -19,6 +21,8 @@ import javax.validation.constraints.*;
  */
 @Entity
 @Table(name = "core_institucion")
+@Audited
+@AuditTable(value = "core_institucion_aud", schema = "audit")
 public class Institucion implements Serializable {
 
     @Id
