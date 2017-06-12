@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <p:panel>
+            <p:dataTable var="ofertaComponenteEducativo" 
+                         value="#{ofertadorComponenteEducativoController.ofertadorComponenteEducativo.ofertaComponenteEducativos}" 
+                         paginator="true" rows="#{ofertaAcademicaController.getDetalleParametrizacion('TABLE_ROWS', '50')}" 
+                         sortOrder="DESCENDING"
+                         reflow="true" 
+                         rowKey="#{ofertaComponenteEducativo.id}" 
+                         resizableColumns="true" 
+                         id="dataTable" lazy="true">
+                <p:column headerText="#{lbl['nombre']}" sortBy="#{ofertaComponenteEducativo.componenteEducativo.nombre}"
+                          styleClass="text-right">
+                    <h:outputText value="#{ofertaComponenteEducativo.componenteEducativo.nombre}"/>
+                </p:column>
+                <p:column headerText="#{lbl['descripcion']}" sortBy="#{ofertaComponenteEducativo.componenteEducativo.descripcion}"
+                          styleClass="text-right">
+                    <h:outputText value="#{ofertaComponenteEducativo.componenteEducativo.descripcion}"/>
+                </p:column>  
+                <p:column headerText="#{lbl['accion']}">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank">
+
+                    </p:panelGrid>
+                </p:column>
+            </p:dataTable>
+            <f:facet name="footer">
+                <p:commandButton value="#{btn['crear']}" update="@form" process="@form"  icon="fa fa-file-text" immediate="true"
+                                 onstart="PF('dlgLoading').show()" action="#{ofertaAcademicaController.crear()}" oncomplete="PF('dlgLoading').hide()"/>
+            </f:facet>
+        </p:panel>
+
+
+    </body>
+</html>
+

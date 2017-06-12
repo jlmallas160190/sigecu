@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,7 +45,7 @@ public class Parametrizacion implements Serializable {
     private String nombre;
     @Column(name = "descripcion")
     private String descripcion;
-    @OneToMany(mappedBy = "parametrizacion")
+    @OneToMany(mappedBy = "parametrizacion", fetch = FetchType.LAZY)
     private List<DetalleParametrizacion> detalleParametrizacions;
 
     public Parametrizacion() {

@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -49,7 +50,7 @@ public class GrupoComponenteEducativo implements Serializable {
     private String descripcion;
     @Column(name = "eliminado", columnDefinition = "boolean default false")
     private Boolean eliminado;
-    @OneToMany(mappedBy = "grupoComponenteEducativo")
+    @OneToMany(mappedBy = "grupoComponenteEducativo", fetch = FetchType.LAZY)
     private List<GrupoComponenteEducativo> grupoComponenteEducativos;
     @JoinColumn(name = "grupo_id", referencedColumnName = "id")
     @ManyToOne
@@ -57,7 +58,7 @@ public class GrupoComponenteEducativo implements Serializable {
     @JoinColumn(name = "institucion_id", referencedColumnName = "id")
     @ManyToOne
     private Institucion institucion;
-    @OneToMany(mappedBy = "grupoComponenteEducativo")
+    @OneToMany(mappedBy = "grupoComponenteEducativo", fetch = FetchType.LAZY)
     private List<ComponenteEducativo> componenteEducativos;
 
     public GrupoComponenteEducativo() {

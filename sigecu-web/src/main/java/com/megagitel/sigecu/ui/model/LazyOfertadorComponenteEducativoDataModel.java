@@ -56,6 +56,7 @@ public class LazyOfertadorComponenteEducativoDataModel extends LazyDataModel<Ofe
                 range.put("end", fechaActual);
             }
         }
+        _filters.put("eliminar", Boolean.FALSE);
         QueryData<OfertadorComponenteEducativo> qData = this.ofertadorComponenteEducativoService.find(first, finPagination, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();

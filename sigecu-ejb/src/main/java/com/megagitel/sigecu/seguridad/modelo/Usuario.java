@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +20,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -26,6 +28,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 /**
  *
@@ -66,7 +69,7 @@ public class Usuario implements Serializable {
     @JoinColumn(name = "grupo_usuario_id", referencedColumnName = "id")
     @ManyToOne
     private GrupoUsuario grupoUsuario;
-    @ManyToMany(mappedBy = "usuarios")
+    @ManyToMany(mappedBy = "usuarios", fetch = FetchType.LAZY)
     private List<Menu> menus;
     @Transient
     private String confirmaClave;
@@ -164,5 +167,4 @@ public class Usuario implements Serializable {
     public void setConfirmaClave(String confirmaClave) {
         this.confirmaClave = confirmaClave;
     }
-
 }

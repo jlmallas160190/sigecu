@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +25,6 @@ import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 
 /**
  *
@@ -32,7 +32,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
  */
 @Entity
 @Table(name = "academico_oferta_academica")
-@Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
+@Audited
 @AuditTable(value = "academico_oferta_academica_aud", schema = "audit")
 @NamedQueries({
     @NamedQuery(name = "OfertaAcademica.findCurrent", query = "select c FROM OfertaAcademica c where ?1 BETWEEN c.fechaInicio and c.fechaFin")
@@ -53,7 +53,7 @@ public class OfertaAcademica implements Serializable {
     private String descripcion;
     @ManyToOne
     private Institucion institucion;
-    @OneToMany(mappedBy = "ofertaAcademica")
+    @OneToMany(mappedBy = "ofertaAcademica",fetch = FetchType.LAZY)
     private List<OfertadorComponenteEducativo> ofertadorComponenteEducativos;
 
     public OfertaAcademica() {

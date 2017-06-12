@@ -23,9 +23,9 @@ import org.hibernate.envers.Audited;
 @AuditTable(value = "academico_estudiante_aud", schema = "audit")
 public class Estudiante extends Persona {
 
-    @OneToMany(mappedBy = "estudiante")
+    @OneToMany(mappedBy = "estudiante", fetch = FetchType.LAZY)
     private List<Matricula> matriculas;
-    @OneToMany(mappedBy = "estudiante")
+    @OneToMany(mappedBy = "estudiante", fetch = FetchType.LAZY)
     private List<InteresComponenteEducativo> interesComponenteEducativos;
 
     public Estudiante() {

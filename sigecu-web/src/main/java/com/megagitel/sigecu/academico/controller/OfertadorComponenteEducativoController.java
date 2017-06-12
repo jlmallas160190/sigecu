@@ -76,6 +76,19 @@ public class OfertadorComponenteEducativoController extends SigecuController imp
         return "";
     }
 
+    public String desactivar(OfertadorComponenteEducativo oce) {
+        try {
+            if (oce.getId() != null) {
+                oce.setEliminar(Boolean.TRUE);
+                this.ofertadorComponenteEducativoService.edit(oce);
+            }
+        } catch (Exception e) {
+            return "";
+        }
+        agregarMensajeExitoso("remove.succesful");
+        return "";
+    }
+
     public void filter() {
         if (lazyOfertadorComponenteEducativoDataModel == null) {
             lazyOfertadorComponenteEducativoDataModel = new LazyOfertadorComponenteEducativoDataModel(this.ofertadorComponenteEducativoService);

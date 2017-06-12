@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -57,9 +58,9 @@ public class ComponenteEducativo implements Serializable {
     @JoinColumn(name = "grupo_id", referencedColumnName = "id")
     @ManyToOne
     private GrupoComponenteEducativo grupoComponenteEducativo;
-    @OneToMany(mappedBy = "componenteEducativo")
+    @OneToMany(mappedBy = "componenteEducativo",fetch = FetchType.LAZY)
     private List<InteresComponenteEducativo> interesComponenteEducativos;
-    @OneToMany(mappedBy = "componenteEducativo")
+    @OneToMany(mappedBy = "componenteEducativo",fetch = FetchType.LAZY)
     private List<OfertaComponenteEducativo> ofertaComponenteEducativos;
 
     public ComponenteEducativo() {

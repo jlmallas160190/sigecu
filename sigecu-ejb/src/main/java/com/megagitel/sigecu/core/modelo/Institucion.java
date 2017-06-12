@@ -55,11 +55,11 @@ public class Institucion implements Serializable {
     private String email;
     @Column(name = "celular")
     private String celular;
-    @OneToMany(mappedBy = "institucion")
+    @OneToMany(mappedBy = "institucion", fetch = FetchType.LAZY)
     private List<GrupoComponenteEducativo> grupoComponenteEducativos;
-    @OneToMany(mappedBy = "institucion")
+    @OneToMany(mappedBy = "institucion", fetch = FetchType.LAZY)
     private List<GrupoUsuario> grupoUsuarios;
-    @OneToMany(mappedBy = "institucion")
+    @OneToMany(mappedBy = "institucion", fetch = FetchType.LAZY)
     private List<OfertaAcademica> ofertaAcademicas;
 
     public Institucion() {

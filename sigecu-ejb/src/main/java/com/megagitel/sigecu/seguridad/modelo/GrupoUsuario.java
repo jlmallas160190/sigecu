@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +34,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Table(name = "seguridad_grupo_usuario")
 @Audited
-@AuditTable(value = "seguridad_grupo_usuario_aud", schema = "audit" )
+@AuditTable(value = "seguridad_grupo_usuario_aud", schema = "audit")
 @NamedQueries({
     @NamedQuery(name = "GrupoUsuario.findByCodigo", query = "select g FROM GrupoUsuario g where g.codigo=?1 ORDER BY g.codigo DESC")})
 public class GrupoUsuario implements Serializable {
@@ -52,7 +53,7 @@ public class GrupoUsuario implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "nombre")
     private String nombre;
-    @OneToMany(mappedBy = "grupoUsuario")
+    @OneToMany(mappedBy = "grupoUsuario", fetch = FetchType.LAZY)
     private List<Usuario> usuarios;
     @JoinColumn(name = "institucion_id", referencedColumnName = "id")
     @ManyToOne

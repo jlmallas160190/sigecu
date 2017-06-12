@@ -42,7 +42,7 @@ public class Catalogo implements Serializable {
     private String descripcion;
     @Column(name = "eliminado", columnDefinition = "boolean default false")
     private Boolean eliminado;
-    @OneToMany(mappedBy = "catalogo")
+    @OneToMany(mappedBy = "catalogo", fetch = FetchType.LAZY)
     private List<CatalogoItem> catalogoItems;
 
     public Catalogo() {

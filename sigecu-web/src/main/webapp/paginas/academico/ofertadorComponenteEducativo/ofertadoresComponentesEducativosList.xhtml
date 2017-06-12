@@ -38,9 +38,9 @@
                                     <p:button outcome="pretty:ofertadorComponenteEducativo" icon="fa fa-edit" >
                                         <f:param name="ofertadorComponenteEducativoId" value="#{ofertadorComponenteEducativo.id}" />
                                     </p:button>
-                                    <!--<p:commandButton icon="fa fa-trash" onclick="if (!confirm('#{msg['remove.confirm']}'))
-                                                return false;" update="@form"
-                                                     onstart="PF('dlgLoading').show()" action="#{ofertaAcademicaController.eliminar(ofertaAcademica)}" oncomplete="PF('dlgLoading').hide()"/>-->
+                                    <p:commandButton icon="fa fa-trash" onclick="if (!confirm('#{msg['remove.confirm']}'))
+                                               return false;" update="@form"
+                                                     onstart="PF('dlgLoading').show()" action="#{ofertadorComponenteEducativoController.desactivar(ofertadorComponenteEducativo)}" oncomplete="PF('dlgLoading').hide()"/>
                                 </p:panelGrid>
                             </p:column>
                         </p:dataTable>

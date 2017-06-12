@@ -59,7 +59,7 @@
                                 <p:message id="msgEmail" display="icon" for="email"/>
                                 <p:outputLabel  value="#{lbl.fechaNacimiento}" />
                                 <p:calendar id="fechaNacimiento" value="#{usuarioController.usuario.persona.fechaNacimiento}" showOn="button" 
-                                            navigator="true" locale="es"  pattern="dd/MM/yyyy">
+                                            yearRange="c-70:c+10" navigator="true" locale="es"  pattern="dd/MM/yyyy">
                                 </p:calendar>
                                 <p:message id="msgFechaNacimiento" display="icon" for="fechaNacimiento"/>
                                 <h:outputLabel value="#{lbl.estadoCivil}"></h:outputLabel>
@@ -116,7 +116,7 @@
                                 <h:panelGrid columns="1" styleClass="ui-panelgrid-blank">
                                     <p:commandButton id="btn" value="#{btn.registrar}"  icon="fa fa-save" update="@form" process="@form"
                                                      onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{usuarioController.guardar()}"/>
-                                    
+
                                 </h:panelGrid>
                             </f:facet>
                         </div>

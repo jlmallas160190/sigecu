@@ -20,19 +20,27 @@
             </ui:define>
             <ui:define name="content">
                 <h:form>
-                    <p:panel id="header" header="#{lbl['com.megagitel.sigecu.ofertadorComponenteEducativo.editar']}">
+
+                    <p:panel id="pnl" >
                         <p:messages id="msg"/>
-                        <div class="ui-fluid">
-                            <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
-                                <h:outputLabel value="#{lbl.nombre}"></h:outputLabel>
-                                <p:inputText id="nombre" placeholder="#{lbl.nombre}"  value="#{ofertadorComponenteEducativoController.ofertadorComponenteEducativo.nombre}">
-                                    <p:ajax event="keyup" update="msgEmail"/>
-                                </p:inputText>
-                                <p:message id="msgEmail" display="icon" for="nombre"/>
-                                <h:outputLabel value="#{lbl['com.megagitel.sigecu.descripcion']}"></h:outputLabel>
-                                <p:editor id="descripcion" value="#{ofertadorComponenteEducativoController.ofertadorComponenteEducativo.descripcion}"/>
-                            </p:panelGrid>
-                        </div>
+                        <p:tabView>
+                            <p:tab title="#{lbl['com.megagitel.sigecu.ofertadorComponenteEducativo.editar']}">
+                                <div class="ui-fluid">
+                                    <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
+                                        <h:outputLabel value="#{lbl.nombre}"></h:outputLabel>
+                                        <p:inputText id="nombre" placeholder="#{lbl.nombre}"  value="#{ofertadorComponenteEducativoController.ofertadorComponenteEducativo.nombre}">
+                                            <p:ajax event="keyup" update="msgEmail"/>
+                                        </p:inputText>
+                                        <p:message id="msgEmail" display="icon" for="nombre"/>
+                                        <h:outputLabel value="#{lbl['com.megagitel.sigecu.descripcion']}"></h:outputLabel>
+                                        <p:editor id="descripcion" value="#{ofertadorComponenteEducativoController.ofertadorComponenteEducativo.descripcion}"/>
+                                    </p:panelGrid>
+                                </div> 
+                            </p:tab>
+                            <p:tab rendered="#{ofertadorComponenteEducativoController.ofertadorComponenteEducativo.id!=null}" title="#{lbl['com.megagitel.sigecu.academico.ofertasComponentesEducativos']}">
+                                <ui:include src="./../ofertaComponenteEducativo/ofertaComponenteEducativoList.xhtml"/>
+                            </p:tab>
+                        </p:tabView>
                         <f:facet name="footer">
                             <div class="ui-fluid">
                                 <h:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">

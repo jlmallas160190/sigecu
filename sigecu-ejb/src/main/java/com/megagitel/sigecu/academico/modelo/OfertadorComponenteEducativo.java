@@ -6,10 +6,13 @@
 package com.megagitel.sigecu.academico.modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,12 +44,23 @@ public class OfertadorComponenteEducativo implements Serializable {
     private String nombre;
     @Column(name = "descripcion")
     private String descripcion;
+    @Column
+    private Boolean eliminar;
     @ManyToOne
     private OfertaAcademica ofertaAcademica;
-    @OneToMany(mappedBy = "ofertadorComponenteEducativo")
+    @OneToMany(mappedBy = "ofertadorComponenteEducativo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<OfertaComponenteEducativo> ofertaComponenteEducativos;
 
     public OfertadorComponenteEducativo() {
+        this.ofertaComponenteEducativos = new ArrayList<>();
+    }
+
+    public void agregarOfertaComponenteEducativo(OfertaComponenteEducativo ofertaComponenteEducativo) {
+        if (!this.ofertaComponenteEducativos.contains(ofertaComponenteEducativo)) {
+            ofertaComponenteEducativo.setOfertadorComponenteEducativo(this);
+            this.ofertaComponenteEducativos.add(ofertaComponenteEducativo);
+        }
+
     }
 
     public Long getId() {
@@ -87,6 +101,14 @@ public class OfertadorComponenteEducativo implements Serializable {
 
     public void setOfertaComponenteEducativos(List<OfertaComponenteEducativo> ofertaComponenteEducativos) {
         this.ofertaComponenteEducativos = ofertaComponenteEducativos;
+    }
+
+    public Boolean getEliminar() {
+        return eliminar;
+    }
+
+    public void setEliminar(Boolean eliminar) {
+        this.eliminar = eliminar;
     }
 
 }
