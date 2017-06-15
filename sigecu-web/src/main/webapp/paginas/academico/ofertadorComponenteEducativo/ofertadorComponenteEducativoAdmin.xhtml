@@ -20,7 +20,6 @@
             </ui:define>
             <ui:define name="content">
                 <h:form>
-
                     <p:panel id="pnl" >
                         <p:messages id="msg"/>
                         <p:tabView>
@@ -49,14 +48,12 @@
                                     <p:commandButton value="#{btn['regresar']}" icon="fa fa-arrow-left" action="pretty:ofertadoresComponentesEducativos" immediate="true"/>
                                 </h:panelGrid>
                             </div>
-                            <ui:include src="/dialogLoading.xhtml"></ui:include>
                         </f:facet>
                     </p:panel> 
+                    <ui:include src="/dialogLoading.xhtml"></ui:include>
+                    <ui:include src="../ofertaComponenteEducativo/ofertaComponenteEducativoAdmin.xhtml"></ui:include>
                 </h:form>
             </ui:define>
-
-
-
         </ui:composition>
 
     </body>

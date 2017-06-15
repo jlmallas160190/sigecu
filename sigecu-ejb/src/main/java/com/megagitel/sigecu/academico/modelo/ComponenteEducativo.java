@@ -17,6 +17,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
@@ -33,6 +35,11 @@ import org.hibernate.envers.Audited;
 @Table(name = "academico_componente_educativo")
 @Audited
 @AuditTable(value = "academico_componente_educativo_aud", schema = "audit")
+@NamedQueries({
+    @NamedQuery(name = "ComponenteEducativo.findByGrupo", query = "select c FROM ComponenteEducativo c where c.grupoComponenteEducativo=?1 and c.eliminado=false")
+    ,
+    @NamedQuery(name = "ComponenteEducativo.findByCodigo", query = "select c FROM ComponenteEducativo c where c.codigo=?1 and c.eliminado=false")
+})
 public class ComponenteEducativo implements Serializable {
 
     @Id
@@ -58,9 +65,9 @@ public class ComponenteEducativo implements Serializable {
     @JoinColumn(name = "grupo_id", referencedColumnName = "id")
     @ManyToOne
     private GrupoComponenteEducativo grupoComponenteEducativo;
-    @OneToMany(mappedBy = "componenteEducativo",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "componenteEducativo", fetch = FetchType.LAZY)
     private List<InteresComponenteEducativo> interesComponenteEducativos;
-    @OneToMany(mappedBy = "componenteEducativo",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "componenteEducativo", fetch = FetchType.LAZY)
     private List<OfertaComponenteEducativo> ofertaComponenteEducativos;
 
     public ComponenteEducativo() {
@@ -147,4 +154,24 @@ public class ComponenteEducativo implements Serializable {
         this.ofertaComponenteEducativos = ofertaComponenteEducativos;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof ComponenteEducativo)) {
+            return false;
+        }
+        ComponenteEducativo other = (ComponenteEducativo) object;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+    }
+
+    @Override
+    public String toString() {
+        return this.codigo;
+    }
 }

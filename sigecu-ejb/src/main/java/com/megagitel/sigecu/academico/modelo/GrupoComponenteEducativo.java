@@ -17,6 +17,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -32,6 +34,11 @@ import org.hibernate.envers.Audited;
 @Table(name = "academico_grupo_componente_educativo")
 @Audited
 @AuditTable(value = "academico_grupo_componente_educativo_aud", schema = "audit")
+@NamedQueries({
+    @NamedQuery(name = "GrupoComponenteEducativo.findByInstitucion", query = "select c FROM GrupoComponenteEducativo c where c.institucion=?1 and c.eliminado=false")
+    ,
+    @NamedQuery(name = "GrupoComponenteEducativo.findByCodigo", query = "select c FROM GrupoComponenteEducativo c where c.codigo=?1 and c.eliminado=false")
+})
 public class GrupoComponenteEducativo implements Serializable {
 
     @Id
@@ -149,4 +156,24 @@ public class GrupoComponenteEducativo implements Serializable {
         this.codigo = codigo;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof GrupoComponenteEducativo)) {
+            return false;
+        }
+        GrupoComponenteEducativo other = (GrupoComponenteEducativo) object;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+    }
+
+    @Override
+    public String toString() {
+        return this.codigo;
+    }
 }

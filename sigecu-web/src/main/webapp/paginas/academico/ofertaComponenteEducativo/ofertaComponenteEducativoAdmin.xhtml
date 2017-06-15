@@ -1,26 +1,42 @@
 <?xml version='1.0' encoding='UTF-8' ?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <h:outputStylesheet name="./css/default.css"/>
-        <h:outputStylesheet name="./css/cssLayout.css"/>
-        <title>Facelets Template</title>
-    </h:head>
+    <body>
+        <p:dialog id="dlgOfertaComponenteEducativo"  widgetVar="dlgOfertaComponenteEducativo"  header="#{lbl['com.megagitel.sigecu.ofertaComponenteEducativo.editar']}" 
+                  modal="true" rendered="#{ofertadorComponenteEducativoController.ofertadorComponenteEducativo.id!=null}" draggable="true" position="center" closable="false" >            
+            <p:panel>
+                <div class="ui-fluid">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid" styleClass="ui-panelgrid-blank">
+                        <h:outputLabel value="#{lbl['com.megagitel.sigecu.academico.grupoComponenteEducativo']}"></h:outputLabel>
+                        <p:selectOneMenu id="select-grupoComponenteEducativo" converter="#{grupoComponenteEducativoConverter}" value="#{ofertadorComponenteEducativoController.grupoComponenteEducativo}" 
+                                         panelStyle="width:180px" style="width:160px"  filter="true" filterMatchMode="startsWith">
+                            <p:ajax  listener="#{ofertadorComponenteEducativoController.seleccionarGrupoComponenteEducativo()}" update="select-componenteEducativo"/>
+                            <f:selectItem noSelectionOption="true" itemLabel="#{lbl['com.megagitel.sigecu.academico.grupoComponenteEducativo.seleccionar']}"/>
+                            <f:selectItems var="grupo" itemLabel="#{grupo.codigo}" itemValue="#{grupo}" value="#{ofertadorComponenteEducativoController.grupoComponenteEducativos}" />
+                        </p:selectOneMenu>
+                        <h:outputLabel value="#{lbl['com.megagitel.sigecu.academico.componenteEducativo']}"></h:outputLabel>
+                        <p:selectOneMenu id="select-componenteEducativo" converter="#{componenteEducativoConverter}" value="#{ofertadorComponenteEducativoController.componenteEducativo}" panelStyle="width:180px"
+                                         style="width:160px" filter="true" filterMatchMode="startsWith">
+                            <f:selectItem noSelectionOption="true" itemLabel="#{lbl['com.megagitel.sigecu.academico.componenteEducativo.seleccionar']}"/>
+                            <f:selectItems value="#{ofertadorComponenteEducativoController.componenteEducativos}" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                </div>
+                <f:facet name="footer">
+                    <div class="ui-fluid">
+                        <h:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">
+                            <p:commandButton id="btn_agregar_componente" value="#{btn['agregar']}" update="@form" process="@form"  icon="fa fa-save" 
+                                             onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{ofertadorComponenteEducativoController.agregarOfertaComponenteEducativo()}" />
+                            <p:commandButton value="#{btn['cerrar']}" icon="fa fa-arrow-left" onclick="PF('dlgOfertaComponenteEducativo').hide();"/>
+                        </h:panelGrid>
+                    </div>
 
-    <h:body>
-
-        <div id="top" class="top">
-            <ui:insert name="top">Top</ui:insert>
-        </div>
-
-        <div id="content" class="center_content">
-            <ui:insert name="content">Content</ui:insert>
-        </div>
-
-    </h:body>
-
+                </f:facet>
+            </p:panel>
+        </p:dialog>
+    </body>
 </html>
