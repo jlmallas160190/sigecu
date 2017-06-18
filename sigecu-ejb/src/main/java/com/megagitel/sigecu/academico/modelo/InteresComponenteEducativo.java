@@ -32,8 +32,8 @@ public class InteresComponenteEducativo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer id;
-    @Column(name = "eliminado", columnDefinition = "boolean default false")
-    private Boolean eliminado;
+    @Column(name = "eliminar", columnDefinition = "boolean default false")
+    private Boolean eliminar;
     @JoinColumn(name = "componente_educativo_id", referencedColumnName = "id")
     @ManyToOne
     private ComponenteEducativo componenteEducativo;
@@ -46,7 +46,7 @@ public class InteresComponenteEducativo implements Serializable {
 
     public InteresComponenteEducativo(Boolean eliminado, ComponenteEducativo componenteEducativo,
             Estudiante estudiante) {
-        this.eliminado = eliminado;
+        this.eliminar = eliminado;
         this.componenteEducativo = componenteEducativo;
         this.estudiante = estudiante;
     }
@@ -59,12 +59,12 @@ public class InteresComponenteEducativo implements Serializable {
         this.id = id;
     }
 
-    public Boolean getEliminado() {
-        return eliminado;
+    public Boolean getEliminar() {
+        return eliminar;
     }
 
-    public void setEliminado(Boolean eliminado) {
-        this.eliminado = eliminado;
+    public void setEliminar(Boolean eliminar) {
+        this.eliminar = eliminar;
     }
 
     public ComponenteEducativo getComponenteEducativo() {

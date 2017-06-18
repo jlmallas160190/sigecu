@@ -43,8 +43,8 @@ public class CatalogoItem implements Serializable {
     @JoinColumn(name = "catalogo_id", referencedColumnName = "id")
     @ManyToOne
     private Catalogo catalogo;
-    @Column(name = "eliminado", columnDefinition = "boolean default false")
-    private Boolean eliminado;
+    @Column(name = "eliminar", columnDefinition = "boolean default false")
+    private Boolean eliminar;
 
     public CatalogoItem() {
     }
@@ -55,7 +55,7 @@ public class CatalogoItem implements Serializable {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.catalogo = catalogo;
-        this.eliminado = eliminado;
+        this.eliminar = eliminado;
     }
 
     public Integer getId() {
@@ -98,12 +98,12 @@ public class CatalogoItem implements Serializable {
         this.catalogo = catalogo;
     }
 
-    public Boolean getEliminado() {
-        return eliminado;
+    public Boolean getEliminar() {
+        return eliminar;
     }
 
-    public void setEliminado(Boolean eliminado) {
-        this.eliminado = eliminado;
+    public void setEliminar(Boolean eliminar) {
+        this.eliminar = eliminar;
     }
 
 }

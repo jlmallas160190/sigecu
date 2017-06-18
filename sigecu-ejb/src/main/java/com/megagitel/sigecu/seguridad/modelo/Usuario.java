@@ -20,7 +20,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -28,7 +27,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
 
 /**
  *
@@ -61,20 +59,24 @@ public class Usuario implements Serializable {
     private Boolean superUsuario;
     @Column(name = "token")
     private String token;
-    @Column(name = "eliminado", columnDefinition = "boolean default false")
-    private Boolean eliminado;
+    @Column(name = "eliminar", columnDefinition = "boolean default false")
+    private Boolean eliminar;
     @JoinColumn(name = "persona_id", referencedColumnName = "id")
     @OneToOne
     private Persona persona;
     @JoinColumn(name = "grupo_usuario_id", referencedColumnName = "id")
     @ManyToOne
     private GrupoUsuario grupoUsuario;
-    @ManyToMany(mappedBy = "usuarios", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "usuarios", fetch = FetchType.EAGER)
     private List<Menu> menus;
+    @Column(name = "activo", columnDefinition = "boolean default false")
+    private Boolean activo;
     @Transient
     private String confirmaClave;
 
     public Usuario() {
+        this.activo = Boolean.TRUE;
+        this.eliminar = Boolean.FALSE;
     }
 
     public Usuario(String nombre, String clave, Boolean superUsuario, Persona persona,
@@ -152,12 +154,12 @@ public class Usuario implements Serializable {
         this.token = token;
     }
 
-    public Boolean getEliminado() {
-        return eliminado;
+    public Boolean getEliminar() {
+        return eliminar;
     }
 
-    public void setEliminado(Boolean eliminado) {
-        this.eliminado = eliminado;
+    public void setEliminar(Boolean eliminar) {
+        this.eliminar = eliminar;
     }
 
     public String getConfirmaClave() {
@@ -167,4 +169,13 @@ public class Usuario implements Serializable {
     public void setConfirmaClave(String confirmaClave) {
         this.confirmaClave = confirmaClave;
     }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
 }

@@ -101,7 +101,7 @@ public class UsuarioController implements Serializable {
                 this.usuario.setNombre(this.usuario.getPersona().getEmail());
                 String result = new Sha256Hash(this.usuario.getPersona().getNumeroIdentificacion()).toHex();
                 this.usuario.setClave(result);
-                this.usuario.setEliminado(Boolean.FALSE);
+                this.usuario.setEliminar(Boolean.FALSE);
                 this.usuario.setSuperUsuario(Boolean.FALSE);
                 this.usuario.setToken(result);
                 this.usuario.setGrupoUsuario(grupoUsuario);

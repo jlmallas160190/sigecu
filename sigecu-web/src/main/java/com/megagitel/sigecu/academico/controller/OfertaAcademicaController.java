@@ -34,13 +34,13 @@ import org.apache.shiro.subject.Subject;
 @URLMappings(mappings = {
     @URLMapping(
             id = "ofertasAcademicas",
-            pattern = "/home/ofertasAcademicas",
+            pattern = "/admin/ofertasAcademicas",
             viewId = "/faces/paginas/academico/ofertaAcademica/ofertasAcademicasList.xhtml"
     )
     ,
 @URLMapping(
             id = "ofertaAcademica",
-            pattern = "/home/ofertaAcademica",
+            pattern = "/admin/ofertaAcademica",
             viewId = "/faces/paginas/academico/ofertaAcademica/ofertaAcademicaAdmin.xhtml"
     ),})
 public class OfertaAcademicaController extends SigecuController implements Serializable {

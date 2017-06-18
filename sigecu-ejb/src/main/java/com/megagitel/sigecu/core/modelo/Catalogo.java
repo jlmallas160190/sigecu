@@ -41,7 +41,7 @@ public class Catalogo implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
     @Column(name = "eliminado", columnDefinition = "boolean default false")
-    private Boolean eliminado;
+    private Boolean eliminar;
     @OneToMany(mappedBy = "catalogo", fetch = FetchType.LAZY)
     private List<CatalogoItem> catalogoItems;
 
@@ -87,12 +87,12 @@ public class Catalogo implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Boolean getEliminado() {
-        return eliminado;
+    public Boolean getEliminar() {
+        return eliminar;
     }
 
-    public void setEliminado(Boolean eliminado) {
-        this.eliminado = eliminado;
+    public void setEliminar(Boolean eliminar) {
+        this.eliminar = eliminar;
     }
 
     public List<CatalogoItem> getCatalogoItems() {

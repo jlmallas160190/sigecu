@@ -17,6 +17,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -32,6 +34,9 @@ import org.hibernate.envers.Audited;
 @Table(name = "academico_ofertador_componente_educativo")
 @Audited
 @AuditTable(value = "academico_ofertador_componente_educativo_aud", schema = "audit")
+@NamedQueries({
+    @NamedQuery(name = "OfertadorComponenteEducativo.findByOfertaAcademica", query = "select c FROM OfertadorComponenteEducativo c where c.ofertaAcademica=?1 and c.eliminar=false")
+})
 public class OfertadorComponenteEducativo implements Serializable {
 
     @Id
@@ -50,6 +55,8 @@ public class OfertadorComponenteEducativo implements Serializable {
     private OfertaAcademica ofertaAcademica;
     @OneToMany(mappedBy = "ofertadorComponenteEducativo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<OfertaComponenteEducativo> ofertaComponenteEducativos;
+    @OneToMany(mappedBy = "ofertadorComponenteEducativo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Paralelo> paralelos;
 
     public OfertadorComponenteEducativo() {
         this.ofertaComponenteEducativos = new ArrayList<>();
@@ -111,4 +118,32 @@ public class OfertadorComponenteEducativo implements Serializable {
         this.eliminar = eliminar;
     }
 
+    public List<Paralelo> getParalelos() {
+        return paralelos;
+    }
+
+    public void setParalelos(List<Paralelo> paralelos) {
+        this.paralelos = paralelos;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof OfertadorComponenteEducativo)) {
+            return false;
+        }
+        OfertadorComponenteEducativo other = (OfertadorComponenteEducativo) object;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+    }
+
+    @Override
+    public String toString() {
+        return this.nombre;
+    }
 }

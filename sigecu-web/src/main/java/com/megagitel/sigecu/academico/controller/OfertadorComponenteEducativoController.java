@@ -57,8 +57,6 @@ public class OfertadorComponenteEducativoController extends SigecuController imp
     @EJB
     private OfertaAcademicaService ofertaAcademicaService;
     @EJB
-    private OfertaComponenteEducativoService ofertaComponenteEducativoService;
-    @EJB
     private GrupoComponenteEducativoService grupoComponenteEducativoService;
     @EJB
     private ComponenteEducativoService componenteEducativoService;

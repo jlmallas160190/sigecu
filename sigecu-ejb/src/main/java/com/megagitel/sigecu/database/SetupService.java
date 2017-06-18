@@ -104,7 +104,7 @@ public class SetupService implements Serializable {
             usuario.setNombre("administrador");
             String result = new Sha256Hash("admin").toHex();
             usuario.setClave(result);
-            usuario.setEliminado(Boolean.FALSE);
+            usuario.setEliminar(Boolean.FALSE);
             usuario.setSuperUsuario(Boolean.TRUE);
             usuario.setGrupoUsuario(grupoUsuario);
             getEm().persist(usuario);
@@ -180,7 +180,7 @@ public class SetupService implements Serializable {
             catalog.setCodigo(catalogo[0]);
             catalog.setNombre(catalogo[1]);
             catalog.setDescripcion(catalogo[1]);
-            catalog.setEliminado(Boolean.FALSE);
+            catalog.setEliminar(Boolean.FALSE);
             getEm().persist(catalog);
         } catch (Exception e) {
             throw e;
@@ -232,7 +232,7 @@ public class SetupService implements Serializable {
             catalogoItem.setCodigo(catalogoItemStr[0]);
             catalogoItem.setNombre(catalogoItemStr[1]);
             catalogoItem.setDescripcion(catalogoItemStr[1]);
-            catalogoItem.setEliminado(Boolean.FALSE);
+            catalogoItem.setEliminar(Boolean.FALSE);
             catalogoItem.setCatalogo(catalogo);
             getEm().persist(catalogoItem);
         } catch (Exception e) {
@@ -281,7 +281,7 @@ public class SetupService implements Serializable {
             grupoUsuario.setCodigo(grupo[0]);
             grupoUsuario.setNombre(grupo[1]);
             grupoUsuario.setDescripcion(grupo[1]);
-            grupoUsuario.setEliminado(Boolean.FALSE);
+            grupoUsuario.setEliminar(Boolean.FALSE);
             grupoUsuario.setInstitucion(this.buscarInstitucion());
             getEm().persist(grupoUsuario);
         } catch (Exception e) {
@@ -418,7 +418,7 @@ public class SetupService implements Serializable {
             GrupoComponenteEducativo grupo = new GrupoComponenteEducativo();
             grupo.setCodigo(grupoComponente[0]);
             grupo.setNombre(grupoComponente[1]);
-            grupo.setEliminado(Boolean.FALSE);
+            grupo.setEliminar(Boolean.FALSE);
             grupo.setDescripcion(grupoComponente[2]);
             getEm().persist(grupo);
         } catch (Exception e) {
@@ -473,7 +473,7 @@ public class SetupService implements Serializable {
             componente.setCreditos(new BigDecimal(componenteEducativo[3]));
             componente.setDescripcion(componenteEducativo[2]);
             componente.setGrupoComponenteEducativo(grupoComponenteEducativo);
-            componente.setEliminado(Boolean.FALSE);
+            componente.setEliminar(Boolean.FALSE);
             getEm().persist(componente);
         } catch (Exception e) {
             throw e;

@@ -56,8 +56,8 @@ public class ComponenteEducativo implements Serializable {
     private String nombre;
     @Column(name = "descripcion")
     private String descripcion;
-    @Column(name = "eliminado", columnDefinition = "boolean default false")
-    private Boolean eliminado;
+    @Column(name = "eliminar", columnDefinition = "boolean default false")
+    private Boolean eliminar;
     @NotNull
     @Digits(integer = 12, fraction = 2)
     @Column(name = "creditos")
@@ -77,7 +77,7 @@ public class ComponenteEducativo implements Serializable {
             BigDecimal creditos, GrupoComponenteEducativo grupoComponenteEducativo) {
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.eliminado = eliminado;
+        this.eliminar = eliminado;
         this.creditos = creditos;
         this.grupoComponenteEducativo = grupoComponenteEducativo;
     }
@@ -106,12 +106,12 @@ public class ComponenteEducativo implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Boolean getEliminado() {
-        return eliminado;
+    public Boolean getEliminar() {
+        return eliminar;
     }
 
-    public void setEliminado(Boolean eliminado) {
-        this.eliminado = eliminado;
+    public void setEliminar(Boolean eliminar) {
+        this.eliminar = eliminar;
     }
 
     public BigDecimal getCreditos() {

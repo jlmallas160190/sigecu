@@ -35,9 +35,9 @@ import org.hibernate.envers.Audited;
 @Audited
 @AuditTable(value = "academico_grupo_componente_educativo_aud", schema = "audit")
 @NamedQueries({
-    @NamedQuery(name = "GrupoComponenteEducativo.findByInstitucion", query = "select c FROM GrupoComponenteEducativo c where c.institucion=?1 and c.eliminado=false")
+    @NamedQuery(name = "GrupoComponenteEducativo.findByInstitucion", query = "select c FROM GrupoComponenteEducativo c where c.institucion=?1 and c.eliminar=false")
     ,
-    @NamedQuery(name = "GrupoComponenteEducativo.findByCodigo", query = "select c FROM GrupoComponenteEducativo c where c.codigo=?1 and c.eliminado=false")
+    @NamedQuery(name = "GrupoComponenteEducativo.findByCodigo", query = "select c FROM GrupoComponenteEducativo c where c.codigo=?1 and c.eliminar=false")
 })
 public class GrupoComponenteEducativo implements Serializable {
 
@@ -55,8 +55,8 @@ public class GrupoComponenteEducativo implements Serializable {
     private String nombre;
     @Column(name = "descripcion")
     private String descripcion;
-    @Column(name = "eliminado", columnDefinition = "boolean default false")
-    private Boolean eliminado;
+    @Column(name = "eliminar", columnDefinition = "boolean default false")
+    private Boolean eliminar;
     @OneToMany(mappedBy = "grupoComponenteEducativo", fetch = FetchType.LAZY)
     private List<GrupoComponenteEducativo> grupoComponenteEducativos;
     @JoinColumn(name = "grupo_id", referencedColumnName = "id")
@@ -78,7 +78,7 @@ public class GrupoComponenteEducativo implements Serializable {
         this.componenteEducativos = componenteEducativos;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.eliminado = eliminado;
+        this.eliminar = eliminado;
         this.grupoComponenteEducativos = grupoComponenteEducativos;
         this.grupoComponenteEducativo = grupoComponenteEducativo;
         this.institucion = institucion;
@@ -108,12 +108,12 @@ public class GrupoComponenteEducativo implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Boolean getEliminado() {
-        return eliminado;
+    public Boolean getEliminar() {
+        return eliminar;
     }
 
-    public void setEliminado(Boolean eliminado) {
-        this.eliminado = eliminado;
+    public void setEliminar(Boolean eliminar) {
+        this.eliminar = eliminar;
     }
 
     public List<GrupoComponenteEducativo> getGrupoComponenteEducativos() {

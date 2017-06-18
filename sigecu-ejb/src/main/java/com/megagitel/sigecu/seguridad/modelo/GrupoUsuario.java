@@ -58,8 +58,8 @@ public class GrupoUsuario implements Serializable {
     @JoinColumn(name = "institucion_id", referencedColumnName = "id")
     @ManyToOne
     private Institucion institucion;
-    @Column(name = "eliminado", columnDefinition = "boolean default false")
-    private Boolean eliminado;
+    @Column(name = "eliminar", columnDefinition = "boolean default false")
+    private Boolean eliminar;
 
     public GrupoUsuario() {
     }
@@ -68,7 +68,7 @@ public class GrupoUsuario implements Serializable {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.nombre = nombre;
-        this.eliminado = eliminado;
+        this.eliminar = eliminado;
         this.usuarios = new ArrayList<>();
     }
 
@@ -120,12 +120,12 @@ public class GrupoUsuario implements Serializable {
         this.institucion = institucion;
     }
 
-    public Boolean getEliminado() {
-        return eliminado;
+    public Boolean getEliminar() {
+        return eliminar;
     }
 
-    public void setEliminado(Boolean eliminado) {
-        this.eliminado = eliminado;
+    public void setEliminar(Boolean eliminar) {
+        this.eliminar = eliminar;
     }
 
 }

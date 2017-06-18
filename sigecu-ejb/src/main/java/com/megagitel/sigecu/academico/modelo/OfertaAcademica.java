@@ -45,15 +45,17 @@ public class OfertaAcademica implements Serializable {
     private Long id;
     @Temporal(javax.persistence.TemporalType.DATE)
     @NotNull
+    @Column(name = "fecha_inicio")
     private Date fechaInicio;
     @NotNull
     @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name = "fecha_fin")
     private Date fechaFin;
     @Column(name = "descripcion", columnDefinition = "text")
     private String descripcion;
     @ManyToOne
     private Institucion institucion;
-    @OneToMany(mappedBy = "ofertaAcademica",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ofertaAcademica", fetch = FetchType.LAZY)
     private List<OfertadorComponenteEducativo> ofertadorComponenteEducativos;
 
     public OfertaAcademica() {

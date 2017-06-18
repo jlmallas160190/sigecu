@@ -7,6 +7,7 @@ package com.megagitel.sigecu.academico.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
@@ -47,6 +49,8 @@ public class Matricula implements Serializable {
     @JoinColumn(name = "estudiante_id", referencedColumnName = "id")
     @ManyToOne
     private Estudiante estudiante;
+    @OneToMany(mappedBy = "matricula")
+    private List<MatriculaComponenteEducativo> matriculaComponenteEducativos;
 
     public Matricula() {
     }
@@ -97,6 +101,14 @@ public class Matricula implements Serializable {
 
     public void setEstudiante(Estudiante estudiante) {
         this.estudiante = estudiante;
+    }
+
+    public List<MatriculaComponenteEducativo> getMatriculaComponenteEducativos() {
+        return matriculaComponenteEducativos;
+    }
+
+    public void setMatriculaComponenteEducativos(List<MatriculaComponenteEducativo> matriculaComponenteEducativos) {
+        this.matriculaComponenteEducativos = matriculaComponenteEducativos;
     }
 
 }
