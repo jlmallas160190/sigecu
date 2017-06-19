@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <p:panel>
+            <p:dataTable id="componentesEducativosPlanificados" var="componenteEducativoPlanificado" 
+                         value="#{jornadaController.jornada.componenteEducativoPlanificados}" 
+                         paginator="true" rows="#{jornadaController.getDetalleParametrizacion('TABLE_ROWS', '50')}" 
+                         sortOrder="DESCENDING"
+                         reflow="true" 
+                         rowKey="#{componenteEducativoPlanificado.id}" 
+                         resizableColumns="true" 
+                          lazy="true">
+                <p:column headerText="#{lbl['nombre']}" sortBy="#{componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.nombre}"
+                          styleClass="text-right">
+                    <h:outputText value="#{componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.nombre}"/>
+                </p:column>
+                <p:column headerText="#{lbl['descripcion']}" sortBy="#{componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.descripcion}"
+                          styleClass="text-right">
+                    <h:outputText value="#{componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.descripcion}"/>
+                </p:column>  
+                <p:column headerText="#{lbl['accion']}">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank">
+
+                    </p:panelGrid>
+                </p:column>
+            </p:dataTable>
+            <f:facet name="footer">
+
+            </f:facet>
+        </p:panel>
+    </body>
+
+</html>

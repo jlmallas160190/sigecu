@@ -11,13 +11,17 @@ import com.megagitel.sigecu.academico.ejb.ParaleloService;
 import com.megagitel.sigecu.academico.modelo.OfertaAcademica;
 import com.megagitel.sigecu.academico.modelo.OfertadorComponenteEducativo;
 import com.megagitel.sigecu.academico.modelo.Paralelo;
+import com.megagitel.sigecu.core.ejb.CatalogoItemService;
 import com.megagitel.sigecu.core.ejb.DetalleParametrizacionService;
+import com.megagitel.sigecu.core.modelo.CatalogoItem;
 import com.megagitel.sigecu.core.modelo.DetalleParametrizacion;
+import com.megagitel.sigecu.enumeration.SigecuEnum;
 import com.megagitel.sigecu.ui.model.LazyParaleloDataModel;
 import com.megagitel.sigecu.util.SigecuController;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -35,7 +39,7 @@ import javax.inject.Named;
     @URLMapping(
             id = "paralelos",
             pattern = "/admin/paralelos",
-            viewId = "/faces/paginas/academico/paralelo/paralelosList.xhtml"
+            viewId = "/faces/paginas/academico/paralelo/paraleloList.xhtml"
     )
     ,
 @URLMapping(
@@ -53,15 +57,20 @@ public class ParaleloController extends SigecuController implements Serializable
     private OfertadorComponenteEducativoService ofertadorComponenteEducativoService;
     @EJB
     private OfertaAcademicaService ofertaAcademicaService;
+    @EJB
+    private CatalogoItemService catalogoItemService;
+
     private LazyParaleloDataModel dataModel;
     private Paralelo paralelo;
     private Long paraleloId;
     private List<OfertadorComponenteEducativo> ofertadorComponenteEducativos;
-    private OfertadorComponenteEducativo ofertadorComponenteEducativo;
+    private List<CatalogoItem> secciones;
 
     @PostConstruct
     public void init() {
         this.paralelo = new Paralelo();
+        this.secciones = new ArrayList<>();
+        this.ofertadorComponenteEducativos = new ArrayList<>();
     }
 
     public void filter() {
@@ -78,7 +87,6 @@ public class ParaleloController extends SigecuController implements Serializable
 
     public String guardar() {
         try {
-            this.paralelo.setOfertadorComponenteEducativo(ofertadorComponenteEducativo);
             if (this.paralelo.getId() == null) {
                 this.paraleloService.create(paralelo);
             } else {
@@ -89,7 +97,7 @@ public class ParaleloController extends SigecuController implements Serializable
             agregarMensajeFatal("save.error");
             return "";
         }
-        return "";
+        return "pretty:paralelos";
     }
 
     public String eliminar(Paralelo paralelo) {
@@ -120,6 +128,9 @@ public class ParaleloController extends SigecuController implements Serializable
     }
 
     public Paralelo getParalelo() {
+        if (this.paraleloId != null && this.paralelo.getId() == null) {
+            this.paralelo = paraleloService.find(paraleloId);
+        }
         return paralelo;
     }
 
@@ -139,7 +150,6 @@ public class ParaleloController extends SigecuController implements Serializable
         if (this.ofertadorComponenteEducativos.isEmpty()) {
             Date fechaActual = new Date();
             OfertaAcademica ofertaAcademica = this.ofertaAcademicaService.getOfertaAcademicaActual(fechaActual);
-
             this.ofertadorComponenteEducativos = this.ofertadorComponenteEducativoService.findByNamedQueryWithLimit("OfertadorComponenteEducativo.findByOfertaAcademica", 0, ofertaAcademica);
         }
         return ofertadorComponenteEducativos;
@@ -149,12 +159,15 @@ public class ParaleloController extends SigecuController implements Serializable
         this.ofertadorComponenteEducativos = ofertadorComponenteEducativos;
     }
 
-    public OfertadorComponenteEducativo getOfertadorComponenteEducativo() {
-        return ofertadorComponenteEducativo;
+    public List<CatalogoItem> getSecciones() {
+        if (this.secciones.isEmpty()) {
+            this.secciones = this.catalogoItemService.findByNamedQueryWithLimit("CatalogoItem.findByCatalogo", 0, SigecuEnum.SECCION.getTipo());
+        }
+        return secciones;
     }
 
-    public void setOfertadorComponenteEducativo(OfertadorComponenteEducativo ofertadorComponenteEducativo) {
-        this.ofertadorComponenteEducativo = ofertadorComponenteEducativo;
+    public void setSecciones(List<CatalogoItem> secciones) {
+        this.secciones = secciones;
     }
 
 }

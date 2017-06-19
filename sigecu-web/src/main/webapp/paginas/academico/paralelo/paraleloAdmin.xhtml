@@ -2,25 +2,69 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
-    <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <h:outputStylesheet name="./css/default.css"/>
-        <h:outputStylesheet name="./css/cssLayout.css"/>
-        <title>Facelets Template</title>
-    </h:head>
+    <body>
 
-    <h:body>
+        <ui:composition template="./../../../index.xhtml">
 
-        <div id="top" class="top">
-            <ui:insert name="top">Top</ui:insert>
-        </div>
+            <ui:define name="title">
+                #{lbl['com.megagitel.sigecu.paralelo.editar']}
+            </ui:define>
+            <ui:define name="params">
+                <f:metadata>
+                    <f:viewParam name="paraleloId" value="#{paraleloController.paraleloId}" />
+                </f:metadata>
+            </ui:define>
+            <ui:define name="content">
+                <h:form>
+                    <p:panel id="pnl" >
+                        <p:messages id="msg"/>
 
-        <div id="content" class="center_content">
-            <ui:insert name="content">Content</ui:insert>
-        </div>
+                        <div class="ui-fluid">
+                            <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
+                                <h:outputLabel value="#{lbl.nombre}"></h:outputLabel>
+                                <p:inputText id="nombre" placeholder="#{lbl.nombre}" value="#{paraleloController.paralelo.nombre}">
+                                    <p:ajax event="keyup" update="msgNombre"/>
+                                </p:inputText>
+                                <p:message id="msgNombre" display="icon" for="nombre"/>
+                                <h:outputLabel value="#{lbl['com.megagitel.sigecu.paralelo.seccion']}"></h:outputLabel>
+                                <p:selectOneMenu id="seccion" value="#{paraleloController.paralelo.seccion}" converter="#{catalogoItemConverter}">
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{lbl['com.megagitel.sigecu.paralelo.seleccionarSeccion']}"/>
+                                    <f:selectItems itemLabel="#{item.nombre}" itemValue="#{item.codigo}" var="item" value="#{paraleloController.secciones}"/>
+                                    <p:ajax event="change" update="msgSeccion"/>
+                                </p:selectOneMenu>
+                                <p:message id="msgSeccion" display="icon" for="seccion"/>
+                                <h:outputLabel value="#{lbl['com.megagitel.sigecu.paralelo.maxMaticulados']}"></h:outputLabel>
+                                <p:inputNumber id="numeroMatriculados" decimalPlaces="0" placeholder="#{lbl['com.megagitel.sigecu.paralelo.maxMaticulados']}" value="#{paraleloController.paralelo.numeroMaximoMatriculados}">
+                                    <p:ajax event="keyup" update="msgNumeroMatriculados"/>
+                                </p:inputNumber>
+                                <p:message id="msgNumeroMatriculados" display="icon" for="numeroMatriculados"/>
+                                <h:outputLabel value="#{lbl['com.megagitel.sigecu.ofertadorComponenteEducativo']}"></h:outputLabel>
+                                <p:selectOneMenu id="select-ofertador" converter="#{ofertadorComponenteEducativoConverter}" value="#{paraleloController.paralelo.ofertadorComponenteEducativo}" panelStyle="width:180px"
+                                                 style="width:160px" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{lbl['com.megagitel.sigecu.ofertadorComponenteEducativo.seleccionar']}"/>
+                                    <f:selectItems  var="ofertador" itemLabel="#{ofertador.nombre}" itemValue="#{ofertador}" value="#{paraleloController.ofertadorComponenteEducativos}" />
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                        </div>          
+                        <f:facet name="footer">
+                            <div class="ui-fluid">
+                                <h:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">
+                                    <p:commandButton id="btn" value="#{btn['guardar']}" update="@form" process="@form"  icon="fa fa-save" 
+                                                     onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{paraleloController.guardar()}" />
+                                    <p:commandButton value="#{btn['regresar']}" icon="fa fa-arrow-left" action="pretty:paralelos" immediate="true"/>
+                                </h:panelGrid>
+                            </div>
+                        </f:facet>
+                    </p:panel> 
+                    <ui:include src="/dialogLoading.xhtml"></ui:include>
+                </h:form>
+            </ui:define>
+        </ui:composition>
 
-    </h:body>
+    </body>
 
 </html>

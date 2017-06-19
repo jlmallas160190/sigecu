@@ -36,6 +36,8 @@ import org.hibernate.envers.Audited;
 @AuditTable(value = "academico_ofertador_componente_educativo_aud", schema = "audit")
 @NamedQueries({
     @NamedQuery(name = "OfertadorComponenteEducativo.findByOfertaAcademica", query = "select c FROM OfertadorComponenteEducativo c where c.ofertaAcademica=?1 and c.eliminar=false")
+    ,
+    @NamedQuery(name = "OfertadorComponenteEducativo.findById", query = "select c FROM OfertadorComponenteEducativo c where c.id=?1 and c.eliminar=false")
 })
 public class OfertadorComponenteEducativo implements Serializable {
 
@@ -53,9 +55,9 @@ public class OfertadorComponenteEducativo implements Serializable {
     private Boolean eliminar;
     @ManyToOne
     private OfertaAcademica ofertaAcademica;
-    @OneToMany(mappedBy = "ofertadorComponenteEducativo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ofertadorComponenteEducativo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OfertaComponenteEducativo> ofertaComponenteEducativos;
-    @OneToMany(mappedBy = "ofertadorComponenteEducativo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ofertadorComponenteEducativo")
     private List<Paralelo> paralelos;
 
     public OfertadorComponenteEducativo() {
@@ -67,7 +69,6 @@ public class OfertadorComponenteEducativo implements Serializable {
             ofertaComponenteEducativo.setOfertadorComponenteEducativo(this);
             this.ofertaComponenteEducativos.add(ofertaComponenteEducativo);
         }
-
     }
 
     public Long getId() {
@@ -144,6 +145,6 @@ public class OfertadorComponenteEducativo implements Serializable {
 
     @Override
     public String toString() {
-        return this.nombre;
+        return this.id+"";
     }
 }

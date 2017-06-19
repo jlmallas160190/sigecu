@@ -419,6 +419,7 @@ public class SetupService implements Serializable {
             grupo.setCodigo(grupoComponente[0]);
             grupo.setNombre(grupoComponente[1]);
             grupo.setEliminar(Boolean.FALSE);
+            grupo.setInstitucion(getInstitucion());
             grupo.setDescripcion(grupoComponente[2]);
             getEm().persist(grupo);
         } catch (Exception e) {

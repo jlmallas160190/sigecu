@@ -5,10 +5,8 @@
  */
 package com.megagitel.sigecu.ui.converter;
 
-import com.megagitel.sigecu.academico.ejb.OfertadorComponenteEducativoService;
-import com.megagitel.sigecu.academico.modelo.OfertadorComponenteEducativo;
+import com.megagitel.sigecu.academico.ejb.ParaleloService;
 import java.io.Serializable;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
@@ -21,18 +19,17 @@ import javax.inject.Named;
  *
  * @author jorgemalla
  */
-@Named("ofertadorComponenteEducativoConverter")
+@Named("paraleloConverter")
 @RequestScoped
-@FacesConverter(forClass = OfertadorComponenteEducativo.class)
-public class OfertadorComponenteEducativoConverter implements Converter, Serializable {
+@FacesConverter(forClass = ParaleloConverter.class)
+public class ParaleloConverter implements Converter, Serializable {
 
     @EJB
-    private OfertadorComponenteEducativoService ofertadorComponenteEducativoService;
+    private ParaleloService paraleloService;
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        List<OfertadorComponenteEducativo> ofertadorComponenteEducativos = this.ofertadorComponenteEducativoService.findByNamedQueryWithLimit("OfertadorComponenteEducativo.findById", 0, Long.parseLong(value));
-        return !ofertadorComponenteEducativos.isEmpty() ? ofertadorComponenteEducativos.get(0) : null;
+        return this.paraleloService.find(Long.parseLong(value));
     }
 
     @Override

@@ -69,7 +69,7 @@ public class Usuario implements Serializable {
     private GrupoUsuario grupoUsuario;
     @ManyToMany(mappedBy = "usuarios", fetch = FetchType.EAGER)
     private List<Menu> menus;
-    @Column(name = "activo", columnDefinition = "boolean default false")
+    @Column(name = "activo", columnDefinition = "boolean default true")
     private Boolean activo;
     @Transient
     private String confirmaClave;

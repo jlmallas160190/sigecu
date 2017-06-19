@@ -23,10 +23,15 @@
         <class>com.megagitel.sigecu.academico.modelo.OfertaComponenteEducativo</class>
         <class>com.megagitel.sigecu.academico.modelo.OfertadorComponenteEducativo</class>
         <class>com.megagitel.sigecu.seguridad.modelo.Log</class>
+        <class>com.megagitel.sigecu.academico.modelo.ComponenteEducativoPlanificado</class>
+        <class>com.megagitel.sigecu.academico.modelo.Jornada</class>
+        <class>com.megagitel.sigecu.academico.modelo.MatriculaComponenteEducativo</class>
+        <class>com.megagitel.sigecu.academico.modelo.Paralelo</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>

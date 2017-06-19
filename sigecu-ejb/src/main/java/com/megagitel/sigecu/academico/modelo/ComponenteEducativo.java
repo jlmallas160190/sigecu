@@ -36,9 +36,9 @@ import org.hibernate.envers.Audited;
 @Audited
 @AuditTable(value = "academico_componente_educativo_aud", schema = "audit")
 @NamedQueries({
-    @NamedQuery(name = "ComponenteEducativo.findByGrupo", query = "select c FROM ComponenteEducativo c where c.grupoComponenteEducativo=?1 and c.eliminado=false")
+    @NamedQuery(name = "ComponenteEducativo.findByGrupo", query = "select c FROM ComponenteEducativo c where c.grupoComponenteEducativo=?1 and c.eliminar=false")
     ,
-    @NamedQuery(name = "ComponenteEducativo.findByCodigo", query = "select c FROM ComponenteEducativo c where c.codigo=?1 and c.eliminado=false")
+    @NamedQuery(name = "ComponenteEducativo.findByCodigo", query = "select c FROM ComponenteEducativo c where c.codigo=?1 and c.eliminar=false")
 })
 public class ComponenteEducativo implements Serializable {
 

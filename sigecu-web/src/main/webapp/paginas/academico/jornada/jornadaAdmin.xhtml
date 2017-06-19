@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../../../index.xhtml">
+
+            <ui:define name="title">
+                #{lbl['com.megagitel.sigecu.jornada.editar']}
+            </ui:define>
+            <ui:define name="params">
+                <f:metadata>
+                    <f:viewParam name="jornadaId" value="#{jornadaController.jornadaId}" />
+                </f:metadata>
+            </ui:define>
+            <ui:define name="content">
+                <h:form>
+                    <p:panel id="pnl" >
+                        <p:messages id="msg"/>
+                        <p:tabView>
+                            <p:tab title="#{lbl['com.megagitel.sigecu.jornada.editar']}">
+                                <div class="ui-fluid">
+                                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid" styleClass="ui-panelgrid-blank">
+                                        <h:outputLabel rendered="#{jornadaController.jornada.id==null}" value="#{lbl['com.megagitel.sigecu.ofertadorComponenteEducativo']}"></h:outputLabel>
+                                        <p:selectOneMenu id="select-ofertador" rendered="#{jornadaController.jornada.id==null}" converter="#{ofertadorComponenteEducativoConverter}" value="#{jornadaController.ofertadorComponenteEducativo}" 
+                                                         panelStyle="width:180px" style="width:160px"  filter="true" filterMatchMode="startsWith">
+                                            <p:ajax  listener="#{jornadaController.seleccionarOfertador()}" update="select-paralelo"/>
+                                            <f:selectItem noSelectionOption="true" itemLabel="#{lbl['com.megagitel.sigecu.ofertadorComponenteEducativo.seleccionar']}"/>
+                                            <f:selectItems var="ofertador" itemLabel="#{ofertador.nombre}" itemValue="#{ofertador}" value="#{jornadaController.ofertadorComponenteEducativos}" />
+                                        </p:selectOneMenu>
+                                        <h:outputLabel value="#{lbl['com.megagitel.sigecu.paralelo']}"></h:outputLabel>
+                                        <h:outputLabel rendered="#{jornadaController.jornada.id!=null}" value="#{jornadaController.jornada.paralelo.ofertadorComponenteEducativo.nombre} - #{jornadaController.jornada.paralelo.nombre}"/>
+                                        <p:selectOneMenu id="select-paralelo" rendered="#{jornadaController.jornada.id==null}" converter="#{paraleloConverter}" value="#{jornadaController.jornada.paralelo}" panelStyle="width:180px"
+                                                         style="width:160px" filter="true" filterMatchMode="startsWith">
+                                            <p:ajax  listener="#{jornadaController.agregarComponentesEducativosPlanificados(paralelo)}" update="componentesEducativosPlanificados"/>
+                                            <f:selectItem noSelectionOption="true" itemLabel="#{lbl['com.megagitel.sigecu.paralelo.seleccionar']}"/>
+                                            <f:selectItems var="paralelo" itemLabel="#{paralelo.nombre}" itemValue="#{paralelo}" value="#{jornadaController.paralelos}" />
+                                        </p:selectOneMenu>
+                                        <h:outputLabel value="#{lbl['com.megagitel.sigecu.fechaInicio']}"></h:outputLabel>
+                                        <p:calendar id="fechaInicio" placeholder="#{lbl['com.megagitel.sigecu.fechaInicio']}"  value="#{jornadaController.jornada.fechaInicio}">
+                                        </p:calendar>
+                                        <h:outputLabel value="#{lbl['com.megagitel.sigecu.fechaFin']}"></h:outputLabel>
+                                        <p:calendar id="fechaFin" placeholder="#{lbl['com.megagitel.sigecu.fechaFin']}"  value="#{jornadaController.jornada.fechaFin}">
+                                        </p:calendar>
+                                    </p:panelGrid>
+                                </div> 
+                            </p:tab>
+                            <p:tab  title="#{lbl['com.megagitel.sigecu.componenteEducativoPlanificado.lista']}">
+                                <ui:include src="./../componenteEducativoPlanificado/componenteEducativoPlanificadoList.xhtml"/>
+                            </p:tab>
+                        </p:tabView>
+                        <f:facet name="footer">
+                            <div class="ui-fluid">
+                                <h:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">
+                                    <p:commandButton id="btn" value="#{btn['guardar']}" update="@form" process="@form"  icon="fa fa-save" 
+                                                     onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{jornadaController.guardar()}" />
+                                    <p:commandButton value="#{btn['regresar']}" icon="fa fa-arrow-left" action="pretty:jornadas" immediate="true"/>
+                                </h:panelGrid>
+                            </div>
+                        </f:facet>
+                    </p:panel> 
+                    <ui:include src="/dialogLoading.xhtml"></ui:include>
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+
+</html>

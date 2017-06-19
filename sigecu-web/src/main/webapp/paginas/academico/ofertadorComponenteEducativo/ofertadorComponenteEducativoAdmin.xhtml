@@ -28,9 +28,9 @@
                                     <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
                                         <h:outputLabel value="#{lbl.nombre}"></h:outputLabel>
                                         <p:inputText id="nombre" placeholder="#{lbl.nombre}"  value="#{ofertadorComponenteEducativoController.ofertadorComponenteEducativo.nombre}">
-                                            <p:ajax event="keyup" update="msgEmail"/>
+                                            <p:ajax event="keyup" update="msgNombre"/>
                                         </p:inputText>
-                                        <p:message id="msgEmail" display="icon" for="nombre"/>
+                                        <p:message id="msgNombre" display="icon" for="nombre"/>
                                         <h:outputLabel value="#{lbl['com.megagitel.sigecu.descripcion']}"></h:outputLabel>
                                         <p:editor id="descripcion" value="#{ofertadorComponenteEducativoController.ofertadorComponenteEducativo.descripcion}"/>
                                     </p:panelGrid>

@@ -8,7 +8,6 @@ package com.megagitel.sigecu.academico.controller;
 import com.megagitel.sigecu.academico.ejb.ComponenteEducativoService;
 import com.megagitel.sigecu.academico.ejb.GrupoComponenteEducativoService;
 import com.megagitel.sigecu.academico.ejb.OfertaAcademicaService;
-import com.megagitel.sigecu.academico.ejb.OfertaComponenteEducativoService;
 import com.megagitel.sigecu.academico.ejb.OfertadorComponenteEducativoService;
 import com.megagitel.sigecu.academico.modelo.ComponenteEducativo;
 import com.megagitel.sigecu.academico.modelo.GrupoComponenteEducativo;
@@ -41,13 +40,13 @@ import org.apache.shiro.subject.Subject;
 @URLMappings(mappings = {
     @URLMapping(
             id = "ofertadoresComponentesEducativos",
-            pattern = "/home/ofertadoresComponentesEducativos",
+            pattern = "/admin/ofertadoresComponentesEducativos",
             viewId = "/faces/paginas/academico/ofertadorComponenteEducativo/ofertadoresComponentesEducativosList.xhtml"
     )
     ,
 @URLMapping(
             id = "ofertadorComponenteEducativo",
-            pattern = "/home/ofertadorComponenteEducativo",
+            pattern = "/admin/ofertadorComponenteEducativo",
             viewId = "/faces/paginas/academico/ofertadorComponenteEducativo/ofertadorComponenteEducativoAdmin.xhtml"
     ),})
 public class OfertadorComponenteEducativoController extends SigecuController implements Serializable {

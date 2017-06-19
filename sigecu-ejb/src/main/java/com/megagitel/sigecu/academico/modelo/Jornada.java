@@ -9,8 +9,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,12 +46,21 @@ public class Jornada implements Serializable {
     @NotNull
     @Column(name = "fecha_fin")
     private Date fechaFin;
+    @Column(name = "eliminar", columnDefinition = "boolean default false")
+    private Boolean eliminar;
     @ManyToOne
     private Paralelo paralelo;
-    @OneToMany(mappedBy = "jornada")
+    @OneToMany(mappedBy = "jornada", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ComponenteEducativoPlanificado> componenteEducativoPlanificados;
 
     public Jornada() {
+    }
+
+    public void agregarComponenteEducativoPlanificado(ComponenteEducativoPlanificado componenteEducativoPlanificado) {
+        if (!this.componenteEducativoPlanificados.contains(componenteEducativoPlanificado)) {
+            componenteEducativoPlanificado.setJornada(this);
+            this.componenteEducativoPlanificados.add(componenteEducativoPlanificado);
+        }
     }
 
     public Long getId() {
@@ -90,6 +101,14 @@ public class Jornada implements Serializable {
 
     public void setComponenteEducativoPlanificados(List<ComponenteEducativoPlanificado> componenteEducativoPlanificados) {
         this.componenteEducativoPlanificados = componenteEducativoPlanificados;
+    }
+
+    public Boolean getEliminar() {
+        return eliminar;
+    }
+
+    public void setEliminar(Boolean eliminar) {
+        this.eliminar = eliminar;
     }
 
 }

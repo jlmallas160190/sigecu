@@ -43,4 +43,9 @@ public abstract class SigecuController {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, I18nUtil.getMessages(mensaje), null);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+
+    public void agregarMensajeError(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, I18nUtil.getMessages(mensaje), null);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
 }

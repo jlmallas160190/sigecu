@@ -8,12 +8,16 @@ package com.megagitel.sigecu.academico.modelo;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -29,6 +33,9 @@ import org.hibernate.envers.Audited;
 @Table(name = "academico_paralelo")
 @Audited
 @AuditTable(value = "academico_paralelo_aud", schema = "audit")
+@NamedQueries({
+    @NamedQuery(name = "Paralelo.findByOfertador", query = "select c FROM Paralelo c where c.ofertadorComponenteEducativo=?1 and c.eliminar=false")
+})
 public class Paralelo implements Serializable {
 
     @Id
@@ -41,7 +48,7 @@ public class Paralelo implements Serializable {
     private String nombre;
     @Column(name = "seccion")
     private Integer seccion;
-    @Column(name = "eliminar")
+    @Column(name = "eliminar", columnDefinition = "boolean default false")
     private Boolean eliminar;
     @Column(name = "numero_maximo_matriculados")
     @NotNull
@@ -49,7 +56,7 @@ public class Paralelo implements Serializable {
     @ManyToOne
     @NotNull
     private OfertadorComponenteEducativo ofertadorComponenteEducativo;
-    @OneToMany(mappedBy = "paralelo")
+    @OneToMany(mappedBy = "paralelo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Jornada> jornadas;
 
     public Paralelo() {
@@ -112,4 +119,24 @@ public class Paralelo implements Serializable {
         this.numeroMaximoMatriculados = numeroMaximoMatriculados;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Paralelo)) {
+            return false;
+        }
+        Paralelo other = (Paralelo) object;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+    }
+
+    @Override
+    public String toString() {
+        return this.id + "";
+    }
 }
