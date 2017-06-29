@@ -79,7 +79,8 @@ public abstract class AbstractDao<T> {
         return ((Long) q.getSingleResult()).intValue();
     }
 
-    public <E> List<E> findByNamedQueryWithLimit(final String namedQueryName, final int limit, final Object... params) {
+    
+public <E> List<E> findByNamedQueryWithLimit(final String namedQueryName, final int limit, final Object... params) {
         Query query = em.createNamedQuery(namedQueryName);
         int i = 1;
         for (Object p : params) {
@@ -88,7 +89,6 @@ public abstract class AbstractDao<T> {
         query.setMaxResults(limit);
         return query.getResultList();
     }
-
     public QueryData<T> find(int start, int end, String sortField, QuerySortOrder querySortOrder, Map<String, Object> filters) {
         QueryData<T> queryData = new QueryData<>();
         CriteriaBuilder cb = getCriteriaBuilder();

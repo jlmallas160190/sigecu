@@ -18,34 +18,34 @@
                             <p:messages id="msg"/>
                             <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
                                 <h:outputLabel value="#{lbl.primerNombre}"></h:outputLabel>
-                                <p:inputText id="primerNombre" placeholder="#{lbl.primerNombre}" value="#{usuarioController.usuario.persona.primerNombre}">
+                                <p:inputText id="primerNombre" placeholder="#{lbl.primerNombre}" value="#{usuarioController.estudiante.primerNombre}">
                                     <p:ajax event="keyup" update="msgPrimerNombre"/>
                                 </p:inputText>
                                 <p:message id="msgPrimerNombre" display="icon" for="primerNombre"/>
                                 <h:outputLabel value="#{lbl.segundoNombre}"></h:outputLabel>
-                                <p:inputText id="segundoNombre" placeholder="#{lbl.segundoNombre}"  value="#{usuarioController.usuario.persona.segundoNombre}">
+                                <p:inputText id="segundoNombre" placeholder="#{lbl.segundoNombre}"  value="#{usuarioController.estudiante.segundoNombre}">
                                     <p:ajax event="keyup" update="msgSegundoNombre"/>
                                 </p:inputText>
                                 <p:message id="msgSegundoNombre" display="icon" for="segundoNombre"/>
                                 <h:outputLabel value="#{lbl.primerApellido}"></h:outputLabel>
-                                <p:inputText id="primerApellido" placeholder="#{lbl.primerApellido}" value="#{usuarioController.usuario.persona.primerApellido}">
+                                <p:inputText id="primerApellido" placeholder="#{lbl.primerApellido}" value="#{usuarioController.estudiante.primerApellido}">
                                     <p:ajax event="keyup" update="msgPrimerApellido"/>
                                 </p:inputText>
                                 <p:message id="msgPrimerApellido" display="icon" for="primerApellido"/>
                                 <h:outputLabel value="#{lbl.segundoApellido}"></h:outputLabel>
-                                <p:inputText id="segundoApellido" placeholder="#{lbl.segundoApellido}" value="#{usuarioController.usuario.persona.segundoApellido}">
+                                <p:inputText id="segundoApellido" placeholder="#{lbl.segundoApellido}" value="#{usuarioController.estudiante.segundoApellido}">
                                     <p:ajax event="keyup" update="msgSegundoApellido"/>
                                 </p:inputText>
                                 <p:message id="msgSegundoApellido" display="icon" for="segundoApellido"/>
                                 <h:outputLabel value="#{lbl.tipoIdentificacion}"></h:outputLabel>
-                                <p:selectOneMenu id="tipoIdentificacion" value="#{usuarioController.usuario.persona.tipoIdentificacion}" converter="#{catalogoItemConverter}">
+                                <p:selectOneMenu id="tipoIdentificacion" value="#{usuarioController.estudiante.tipoIdentificacion}" converter="#{catalogoItemConverter}">
                                     <f:selectItem noSelectionOption="true" itemLabel="#{lbl.seleccioneTipoIdentificacion}"/>
                                     <f:selectItems itemLabel="#{item.nombre}" itemValue="#{item.codigo}" var="item" value="#{usuarioController.tiposDocumento}"/>
                                     <p:ajax event="change" update="msgTipoIdentificacion"/>
                                 </p:selectOneMenu>
                                 <p:message id="msgTipoIdentificacion" display="icon" for="tipoIdentificacion"/>
                                 <h:outputLabel value="#{lbl.numeroIdentificacion}"></h:outputLabel>
-                                <p:inputText id="numeroIdentificacion" placeholder="#{lbl.numeroIdentificacion}" value="#{usuarioController.usuario.persona.numeroIdentificacion}">
+                                <p:inputText id="numeroIdentificacion" placeholder="#{lbl.numeroIdentificacion}" value="#{usuarioController.estudiante.numeroIdentificacion}">
                                     <c:if test="#{usuarioController.validarCedula()}">
                                         <f:validator validatorId="numeroIdentificacionValidator"/>
                                     </c:if>
@@ -53,17 +53,17 @@
                                 </p:inputText>
                                 <p:message id="msgNumeroIdentificacion" display="icon" for="numeroIdentificacion"/>
                                 <h:outputLabel value="#{lbl.email}"></h:outputLabel>
-                                <p:inputText id="email" placeholder="#{lbl.email}"  value="#{usuarioController.usuario.persona.email}" validator="emailValidator">
+                                <p:inputText id="email" placeholder="#{lbl.email}"  value="#{usuarioController.estudiante.email}" validator="emailValidator">
                                     <p:ajax event="keyup" update="msgEmail"/>
                                 </p:inputText>
                                 <p:message id="msgEmail" display="icon" for="email"/>
                                 <p:outputLabel  value="#{lbl.fechaNacimiento}" />
-                                <p:calendar id="fechaNacimiento" value="#{usuarioController.usuario.persona.fechaNacimiento}" showOn="button" 
+                                <p:calendar id="fechaNacimiento" value="#{usuarioController.estudiante.fechaNacimiento}" showOn="button" 
                                             yearRange="c-70:c+10" navigator="true" locale="es"  pattern="dd/MM/yyyy">
                                 </p:calendar>
                                 <p:message id="msgFechaNacimiento" display="icon" for="fechaNacimiento"/>
                                 <h:outputLabel value="#{lbl.estadoCivil}"></h:outputLabel>
-                                <p:selectOneMenu id="estadoCivil" value="#{usuarioController.usuario.persona.estadoCivil}" converter="#{catalogoItemConverter}"
+                                <p:selectOneMenu id="estadoCivil" value="#{usuarioController.estudiante.estadoCivil}" converter="#{catalogoItemConverter}"
                                                  effect="fade" filter="true" filterMatchMode="startsWith">
                                     <f:selectItem noSelectionOption="true" itemLabel="#{lbl.seleccioneEstadoCivil}"/>
                                     <f:selectItems itemLabel="#{item.nombre}" itemValue="#{item.codigo}" var="item" value="#{usuarioController.estadosCiviles}"/>
@@ -71,7 +71,7 @@
                                 </p:selectOneMenu>
                                 <p:message id="msgEstadoCivil" display="icon" for="estadoCivil"/>
                                 <h:outputLabel value="#{lbl.genero}"></h:outputLabel>
-                                <p:selectOneMenu id="genero" value="#{usuarioController.usuario.persona.genero}" converter="#{catalogoItemConverter}" 
+                                <p:selectOneMenu id="genero" value="#{usuarioController.estudiante.genero}" converter="#{catalogoItemConverter}" 
                                                  effect="fade" filter="true" filterMatchMode="startsWith">
                                     <f:selectItem noSelectionOption="true" itemLabel="#{lbl.seleccioneGenero}"/>
                                     <f:selectItems itemLabel="#{item.nombre}" itemValue="#{item.codigo}" var="item" value="#{usuarioController.generos}"/>
@@ -79,7 +79,7 @@
                                 </p:selectOneMenu>
                                 <p:message id="msgGenero" display="icon" for="genero"/>
                                 <h:outputLabel value="#{lbl.nivelInstruccion}"></h:outputLabel>
-                                <p:selectOneMenu id="nivelInstruccion" value="#{usuarioController.usuario.persona.nivelInstuccion}" converter="#{catalogoItemConverter}" 
+                                <p:selectOneMenu id="nivelInstruccion" value="#{usuarioController.estudiante.nivelInstuccion}" converter="#{catalogoItemConverter}" 
                                                  effect="fade" filter="true" filterMatchMode="startsWith">
                                     <f:selectItem noSelectionOption="true" itemLabel="#{lbl.seleccioneNivelInstruccion}"/>
                                     <f:selectItems itemLabel="#{item.nombre}" itemValue="#{item.codigo}" var="item" value="#{usuarioController.nivelesInstruccion}"/>
@@ -105,7 +105,7 @@
                                 </p:inputText>
                                 <p:message id="msgDireccion" display="icon" for="direccion"/>
                                 <h:outputLabel value="#{lbl.celular}"></h:outputLabel>
-                                <p:inputText id="celular" placeholder="#{lbl.celular}" value="#{usuarioController.usuario.persona.celular}" >
+                                <p:inputText id="celular" placeholder="#{lbl.celular}" value="#{usuarioController.estudiante.celular}" >
                                     <p:ajax event="keyup" update="msgCelular"/>
                                 </p:inputText>
                                 <p:message id="msgCelular" display="icon" for="celular"/>

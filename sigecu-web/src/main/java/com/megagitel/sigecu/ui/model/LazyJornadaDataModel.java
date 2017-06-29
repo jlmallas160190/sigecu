@@ -44,25 +44,15 @@ public class LazyJornadaDataModel extends LazyDataModel<Jornada> implements Seri
     @Override
     public List<Jornada> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         int finPagination = first + pageSize;
-        Date fechaActual = new Date(System.currentTimeMillis());
         QuerySortOrder order = QuerySortOrder.DESC;
         if (sortOrder == SortOrder.ASCENDING) {
             order = QuerySortOrder.ASC;
         }
         Map<String, Object> _filters = new HashMap<>();
-        Map<String, Date> range = new HashMap<>();
-        if (getStart() != null) {
-            range.put("start", getStart());
-            if (getEnd() != null) {
-                range.put("end", getEnd());
-            } else {
-                range.put("end", fechaActual);
-            }
-        }
         _filters.put("eliminar", Boolean.FALSE);
-        QueryData<Jornada> qData = this.jornadaService.find(first, finPagination, sortField, order, _filters);
-        this.setRowCount(qData.getTotalResultCount().intValue());
-        return qData.getResult();
+        QueryData<Jornada> query = this.jornadaService.find(first, finPagination, sortField, order, _filters);
+        this.setRowCount(query.getTotalResultCount().intValue());
+        return query.getResult();
     }
 
     @Override

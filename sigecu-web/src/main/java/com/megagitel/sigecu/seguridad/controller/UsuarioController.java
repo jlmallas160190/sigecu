@@ -5,13 +5,13 @@
  */
 package com.megagitel.sigecu.seguridad.controller;
 
+import com.megagitel.sigecu.academico.ejb.EstudianteService;
+import com.megagitel.sigecu.academico.modelo.Estudiante;
 import com.megagitel.sigecu.core.ejb.CatalogoItemService;
 import com.megagitel.sigecu.core.ejb.DetalleParametrizacionService;
-import com.megagitel.sigecu.core.ejb.PersonaService;
 import com.megagitel.sigecu.core.modelo.CatalogoItem;
 import com.megagitel.sigecu.core.modelo.DetalleParametrizacion;
 import com.megagitel.sigecu.core.modelo.DireccionPersona;
-import com.megagitel.sigecu.core.modelo.Persona;
 import com.megagitel.sigecu.dto.MailDto;
 import com.megagitel.sigecu.seguridad.ejb.GrupoUsuarioService;
 import com.megagitel.sigecu.seguridad.modelo.GrupoUsuario;
@@ -55,9 +55,8 @@ public class UsuarioController implements Serializable {
     @EJB
     private GrupoUsuarioService grupoUsuarioService;
     @EJB
-    private PersonaService personaService;
-
-    private Usuario usuario;
+    private EstudianteService estudianteService;
+    private Estudiante estudiante;
     private DireccionPersona direccion;
     private List<CatalogoItem> tiposDocumento;
     private List<CatalogoItem> estadosCiviles;
@@ -77,8 +76,7 @@ public class UsuarioController implements Serializable {
     }
 
     public void crearUsuario() {
-        this.usuario = new Usuario();
-        this.usuario.setPersona(new Persona());
+        this.estudiante = new Estudiante();
     }
 
     public void crearDireccion() {
@@ -88,7 +86,8 @@ public class UsuarioController implements Serializable {
     public String guardar() {
         try {
 
-            if (this.usuario.getId() == null) {
+            if (this.estudiante.getId() == null) {
+                Usuario usuario = new Usuario();
                 List<GrupoUsuario> grupoUsuarios = this.grupoUsuarioService.findByNamedQueryWithLimit("GrupoUsuario.findByCodigo", 0, SigecuEnum.ESTUDIANTE.getTipo());
                 GrupoUsuario grupoUsuario = !grupoUsuarios.isEmpty() ? grupoUsuarios.get(0) : null;
                 List<CatalogoItem> tiposDireccion = this.catalogoItemService.findByNamedQueryWithLimit("CatalogoItem.findByCodigo", 0, SigecuEnum.TIPO_DIRECCION_DOCIMICILIO.getTipo());
@@ -98,17 +97,18 @@ public class UsuarioController implements Serializable {
                     FacesContext.getCurrentInstance().addMessage(null, message);
                     return "";
                 }
-                this.usuario.setNombre(this.usuario.getPersona().getEmail());
-                String result = new Sha256Hash(this.usuario.getPersona().getNumeroIdentificacion()).toHex();
-                this.usuario.setClave(result);
-                this.usuario.setEliminar(Boolean.FALSE);
-                this.usuario.setSuperUsuario(Boolean.FALSE);
-                this.usuario.setToken(result);
-                this.usuario.setGrupoUsuario(grupoUsuario);
+                usuario.setNombre(this.estudiante.getEmail());
+                String result = new Sha256Hash(this.estudiante.getNumeroIdentificacion()).toHex();
+                usuario.setClave(result);
+                usuario.setEliminar(Boolean.FALSE);
+                usuario.setSuperUsuario(Boolean.FALSE);
+                usuario.setToken(result);
+                usuario.setGrupoUsuario(grupoUsuario);
                 this.direccion.setDescripcion(this.direccion.getReferencia());
                 this.direccion.setTipoDireccion(tipoDireccion.getId());
-                this.usuario.getPersona().getDireccionPersonas().add(direccion);
-                this.usuario.getPersona().setUsuario(usuario);
+                this.estudiante.getDireccionPersonas().add(direccion);
+                this.estudiante.setUsuario(usuario);
+                usuario.setPersona(estudiante);
                 direccion.setPersona(usuario.getPersona());
                 boolean send = this.sendTokenResetPassword();
                 if (!send) {
@@ -116,7 +116,7 @@ public class UsuarioController implements Serializable {
                     FacesContext.getCurrentInstance().addMessage(null, message);
                     return "";
                 }
-                this.personaService.create(usuario.getPersona());
+                this.estudianteService.create(estudiante);
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, I18nUtil.getMessages("com.megagitel.sigecu.seguridad.usuario.grabarExitoso"), null);
                 FacesContext.getCurrentInstance().addMessage(null, message);
             }
@@ -138,10 +138,10 @@ public class UsuarioController implements Serializable {
             if (detalleParametrizacionToken == null || detalleParametrizacionHost == null) {
                 return false;
             }
-            mailDto.setDestino(this.usuario.getPersona().getEmail());
+            mailDto.setDestino(this.estudiante.getEmail());
             HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
             String url = req.getContextPath();
-            mailDto.setMensaje(detalleParametrizacionHost.getValor() + "" + url + "/" + detalleParametrizacionToken.getValor() + "" + this.usuario.getToken());
+            mailDto.setMensaje(detalleParametrizacionHost.getValor() + "" + url + "/" + detalleParametrizacionToken.getValor() + "" + this.estudiante.getUsuario().getToken());
             return EmailService.enviar(mailDto);
         } catch (Exception e) {
             throw e;
@@ -149,20 +149,12 @@ public class UsuarioController implements Serializable {
     }
 
     public boolean validarCedula() {
-        if (usuario.getPersona().getTipoIdentificacion() == null) {
+        if (estudiante.getTipoIdentificacion() == null) {
             return false;
         }
         List<CatalogoItem> cedulas = this.catalogoItemService.findByNamedQueryWithLimit("CatalogoItem.findByCodigo", 0, SigecuEnum.TIPO_DOCUMENTO_CEDULA.getTipo());
         CatalogoItem cedula = !cedulas.isEmpty() ? cedulas.get(0) : null;
-        return cedula != null ? Objects.equals(cedula.getId(), usuario.getPersona().getTipoIdentificacion()) : false;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+        return cedula != null ? Objects.equals(cedula.getId(), estudiante.getTipoIdentificacion()) : false;
     }
 
     public DireccionPersona getDireccion() {
@@ -226,6 +218,14 @@ public class UsuarioController implements Serializable {
 
     public void setPaises(List<CatalogoItem> paises) {
         this.paises = paises;
+    }
+
+    public Estudiante getEstudiante() {
+        return estudiante;
+    }
+
+    public void setEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
     }
 
 }

@@ -17,6 +17,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -32,6 +34,9 @@ import org.hibernate.envers.Audited;
 @Table(name = "academico_jornada")
 @Audited
 @AuditTable(value = "academico_jornada_aud", schema = "audit")
+@NamedQueries({
+    @NamedQuery(name = "Jornada.findByOfertaActual", query = "select c FROM Jornada c where c.paralelo.eliminar=false and ?1 BETWEEN c.paralelo.ofertadorComponenteEducativo.ofertaAcademica.fechaInicio  and c.paralelo.ofertadorComponenteEducativo.ofertaAcademica.fechaFin")
+})
 public class Jornada implements Serializable {
 
     @Id

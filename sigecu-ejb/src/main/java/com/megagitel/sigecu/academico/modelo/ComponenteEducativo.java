@@ -65,9 +65,9 @@ public class ComponenteEducativo implements Serializable {
     @JoinColumn(name = "grupo_id", referencedColumnName = "id")
     @ManyToOne
     private GrupoComponenteEducativo grupoComponenteEducativo;
-    @OneToMany(mappedBy = "componenteEducativo", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "componenteEducativo")
     private List<InteresComponenteEducativo> interesComponenteEducativos;
-    @OneToMany(mappedBy = "componenteEducativo", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "componenteEducativo")
     private List<OfertaComponenteEducativo> ofertaComponenteEducativos;
 
     public ComponenteEducativo() {
