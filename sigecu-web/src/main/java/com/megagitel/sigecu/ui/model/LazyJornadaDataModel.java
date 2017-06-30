@@ -48,9 +48,8 @@ public class LazyJornadaDataModel extends LazyDataModel<Jornada> implements Seri
         if (sortOrder == SortOrder.ASCENDING) {
             order = QuerySortOrder.ASC;
         }
-        Map<String, Object> _filters = new HashMap<>();
-        _filters.put("eliminar", Boolean.FALSE);
-        QueryData<Jornada> query = this.jornadaService.find(first, finPagination, sortField, order, _filters);
+        filters.put("eliminar", Boolean.FALSE);
+        QueryData<Jornada> query = this.jornadaService.find(first, finPagination, sortField, order, filters);
         this.setRowCount(query.getTotalResultCount().intValue());
         return query.getResult();
     }

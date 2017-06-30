@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
@@ -39,7 +40,11 @@ public class ComponenteEducativoPlanificado implements Serializable {
     @OneToMany(mappedBy = "componenteEducativoPlanificado")
     private List<MatriculaComponenteEducativo> matriculaComponenteEducativos;
 
+    @Transient
+    private Boolean seleccionar;
+
     public ComponenteEducativoPlanificado() {
+        this.seleccionar=Boolean.FALSE;
     }
 
     public Long getId() {
@@ -72,6 +77,14 @@ public class ComponenteEducativoPlanificado implements Serializable {
 
     public void setMatriculaComponenteEducativos(List<MatriculaComponenteEducativo> matriculaComponenteEducativos) {
         this.matriculaComponenteEducativos = matriculaComponenteEducativos;
+    }
+
+    public Boolean getSeleccionar() {
+        return seleccionar;
+    }
+
+    public void setSeleccionar(Boolean seleccionar) {
+        this.seleccionar = seleccionar;
     }
 
 }

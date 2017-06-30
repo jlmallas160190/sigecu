@@ -35,7 +35,8 @@ import org.hibernate.envers.Audited;
 @Audited
 @AuditTable(value = "academico_jornada_aud", schema = "audit")
 @NamedQueries({
-    @NamedQuery(name = "Jornada.findByOfertaActual", query = "select c FROM Jornada c where c.paralelo.eliminar=false and ?1 BETWEEN c.paralelo.ofertadorComponenteEducativo.ofertaAcademica.fechaInicio  and c.paralelo.ofertadorComponenteEducativo.ofertaAcademica.fechaFin")
+    @NamedQuery(name = "Jornada.findByOfertaActual", query = "select c FROM Jornada c where c.paralelo.eliminar=false and ?1 BETWEEN "
+            + "c.paralelo.ofertadorComponenteEducativo.ofertaAcademica.fechaInicio  and c.paralelo.ofertadorComponenteEducativo.ofertaAcademica.fechaFin")
 })
 public class Jornada implements Serializable {
 

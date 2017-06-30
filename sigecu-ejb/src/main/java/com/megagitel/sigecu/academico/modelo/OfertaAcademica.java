@@ -57,6 +57,8 @@ public class OfertaAcademica implements Serializable {
     private Institucion institucion;
     @OneToMany(mappedBy = "ofertaAcademica", fetch = FetchType.LAZY)
     private List<OfertadorComponenteEducativo> ofertadorComponenteEducativos;
+    @OneToMany(mappedBy = "ofertaAcademica", fetch = FetchType.LAZY)
+    private List<Matricula> matriculas;
 
     public OfertaAcademica() {
     }
@@ -107,6 +109,14 @@ public class OfertaAcademica implements Serializable {
 
     public void setOfertadorComponenteEducativos(List<OfertadorComponenteEducativo> ofertadorComponenteEducativos) {
         this.ofertadorComponenteEducativos = ofertadorComponenteEducativos;
+    }
+
+    public List<Matricula> getMatriculas() {
+        return matriculas;
+    }
+
+    public void setMatriculas(List<Matricula> matriculas) {
+        this.matriculas = matriculas;
     }
 
 }

@@ -16,6 +16,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -31,6 +33,8 @@ import org.hibernate.envers.Audited;
 @Table(name = "academico_matricula")
 @Audited
 @AuditTable(value = "academico_matricula_aud", schema = "audit")
+@NamedQueries({
+    @NamedQuery(name = "Matricula.findByOfertaAcademica", query = "select c FROM Matricula c where c.ofertaAcademica=?1 and c.estudiante=?2")})
 public class Matricula implements Serializable {
 
     @Id
@@ -49,6 +53,9 @@ public class Matricula implements Serializable {
     @JoinColumn(name = "estudiante_id", referencedColumnName = "id")
     @ManyToOne
     private Estudiante estudiante;
+    @JoinColumn(name = "oferta_academica_id", referencedColumnName = "id")
+    @ManyToOne
+    private OfertaAcademica ofertaAcademica;
     @OneToMany(mappedBy = "matricula")
     private List<MatriculaComponenteEducativo> matriculaComponenteEducativos;
 
@@ -109,6 +116,14 @@ public class Matricula implements Serializable {
 
     public void setMatriculaComponenteEducativos(List<MatriculaComponenteEducativo> matriculaComponenteEducativos) {
         this.matriculaComponenteEducativos = matriculaComponenteEducativos;
+    }
+
+    public OfertaAcademica getOfertaAcademica() {
+        return ofertaAcademica;
+    }
+
+    public void setOfertaAcademica(OfertaAcademica ofertaAcademica) {
+        this.ofertaAcademica = ofertaAcademica;
     }
 
 }

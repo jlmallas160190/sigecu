@@ -79,8 +79,7 @@ public abstract class AbstractDao<T> {
         return ((Long) q.getSingleResult()).intValue();
     }
 
-    
-public <E> List<E> findByNamedQueryWithLimit(final String namedQueryName, final int limit, final Object... params) {
+    public <E> List<E> findByNamedQueryWithLimit(final String namedQueryName, final int limit, final Object... params) {
         Query query = em.createNamedQuery(namedQueryName);
         int i = 1;
         for (Object p : params) {
@@ -89,6 +88,7 @@ public <E> List<E> findByNamedQueryWithLimit(final String namedQueryName, final 
         query.setMaxResults(limit);
         return query.getResultList();
     }
+
     public QueryData<T> find(int start, int end, String sortField, QuerySortOrder querySortOrder, Map<String, Object> filters) {
         QueryData<T> queryData = new QueryData<>();
         CriteriaBuilder cb = getCriteriaBuilder();
@@ -120,6 +120,11 @@ public <E> List<E> findByNamedQueryWithLimit(final String namedQueryName, final 
                             ParameterExpression<String> pexp = cb.parameter(String.class,
                                     (String) key);
                             Predicate predicate = cb.like(cb.lower(filterPropertyPath), pexp);
+                            predicates.add(predicate);
+                        } else {
+                            ParameterExpression<?> pexp = cb.parameter(value != null ? value.getClass() : Object.class,
+                                    (String) key);
+                            Predicate predicate = cb.equal(root.get(filterProperty).get((String) key), pexp);
                             predicates.add(predicate);
                         }
                     }
@@ -190,14 +195,16 @@ public <E> List<E> findByNamedQueryWithLimit(final String namedQueryName, final 
                 if (filterValue instanceof Map) {
                     for (Object key : ((Map) filterValue).keySet()) {
                         Object value = ((Map) filterValue).get((String) key);
-                        //Verify data content for build
                         if (value instanceof Date) {
                             q.setParameter(q.getParameter((String) key, Date.class), (Date) value, TemporalType.TIMESTAMP);
                             countquery.setParameter(q.getParameter((String) key, Date.class), (Date) value, TemporalType.TIMESTAMP);
-                        } else {
+                        } else if (value instanceof String) {
                             String _filterValue = "%" + (String) value + "%";
                             q.setParameter(q.getParameter((String) key, String.class), _filterValue);
                             countquery.setParameter(q.getParameter((String) key, String.class), _filterValue);
+                        } else if (value != null) {
+                            q.setParameter((String) key, value);
+                            countquery.setParameter((String) key, value);
                         }
                     }
                 } else if (filterValue instanceof List) {

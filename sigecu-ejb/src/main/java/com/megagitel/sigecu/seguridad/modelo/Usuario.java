@@ -45,7 +45,7 @@ public class Usuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    private Integer id;
+    private Long id;
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "nombre", unique = true)
@@ -88,14 +88,6 @@ public class Usuario implements Serializable {
         this.persona = persona;
         this.grupoUsuario = grupoUsuario;
         this.menus = menus;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getNombre() {
@@ -176,6 +168,14 @@ public class Usuario implements Serializable {
 
     public void setActivo(Boolean activo) {
         this.activo = activo;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
 }
