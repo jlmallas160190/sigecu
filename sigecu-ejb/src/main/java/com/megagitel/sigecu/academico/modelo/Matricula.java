@@ -9,8 +9,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -50,13 +52,15 @@ public class Matricula implements Serializable {
     @NotNull
     @Column(name = "estado")
     private Integer estado;
+    @Column(name = "codigo")
+    private String codigo;
     @JoinColumn(name = "estudiante_id", referencedColumnName = "id")
     @ManyToOne
     private Estudiante estudiante;
     @JoinColumn(name = "oferta_academica_id", referencedColumnName = "id")
     @ManyToOne
     private OfertaAcademica ofertaAcademica;
-    @OneToMany(mappedBy = "matricula")
+    @OneToMany(mappedBy = "matricula", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<MatriculaComponenteEducativo> matriculaComponenteEducativos;
 
     public Matricula() {
@@ -68,6 +72,14 @@ public class Matricula implements Serializable {
         this.observacion = observacion;
         this.estado = estado;
         this.estudiante = estudiante;
+    }
+
+    public void agregarMatriculasComponentes(MatriculaComponenteEducativo matriculaComponenteEducativo) {
+        if (!this.matriculaComponenteEducativos.contains(matriculaComponenteEducativo)) {
+            this.matriculaComponenteEducativos.add(matriculaComponenteEducativo);
+            matriculaComponenteEducativo.setMatricula(this);
+        }
+
     }
 
     public Long getId() {
@@ -124,6 +136,14 @@ public class Matricula implements Serializable {
 
     public void setOfertaAcademica(OfertaAcademica ofertaAcademica) {
         this.ofertaAcademica = ofertaAcademica;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
 }

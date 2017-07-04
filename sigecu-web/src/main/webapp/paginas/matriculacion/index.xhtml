@@ -36,11 +36,11 @@
                                     </p:panelGrid>
                                 </div>
                                 <f:facet name="footer">
-                                    
-                                            <p:commandButton id="btn" value="#{btn['com.megagitel.sigecu.matriculacion.matricular']}" update="@form" process="@form"  icon="fa fa-save" 
-                                                             onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{matriculacionController.matricular()}" />
 
-                                       
+                                    <p:commandButton id="btn" value="#{btn['com.megagitel.sigecu.matriculacion.matricular']}" update="@form" process="@form"  icon="fa fa-save" 
+                                                     onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{matriculacionController.matricular()}" />
+
+
                                 </f:facet>
                             </p:panel>
                         </p:dataGrid>

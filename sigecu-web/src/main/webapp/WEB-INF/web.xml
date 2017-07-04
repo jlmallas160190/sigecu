@@ -22,7 +22,8 @@
         <param-value>
             com.megagitel.sigecu.controller,
             com.megagitel.sigecu.seguridad.controller,
-            com.megagitel.sigecu.academico.controller
+            com.megagitel.sigecu.academico.controller,
+            com.megagitel.sigecu.matriculacion.controller
         </param-value>
     </context-param>
     <context-param>

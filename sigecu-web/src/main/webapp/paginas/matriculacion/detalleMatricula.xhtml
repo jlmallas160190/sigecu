@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../../index.xhtml">
+
+            <ui:define name="title">
+                #{lbl['com.megagitel.sigecu.matriculacion.detalle']}
+            </ui:define> 
+            <ui:define name="params">
+                <f:metadata>
+                    <f:viewParam name="matriculaId" value="#{detalleMatriculaController.matriculaId}" />
+                </f:metadata>
+            </ui:define>
+            <ui:define name="content">
+                <h:form>
+                    <p:messages id="msg"/>
+                    <div class="ui-fluid">
+                        <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid" styleClass="ui-panelgrid-blank" >
+                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.comun.nombres']}"/>
+                            <h:outputLabel value="#{detalleMatriculaController.matricula.estudiante.primerNombre} #{detalleMatriculaController.matricula.estudiante.segundoNombre}"/>
+                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.comun.apellidos']}"/>
+                            <h:outputLabel value="#{detalleMatriculaController.matricula.estudiante.primerApellido} #{detalleMatriculaController.matricula.estudiante.segundoApellido}"/>
+                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.ofertaAcademica']}"/>
+                            <h:outputLabel value="#{detalleMatriculaController.matricula.ofertaAcademica.descripcion}"/>
+                            <p:barcode value="#{detalleMatriculaController.matricula.codigo}" type="#{detalleMatriculaController.getDetalleParametrizacion('TYPE_BARCODE', 'upca')}" format="png"/>
+                        </p:panelGrid>
+                    </div>
+                    <div class="ui-fluid">
+                        <p:commandButton id="btn" value="#{btn['regresar']}" update="@form" process="@form"  icon="fa fa-arrow-circle-o-left" 
+                                         onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="pretty:inicio" />
+                    </div>
+                    <ui:include src="./../../dialogLoading.xhtml"></ui:include>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+
+</html>

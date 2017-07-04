@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
@@ -22,6 +24,9 @@ import org.hibernate.envers.Audited;
  */
 @Entity
 @Table(name = "academico_matricula_componente_educativo")
+@NamedQueries({
+    @NamedQuery(name = "MatriculaComponenteEducativo.findMatricula", query = "select c FROM MatriculaComponenteEducativo c where c.matricula=?1")
+})
 @Audited
 @AuditTable(value = "academico_matricula_componente_educativo_aud", schema = "audit")
 public class MatriculaComponenteEducativo implements Serializable {

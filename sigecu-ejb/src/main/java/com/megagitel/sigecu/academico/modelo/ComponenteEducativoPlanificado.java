@@ -44,7 +44,7 @@ public class ComponenteEducativoPlanificado implements Serializable {
     private Boolean seleccionar;
 
     public ComponenteEducativoPlanificado() {
-        this.seleccionar=Boolean.FALSE;
+        this.seleccionar = Boolean.FALSE;
     }
 
     public Long getId() {
@@ -87,4 +87,24 @@ public class ComponenteEducativoPlanificado implements Serializable {
         this.seleccionar = seleccionar;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof ComponenteEducativoPlanificado)) {
+            return false;
+        }
+        ComponenteEducativoPlanificado other = (ComponenteEducativoPlanificado) object;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+    }
+
+    @Override
+    public String toString() {
+        return this.id + "";
+    }
 }
