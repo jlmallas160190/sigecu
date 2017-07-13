@@ -21,21 +21,55 @@
             <ui:define name="content">
                 <h:form>
                     <p:messages id="msg"/>
-                    <div class="ui-fluid">
-                        <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid" styleClass="ui-panelgrid-blank" >
-                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.comun.nombres']}"/>
-                            <h:outputLabel value="#{detalleMatriculaController.matricula.estudiante.primerNombre} #{detalleMatriculaController.matricula.estudiante.segundoNombre}"/>
-                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.comun.apellidos']}"/>
-                            <h:outputLabel value="#{detalleMatriculaController.matricula.estudiante.primerApellido} #{detalleMatriculaController.matricula.estudiante.segundoApellido}"/>
-                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.ofertaAcademica']}"/>
-                            <h:outputLabel value="#{detalleMatriculaController.matricula.ofertaAcademica.descripcion}"/>
+                    <p:panel header="#{detalleMatriculaController.matricula.estudiante.nombresCompletos}">
+                        <h2> #{lbl['com.megagitel.sigecu.matriculacion.ofertaAcademica']} #{detalleMatriculaController.matricula.ofertaAcademica.detalle.toUpperCase()}</h2>
+                        <p:separator/>
+                        <p:dataTable var="mat" stickyHeader="true" 
+                                     value="#{detalleMatriculaController.matricula.matriculaComponenteEducativos}" 
+                                     paginator="true" 
+                                     sortOrder="DESCENDING"
+                                     rowKey="#{mat.id}" 
+
+                                     id="dataTable" >
+                            <f:facet name="header">
+                                <h2>#{lbl['com.megagitel.sigecu.componenteEducativoPlanificado.lista']}</h2>
+                            </f:facet>
+                            <p:column headerText="#{lbl['com.megagitel.sigecu.matriculacion.evento']}" sortBy="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.ofertadorComponenteEducativo.nombre}"
+                                      styleClass="text-right">
+                                <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.ofertadorComponenteEducativo.nombre}"/>
+                            </p:column>
+                            <p:column headerText="#{lbl['com.megagitel.sigecu.academico.categoria']}" sortBy="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.grupoComponenteEducativo.nombre}"
+                                      styleClass="text-right">
+                                <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.grupoComponenteEducativo.nombre}"/>
+                            </p:column>
+                            <p:column headerText="#{lbl['com.megagitel.sigecu.academico.curso']}" sortBy="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.nombre}"
+                                      styleClass="text-right">
+                                <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.nombre}"/>
+                            </p:column>
+                            <p:column headerText="#{lbl['com.megagitel.sigecu.academico.duracion']}" sortBy="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.duracion}"
+                                      styleClass="text-right">
+                                <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.duracion}"/>
+                            </p:column>
+                        </p:dataTable>
+                        <p:separator/>
+                        <h2>#{lbl['com.megagitel.sigecu.matriculacion.detalle']}</h2>
+                        <p:panelGrid  columns="2"  styleClass="ui-responsive" >
+                            <p:panelGrid  columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6"  styleClass="ui-responsive" >
+                                <p:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.fecha']}"/>
+                                <p:outputLabel value="#{detalleMatriculaController.matricula.fechaRegistro}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"/>
+                                </p:outputLabel>
+                            </p:panelGrid>
+
                             <p:barcode value="#{detalleMatriculaController.matricula.codigo}" type="#{detalleMatriculaController.getDetalleParametrizacion('TYPE_BARCODE', 'upca')}" format="png"/>
                         </p:panelGrid>
-                    </div>
-                    <div class="ui-fluid">
-                        <p:commandButton id="btn" value="#{btn['regresar']}" update="@form" process="@form"  icon="fa fa-arrow-circle-o-left" 
-                                         onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="pretty:inicio" />
-                    </div>
+
+                        <p:panelGrid columns="1" styleClass="ui-responsive" >
+                            <p:commandButton id="btn" value="#{btn['regresar']}" update="@form" process="@form"  icon="fa fa-arrow-circle-o-left" 
+                                             onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="pretty:inicio" />
+                        </p:panelGrid>
+
+                    </p:panel>
                     <ui:include src="./../../dialogLoading.xhtml"></ui:include>
                 </h:form>
             </ui:define>

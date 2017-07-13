@@ -218,4 +218,7 @@ public class Persona implements Serializable {
         this.usuario = usuario;
     }
 
+    public String getNombresCompletos() {
+        return this.primerNombre + " " + this.segundoNombre + " " + this.primerApellido + " " + this.segundoApellido;
+    }
 }

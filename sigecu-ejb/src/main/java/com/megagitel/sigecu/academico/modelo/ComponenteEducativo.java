@@ -61,6 +61,9 @@ public class ComponenteEducativo implements Serializable {
     @Digits(integer = 12, fraction = 2)
     @Column(name = "creditos")
     private BigDecimal creditos;
+    @Digits(integer = 12, fraction = 2)
+    @Column(name = "duracion")
+    private BigDecimal duracion;
     @JoinColumn(name = "grupo_id", referencedColumnName = "id")
     @ManyToOne
     private GrupoComponenteEducativo grupoComponenteEducativo;
@@ -153,6 +156,14 @@ public class ComponenteEducativo implements Serializable {
         this.ofertaComponenteEducativos = ofertaComponenteEducativos;
     }
 
+    public BigDecimal getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(BigDecimal duracion) {
+        this.duracion = duracion;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -173,4 +184,5 @@ public class ComponenteEducativo implements Serializable {
     public String toString() {
         return this.codigo;
     }
+
 }

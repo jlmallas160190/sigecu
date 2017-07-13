@@ -16,8 +16,8 @@
                 <h:form>
                     <p:panel id="header" header="#{lbl.autenticacion}">
                         <p:messages id="msg"/>
-                        <div class="ui-fluid">
-                            <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
+                       
+                        <p:panelGrid columns="3" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2"  styleClass="ui-responsive">
                                 <h:outputLabel value="#{lbl.usuario}"></h:outputLabel>
                                 <p:inputText id="nombre" placeholder="#{lbl.usuario}"  value="#{loginController.usuario.nombre}">
                                     <p:ajax event="keyup" update="msgNombre"/>
@@ -28,18 +28,17 @@
                                     <p:ajax event="keyup" update="msgClave"/>
                                 </p:password>
                                 <p:message id="msgClave" display="icon" for="clave"/>
-                                <!-- <p:captcha label="Captcha" language="es"/>-->
+                               <!-- <p:captcha label="Captcha" language="es"/>-->
                             </p:panelGrid>
-                        </div>
                         <f:facet name="footer">
-                            <div class="ui-fluid">
-                                <h:panelGrid columns="3"  columnClasses="ui-grid-col-4,ui-grid-col-4, ui-grid-col-4" styleClass="ui-panelgrid-blank">
+                            
+                                <h:panelGrid columns="3"  columnClasses="ui-grid-col-4,ui-grid-col-4, ui-grid-col-4" styleClass="ui-responsive">
                                     <p:commandButton id="btn" value="#{btn.Autenticar}" update="@form" process="@form"  icon="fa fa-lock" 
                                                      onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{loginController.autenticar()}"/>
                                     <p:commandLink value="#{lbl['password.forget']}" action="pretty:olvidarClave" immediate="true"/>
                                     <p:commandLink value="#{btn.RegistarUsuario}" action="pretty:registroUsuario" immediate="true" />
                                 </h:panelGrid>
-                            </div>
+                            
                             <ui:include src="/dialogLoading.xhtml"></ui:include>
                         </f:facet>
                     </p:panel>

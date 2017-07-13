@@ -431,11 +431,13 @@ public class SetupService implements Serializable {
         BufferedReader br = null;
         String linea = "";
         String separador = ";";
+        DetalleParametrizacion detalleParametrizacion = buscarDetalleParametrizacion("DURACION_CREDITOS");
         try {
             br = new BufferedReader(new FileReader(archivo));
             while ((linea = br.readLine()) != null) {
                 String[] compoenteEducativo = linea.split(separador);
-                getComponenteEducativo(compoenteEducativo);
+                ComponenteEducativo c = getComponenteEducativo(compoenteEducativo);
+                c.setDuracion(c.getCreditos().multiply(detalleParametrizacion != null ? new BigDecimal(detalleParametrizacion.getValor()) : BigDecimal.ONE));
             }
         } catch (FileNotFoundException e) {
         } catch (IOException e) {
@@ -468,10 +470,12 @@ public class SetupService implements Serializable {
             if (grupoComponenteEducativo == null) {
                 return;
             }
+            DetalleParametrizacion detalleParametrizacion = buscarDetalleParametrizacion("DURACION_CREDITOS");
             ComponenteEducativo componente = new ComponenteEducativo();
             componente.setCodigo(componenteEducativo[0]);
             componente.setNombre(componenteEducativo[1]);
             componente.setCreditos(new BigDecimal(componenteEducativo[3]));
+            componente.setDuracion(componente.getCreditos().multiply(detalleParametrizacion != null ? new BigDecimal(detalleParametrizacion.getValor()) : BigDecimal.ONE));
             componente.setDescripcion(componenteEducativo[2]);
             componente.setGrupoComponenteEducativo(grupoComponenteEducativo);
             componente.setEliminar(Boolean.FALSE);
@@ -517,6 +521,19 @@ public class SetupService implements Serializable {
             throw e;
         }
         return singleResult;
+    }
+
+    private DetalleParametrizacion buscarDetalleParametrizacion(String codigo) {
+        List<DetalleParametrizacion> detalleParametrizacions = new ArrayList<>();
+        try {
+            Query query = getEm().createQuery("SELECT c FROM Parametrizacion c WHERE" + ""
+                    + " (c.codigo=:codigo)");
+            query.setParameter("codigo", codigo);
+            detalleParametrizacions = query.getResultList();
+        } catch (Exception e) {
+            throw e;
+        }
+        return !detalleParametrizacions.isEmpty() ? detalleParametrizacions.get(0) : null;
     }
 
     public EntityManager getEm() {

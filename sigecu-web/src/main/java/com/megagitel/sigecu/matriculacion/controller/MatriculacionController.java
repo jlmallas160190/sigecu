@@ -27,13 +27,17 @@ import com.megagitel.sigecu.util.SigecuController;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
@@ -164,22 +168,31 @@ public class MatriculacionController extends SigecuController implements Seriali
         return !detallesParametrizacion.isEmpty() ? detallesParametrizacion.get(0).getValor() : valorDefecto;
     }
 
-    public List<ComponenteEducativoPlanificado> getComponentesEducativos(Jornada jornada) {
-        for (ComponenteEducativoPlanificado componenteEducativoPlanificado : jornada.getComponenteEducativoPlanificados()) {
-            for (MatriculaComponenteEducativo matriculaComponenteEducativo : this.matricula.getMatriculaComponenteEducativos()) {
-                if (componenteEducativoPlanificado.equals(matriculaComponenteEducativo.getComponenteEducativoPlanificado())) {
-                    jornada.getComponenteEducativoPlanificados().remove(componenteEducativoPlanificado);
-                }
-            }
-        }
-        return jornada.getComponenteEducativoPlanificados();
-    }
-
     public List<Jornada> getJornadas() {
-        if (jornadas.isEmpty()) {
+        try {
             Date fechaActual = new Date();
-            jornadas = jornadaService.findByNamedQueryWithLimit("Jornada.findByOfertaActual", 0, fechaActual);
+            List<Jornada> query = jornadaService.findByNamedQueryWithLimit("Jornada.findByOfertaActual", 0, fechaActual);
+            for (Jornada jornada : query) {
+                Jornada jor = new Jornada();
+                BeanUtils.copyProperties(jor, jornada);
+                List<ComponenteEducativoPlanificado> componenteEducativoPlanificados = new ArrayList<>();
+                for (ComponenteEducativoPlanificado c : jor.getComponenteEducativoPlanificados()) {
+                    ComponenteEducativoPlanificado componenteEducativoPlanificado = new ComponenteEducativoPlanificado();
+                    BeanUtils.copyProperties(componenteEducativoPlanificado, c);
+                    componenteEducativoPlanificados.add(componenteEducativoPlanificado);
+                }
+                for (ComponenteEducativoPlanificado componenteEducativoPlanificado : componenteEducativoPlanificados) {
+                    for (MatriculaComponenteEducativo matriculaComponenteEducativo : this.matricula.getMatriculaComponenteEducativos()) {
+                        if (componenteEducativoPlanificado.equals(matriculaComponenteEducativo.getComponenteEducativoPlanificado())) {
+                            jor.getComponenteEducativoPlanificados().remove(componenteEducativoPlanificado);
+                        }
+                    }
+                }
+                this.jornadas.add(jor);
+            }
+        } catch (IllegalAccessException | InvocationTargetException e) {
         }
+
         return jornadas;
     }
 

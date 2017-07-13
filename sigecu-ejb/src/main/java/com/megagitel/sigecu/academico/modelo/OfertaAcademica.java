@@ -6,6 +6,7 @@
 package com.megagitel.sigecu.academico.modelo;
 
 import com.megagitel.sigecu.core.modelo.Institucion;
+import com.megagitel.sigecu.util.Formateador;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -119,4 +120,31 @@ public class OfertaAcademica implements Serializable {
         this.matriculas = matriculas;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof OfertaAcademica)) {
+            return false;
+        }
+        OfertaAcademica other = (OfertaAcademica) object;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+    }
+
+    @Override
+    public String toString() {
+        return this.id + "";
+    }
+
+    public String getDetalle() {
+        Formateador formateador = new Formateador();
+        String fechaInicioFormateada = formateador.fecha(this.fechaInicio, "MMMM-yyy");
+        String fechaFinFormateada = formateador.fecha(this.fechaFin, "MMMM-yyy");
+        return fechaInicioFormateada + " - " + fechaFinFormateada;
+    }
 }

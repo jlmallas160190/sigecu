@@ -6,6 +6,7 @@
 package com.megagitel.sigecu.academico.modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -64,6 +65,7 @@ public class Matricula implements Serializable {
     private List<MatriculaComponenteEducativo> matriculaComponenteEducativos;
 
     public Matricula() {
+        this.matriculaComponenteEducativos=new ArrayList<>();
     }
 
     public Matricula(Date fechaRegistro, String observacion, Integer estado,

@@ -1,0 +1,87 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 12/07/2017, 21:13:45
+    Author     : jorgemalla
+*/
+
+.html {
+    font-family: sans-serif;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+body {
+    background:#f8f8f8 !important;
+    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+    color: #000000;  
+    margin: 10px;
+}
+/*panel*/
+.ui-panel {
+    padding: 0.2em;
+
+}
+
+.ui-panel .ui-panel-titlebar {
+    padding: 0.5em 1em 0.3em;
+}
+
+.ui-panel .ui-panel-title {
+    margin: 0.1em 16px 0.2em 0;
+}
+
+.ui-panel .ui-panel-titlebar-icon {
+    float: right;
+    cursor: pointer;
+}
+
+.ui-panel .ui-panel-titlebar-icon,
+.ui-panel .ui-panel-titlebar-icon:hover,
+.ui-panel .ui-panel-titlebar-icon:focus {
+    margin-left:0.2em;
+    margin-top:-0.2em;
+    *margin:-1.5em 0em 0em 0.2em;
+}
+
+.ui-panel .ui-panel-content {
+    border: 0;
+    background: none;
+    padding: 0.5em 1em;
+}
+
+.ui-panel .ui-panel-footer {
+    border-width:1px 0 0;
+    margin:0.5em 0 0;
+    padding:0.5em 1em;
+    text-align:left;
+}
+
+.ui-panel-collapsed-h .ui-panel-titlebar-icon,
+.ui-panel-collapsed-h .ui-panel-titlebar-icon:hover,
+.ui-panel-collapsed-h .ui-panel-titlebar-icon:focus {
+    *margin:-0.2em 0em 0em 0.1em;
+}
+
+.ui-panel.ui-panel-collapsed-h {
+    width: 42px;
+}
+
+.ui-panel.ui-panel-collapsed-h .ui-panel-title {
+    display:none;
+}
+.ui-panelgrid tr, .ui-panelgrid td{
+    border:none !important;
+}
+.ui-panelgrid > tr td, .ui-panelgrid > tr{
+    border-style: none !important
+}
+.outerpanelgrid>tbody>tr{
+    border: none !important;
+}
+.outerpanelgrid>tbody>tr>td{
+    border: none !important;
+}
