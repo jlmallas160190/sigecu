@@ -16,29 +16,29 @@
             <ui:define name="content">
                 <h:form>
                     <p:messages id="msg"/>
-                    <p:dataGrid var="jornada" value="#{matriculacionController.jornadas}" columns="3" layout="grid"
-                                rows="#{matriculacionController.getDetalleParametrizacion('TABLE_ROWS', '50')}"  paginator="true" id="jornadas">
+                    <p:dataGrid var="jornada" value="#{registroMatriculaController.jornadas}" columns="3" layout="grid" paginatorPosition="bottom"
+                                rows="#{registroMatriculaController.getDetalleParametrizacion('TABLE_ROWS', '50')}"  paginator="true" id="jornadas">
 
                         <f:facet name="header">
                             Paralelos
                         </f:facet>
-                        <p:dataGrid var="componente" value="#{jornada.componenteEducativoPlanificados}" columns="1" layout="grid">
+                        <p:dataGrid var="componente" value="#{jornada.componenteEducativoPlanificados}" columns="1" paginatorPosition="bottom" >
                             <f:facet name="header">
                                 <h:outputLabel value="Paralelo: #{jornada.paralelo.nombre}"/>
                             </f:facet>
                             <p:panel>
                                 <div class="ui-fluid">
-                                    <p:panelGrid columns="2" columnClasses="ui-grid-col-8,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank" >
+                                    <p:panelGrid columns="2" columnClasses="ui-grid-col-8,ui-grid-col-4" styleClass="ui-responsive" >
                                         <h:outputLabel value="#{componente.ofertaComponenteEducativo.componenteEducativo.nombre}"/>
                                         <p:selectBooleanCheckbox value="#{componente.seleccionar}">
-                                            <p:ajax listener="#{matriculacionController.seleccionarComponenteEducativo(componente)}" />
+                                            <p:ajax listener="#{registroMatriculaController.seleccionarComponenteEducativo(componente)}" />
                                         </p:selectBooleanCheckbox>
                                     </p:panelGrid>
                                 </div>
                                 <f:facet name="footer">
 
                                     <p:commandButton id="btn" value="#{btn['com.megagitel.sigecu.matriculacion.matricular']}" update="@form" process="@form"  icon="fa fa-save" 
-                                                     onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{matriculacionController.matricular()}" />
+                                                     onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{registroMatriculaController.matricular()}" />
 
 
                                 </f:facet>

@@ -37,7 +37,9 @@ import org.hibernate.envers.Audited;
 @Audited
 @AuditTable(value = "academico_matricula_aud", schema = "audit")
 @NamedQueries({
-    @NamedQuery(name = "Matricula.findByOfertaAcademica", query = "select c FROM Matricula c where c.ofertaAcademica=?1 and c.estudiante=?2")})
+    @NamedQuery(name = "Matricula.findByOfertaAcademica", query = "select c FROM Matricula c where c.ofertaAcademica=?1 and c.estudiante=?2")
+    ,
+@NamedQuery(name = "Matricula.findByEstudiante", query = "select c FROM Matricula c where  c.estudiante=?1")})
 public class Matricula implements Serializable {
 
     @Id
@@ -53,8 +55,6 @@ public class Matricula implements Serializable {
     @NotNull
     @Column(name = "estado")
     private Integer estado;
-    @Column(name = "codigo")
-    private String codigo;
     @JoinColumn(name = "estudiante_id", referencedColumnName = "id")
     @ManyToOne
     private Estudiante estudiante;
@@ -65,7 +65,7 @@ public class Matricula implements Serializable {
     private List<MatriculaComponenteEducativo> matriculaComponenteEducativos;
 
     public Matricula() {
-        this.matriculaComponenteEducativos=new ArrayList<>();
+        this.matriculaComponenteEducativos = new ArrayList<>();
     }
 
     public Matricula(Date fechaRegistro, String observacion, Integer estado,
@@ -138,14 +138,6 @@ public class Matricula implements Serializable {
 
     public void setOfertaAcademica(OfertaAcademica ofertaAcademica) {
         this.ofertaAcademica = ofertaAcademica;
-    }
-
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
     }
 
 }

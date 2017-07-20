@@ -7,6 +7,7 @@ package com.megagitel.sigecu.academico.modelo;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
@@ -26,6 +29,8 @@ import org.hibernate.envers.Audited;
 @Table(name = "academico_matricula_componente_educativo")
 @NamedQueries({
     @NamedQuery(name = "MatriculaComponenteEducativo.findMatricula", query = "select c FROM MatriculaComponenteEducativo c where c.matricula=?1")
+    ,
+    @NamedQuery(name = "MatriculaComponenteEducativo.findCodigo", query = "select c FROM MatriculaComponenteEducativo c where c.codigo=?1")
 })
 @Audited
 @AuditTable(value = "academico_matricula_componente_educativo_aud", schema = "audit")
@@ -35,10 +40,17 @@ public class MatriculaComponenteEducativo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Long id;
+    @Column(name = "codigo", unique = true)
+    private String codigo;
+    @NotNull
+    @Column(name = "estado")
+    private Integer estado;
     @ManyToOne
     private Matricula matricula;
     @ManyToOne
     private ComponenteEducativoPlanificado componenteEducativoPlanificado;
+    @Transient
+    private String estadoMatricula;
 
     public MatriculaComponenteEducativo() {
     }
@@ -65,6 +77,30 @@ public class MatriculaComponenteEducativo implements Serializable {
 
     public void setComponenteEducativoPlanificado(ComponenteEducativoPlanificado componenteEducativoPlanificado) {
         this.componenteEducativoPlanificado = componenteEducativoPlanificado;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public Integer getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Integer estado) {
+        this.estado = estado;
+    }
+
+    public String getEstadoMatricula() {
+        return estadoMatricula;
+    }
+
+    public void setEstadoMatricula(String estadoMatricula) {
+        this.estadoMatricula = estadoMatricula;
     }
 
 }

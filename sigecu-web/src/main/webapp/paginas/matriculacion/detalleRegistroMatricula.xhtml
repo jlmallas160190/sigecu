@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../../index.xhtml">
+
+            <ui:define name="title">
+                #{lbl['com.megagitel.sigecu.matriculacion.detalle']}
+            </ui:define> 
+            <ui:define name="params">
+                <f:metadata>
+                    <f:viewParam name="matriculaId" value="#{detalleRegistroMatriculaController.matriculaId}" />
+                </f:metadata>
+            </ui:define>
+            <ui:define name="content">
+                <h:form>
+                    <p:messages id="msg"/>
+                    <p:panel header="#{lbl['com.megagitel.sigecu.matriculacion.detalle']}">
+                        <p:panelGrid columns="4"  styleClass="ui-responsive">
+                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.ofertaAcademica']}:"/>
+                            <h:outputText value="#{detalleRegistroMatriculaController.matricula.ofertaAcademica.detalle.toUpperCase()}"/>
+                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.academico.estudiante']}:"/>
+                            <h:outputText value="#{detalleRegistroMatriculaController.matricula.estudiante.nombresCompletos}"/>
+                            <p:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.fecha']}:"/>
+                            <p:outputLabel value="#{detalleRegistroMatriculaController.matricula.fechaRegistro}">
+                                <f:convertDateTime timeZone="America/Guayaquil" pattern="yyyy-MM-dd HH:mm:ss"/>
+                            </p:outputLabel>
+                        </p:panelGrid>
+                        <p:separator/>
+                        <p:dataGrid var="mat" value="#{detalleRegistroMatriculaController.matricula.matriculaComponenteEducativos}" columns="3" layout="grid"
+                                    rows="12" paginator="true" id="mats" paginatorPosition="top"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="6,12,16">
+                            <p:panel header="#{lbl['com.megagitel.sigecu.academico.curso']} #{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.nombre}">
+                                <p:panelGrid styleClass="ui-responsive" columns="2">
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.evento']}:"/>
+                                    <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.ofertadorComponenteEducativo.nombre}"/>
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.academico.categoria']}:"/>
+                                    <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.grupoComponenteEducativo.nombre}"/>
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.academico.duracion']}:"/>
+                                    <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.duracion}"/>
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.estadoMatricula']}:"/>
+                                    <h:outputText value="#{mat.estadoMatricula}"/>
+                                </p:panelGrid>
+                                <p:separator/>
+                                <p:barcode value="#{mat.codigo}"  type="#{detalleRegistroMatriculaController.getDetalleParametrizacion('TYPE_BARCODE', 'upca')}" format="png"/>
+                            </p:panel>
+                        </p:dataGrid>
+                        <p:panelGrid columns="1" styleClass="ui-responsive" >
+                            <p:commandButton id="btn" value="#{btn['regresar']}" update="@form" process="@form"  icon="fa fa-arrow-circle-o-left" 
+                                             onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="pretty:listadoMatriculasEstudiante" />
+                        </p:panelGrid>
+                    </p:panel>
+                    <ui:include src="./../../dialogLoading.xhtml"></ui:include>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+
+</html>

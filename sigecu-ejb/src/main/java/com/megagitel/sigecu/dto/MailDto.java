@@ -5,6 +5,8 @@
  */
 package com.megagitel.sigecu.dto;
 
+import java.util.List;
+
 /**
  *
  * @author jorgemalla
@@ -12,7 +14,7 @@ package com.megagitel.sigecu.dto;
 public class MailDto {
 
     private String mensaje;
-    private String archivo;
+    private List<String> archivos;
     private String destino;
     private String datosDestinatario;
 
@@ -25,14 +27,6 @@ public class MailDto {
 
     public void setMensaje(String mensaje) {
         this.mensaje = mensaje;
-    }
-
-    public String getArchivo() {
-        return archivo;
-    }
-
-    public void setArchivo(String archivo) {
-        this.archivo = archivo;
     }
 
     public String getDestino() {
@@ -49,6 +43,14 @@ public class MailDto {
 
     public void setDatosDestinatario(String datosDestinatario) {
         this.datosDestinatario = datosDestinatario;
+    }
+
+    public List<String> getArchivos() {
+        return archivos;
+    }
+
+    public void setArchivos(List<String> archivos) {
+        this.archivos = archivos;
     }
 
 }
