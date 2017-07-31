@@ -16,36 +16,59 @@
             <ui:define name="content">
                 <h:form>
                     <p:messages id="msg"/>
-                    <p:dataGrid var="jornada" value="#{registroMatriculaController.jornadas}" columns="3" layout="grid" paginatorPosition="bottom"
-                                rows="#{registroMatriculaController.getDetalleParametrizacion('TABLE_ROWS', '50')}"  paginator="true" id="jornadas">
+                    <p:panel header="#{lbl['com.megagitel.sigecu.matricula.datos']}">
+                        <p:panelGrid columns="2" columnClasses="ui-grid-col-8,ui-grid-col-4" styleClass="ui-responsive">
+                            <p:outputLabel value="#{lbl['com.megagitel.sigecu.matricula.costo']}"/> 
+                            <p:outputLabel value="#{registroMatriculaController.costoMatricula}"/>
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:separator/>
+                    <p:panel header="#{lbl['com.megagitel.sigecu.matriculacion.seleccionecursos']}">
+                        <p:dataGrid var="jornada" value="#{registroMatriculaController.jornadas}" columns="2"  paginatorPosition="bottom"
+                                    rows="#{registroMatriculaController.getDetalleParametrizacion('TABLE_ROWS', '50')}"  paginator="true" id="jornadas">
 
-                        <f:facet name="header">
-                            Paralelos
-                        </f:facet>
-                        <p:dataGrid var="componente" value="#{jornada.componenteEducativoPlanificados}" columns="1" paginatorPosition="bottom" >
                             <f:facet name="header">
-                                <h:outputLabel value="Paralelo: #{jornada.paralelo.nombre}"/>
+                                #{lbl['com.megagitel.sigecu.academico.paralelo.lista']}
                             </f:facet>
-                            <p:panel>
-                                <div class="ui-fluid">
+                            <p:dataGrid var="componenteEducativo" value="#{jornada.componenteEducativoPlanificados}" columns="2" paginatorPosition="bottom" >
+                                <f:facet name="header">
+                                    <h:outputLabel value="Paralelo: #{jornada.paralelo.nombre}"/>
+                                </f:facet>
+                                <p:panel>
                                     <p:panelGrid columns="2" columnClasses="ui-grid-col-8,ui-grid-col-4" styleClass="ui-responsive" >
-                                        <h:outputLabel value="#{componente.ofertaComponenteEducativo.componenteEducativo.nombre}"/>
-                                        <p:selectBooleanCheckbox value="#{componente.seleccionar}">
-                                            <p:ajax listener="#{registroMatriculaController.seleccionarComponenteEducativo(componente)}" />
+                                        <p:panelGrid columns="2">
+                                            <p:outputLabel value="#{lbl['com.megagitel.sigecu.academico.curso']}:"/>
+                                            <h:outputLabel value="#{componenteEducativo.ofertaComponenteEducativo.componenteEducativo.nombre}"/>
+                                            <p:outputLabel value="#{lbl['com.megagitel.sigecu.academico.duracion']}:"/> 
+                                            <h:outputLabel value="#{componenteEducativo.ofertaComponenteEducativo.componenteEducativo.duracion}"/>
+                                            <p:outputLabel value="#{lbl['com.megagitel.sigecu.matricula.costo']}:"/> 
+                                            <h:outputLabel value="#{componenteEducativo.ofertaComponenteEducativo.componenteEducativo.costo}">
+                                                <f:convertNumber pattern="#0.00"/>
+                                            </h:outputLabel>
+                                        </p:panelGrid>
+                                        <p:selectBooleanCheckbox value="#{componenteEducativo.seleccionar}">
+                                            <p:ajax update="@form" listener="#{registroMatriculaController.seleccionarComponenteEducativo(componenteEducativo)}" />
                                         </p:selectBooleanCheckbox>
                                     </p:panelGrid>
-                                </div>
-                                <f:facet name="footer">
-
-                                    <p:commandButton id="btn" value="#{btn['com.megagitel.sigecu.matriculacion.matricular']}" update="@form" process="@form"  icon="fa fa-save" 
-                                                     onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{registroMatriculaController.matricular()}" />
-
-
-                                </f:facet>
-                            </p:panel>
+                                    <p:separator/>
+                                </p:panel>
+                            </p:dataGrid>
                         </p:dataGrid>
-
-                    </p:dataGrid>
+                        <f:facet name="footer">
+                            <p:panelGrid columns="2" styleClass="ui-responsive" >
+                                <p:commandButton  value="#{btn['com.megagitel.sigecu.matriculacion.matricular']}" update="@form" process="@form"  icon="fa fa-save" 
+                                                  onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{registroMatriculaController.matricular()}" >
+                                    <p:confirm header="Confirmation" message="#{msg['com.megagitel.sigecu.matriculacion.confiramarregistro']}" icon="ui-icon-alert" />
+                                </p:commandButton>
+                                <p:commandButton id="btn" value="#{btn['regresar']}" update="@form" process="@form"  icon="fa fa-arrow-circle-o-left" 
+                                                 onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="pretty:listadoMatriculasEstudiante" />
+                            </p:panelGrid>
+                        </f:facet>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                    </p:panel>
                     <ui:include src="./../../dialogLoading.xhtml"></ui:include>
                 </h:form>
             </ui:define>

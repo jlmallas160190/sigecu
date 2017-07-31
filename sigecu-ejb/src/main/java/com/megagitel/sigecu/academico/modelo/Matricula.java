@@ -6,6 +6,7 @@
 package com.megagitel.sigecu.academico.modelo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
@@ -55,6 +58,9 @@ public class Matricula implements Serializable {
     @NotNull
     @Column(name = "estado")
     private Integer estado;
+    @Digits(integer = 12, fraction = 4)
+    @Column(name = "costo", columnDefinition = "Decimal(10,4) default '0.0000'")
+    private BigDecimal costo;
     @JoinColumn(name = "estudiante_id", referencedColumnName = "id")
     @ManyToOne
     private Estudiante estudiante;
@@ -63,8 +69,12 @@ public class Matricula implements Serializable {
     private OfertaAcademica ofertaAcademica;
     @OneToMany(mappedBy = "matricula", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<MatriculaComponenteEducativo> matriculaComponenteEducativos;
+    @Transient
+    private String estadoMatricula;
+    
 
     public Matricula() {
+        this.costo = BigDecimal.ZERO;
         this.matriculaComponenteEducativos = new ArrayList<>();
     }
 
@@ -138,6 +148,22 @@ public class Matricula implements Serializable {
 
     public void setOfertaAcademica(OfertaAcademica ofertaAcademica) {
         this.ofertaAcademica = ofertaAcademica;
+    }
+
+    public BigDecimal getCosto() {
+        return costo;
+    }
+
+    public void setCosto(BigDecimal costo) {
+        this.costo = costo;
+    }
+
+    public String getEstadoMatricula() {
+        return estadoMatricula;
+    }
+
+    public void setEstadoMatricula(String estadoMatricula) {
+        this.estadoMatricula = estadoMatricula;
     }
 
 }

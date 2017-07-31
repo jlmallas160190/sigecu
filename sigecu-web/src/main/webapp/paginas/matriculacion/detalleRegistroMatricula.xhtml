@@ -27,6 +27,8 @@
                             <h:outputText value="#{detalleRegistroMatriculaController.matricula.ofertaAcademica.detalle.toUpperCase()}"/>
                             <h:outputLabel value="#{lbl['com.megagitel.sigecu.academico.estudiante']}:"/>
                             <h:outputText value="#{detalleRegistroMatriculaController.matricula.estudiante.nombresCompletos}"/>
+                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.matricula.costo']}:"/>
+                            <h:outputText value="#{detalleRegistroMatriculaController.matricula.costo}"/>
                             <p:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.fecha']}:"/>
                             <p:outputLabel value="#{detalleRegistroMatriculaController.matricula.fechaRegistro}">
                                 <f:convertDateTime timeZone="America/Guayaquil" pattern="yyyy-MM-dd HH:mm:ss"/>
@@ -45,8 +47,16 @@
                                     <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.grupoComponenteEducativo.nombre}"/>
                                     <p:outputLabel value="#{lbl['com.megagitel.sigecu.academico.duracion']}:"/>
                                     <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.duracion}"/>
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.matricula.costo']}:"/>
+                                    <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.costo}"/>
                                     <p:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.estadoMatricula']}:"/>
                                     <h:outputText value="#{mat.estadoMatricula}"/>
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.fechaInicio']}:"/>
+                                    <h:outputText value="#{mat.componenteEducativoPlanificado.jornada.fechaInicio}"/>
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.fechaFin']}:"/>
+                                    <h:outputText value="#{mat.componenteEducativoPlanificado.jornada.fechaFin}"/>
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.paralelo']}:"/>
+                                    <h:outputText value="#{mat.componenteEducativoPlanificado.jornada.paralelo.nombre}"/>
                                 </p:panelGrid>
                                 <p:separator/>
                                 <p:barcode value="#{mat.codigo}"  type="#{detalleRegistroMatriculaController.getDetalleParametrizacion('TYPE_BARCODE', 'upca')}" format="png"/>

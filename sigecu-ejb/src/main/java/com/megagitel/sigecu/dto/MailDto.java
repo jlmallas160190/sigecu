@@ -5,6 +5,7 @@
  */
 package com.megagitel.sigecu.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ public class MailDto {
     private String datosDestinatario;
 
     public MailDto() {
+        this.archivos = new ArrayList<>();
     }
 
     public String getMensaje() {

@@ -10,6 +10,7 @@ import com.megagitel.sigecu.dto.MailDto;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -32,7 +33,7 @@ import javax.mail.internet.MimeMultipart;
  * @author jorgemalla
  */
 public class EmailService implements Serializable {
-    
+
     public static boolean enviar(final MailDto mailDto) {
         Properties properties = EmailService.getProporties();
         Properties props = new Properties();
@@ -48,16 +49,13 @@ public class EmailService implements Serializable {
         // Se inicia una nueva sesion  
         Session session = Session.getDefaultInstance(props);
         MimeMessage mimeMessage = new MimeMessage(session);
-        
+
         try {
-            BodyPart texto = new MimeBodyPart();
             MimeMultipart correo = new MimeMultipart();
-            correo.addBodyPart(texto);
-            texto.setText(mailDto.getMensaje());
             mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(mailDto.getDestino()));
             mimeMessage.setSubject(properties.getProperty("subjectEmail"));
-            mimeMessage.setContent(correo, "text/html");
-            agregarArchivos(mailDto.getArchivos(), correo);
+            mimeMessage.setContent(mailDto.getMensaje(), "text/html");
+            agregarArchivos(!mailDto.getArchivos().isEmpty() ? mailDto.getArchivos() : new ArrayList<String>(), correo);
             Transport t = session.getTransport("smtp");
             t.connect(properties.getProperty("email"), properties.getProperty("passwordEmail"));
             t.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
@@ -72,19 +70,21 @@ public class EmailService implements Serializable {
         }
         return true;
     }
-    
+
     private static void agregarArchivos(List<String> archivos, MimeMultipart correo) {
         try {
-            MimeBodyPart messageBodyPart = new MimeBodyPart();
-            DataSource source = new FileDataSource("/home/jorgemalla/541630486203.png");
-            messageBodyPart.setDataHandler(new DataHandler(source));
-            messageBodyPart.setFileName(source.getName());
-            correo.addBodyPart(messageBodyPart);
+            for (String archivo : archivos) {
+                MimeBodyPart messageBodyPart = new MimeBodyPart();
+                DataSource source = new FileDataSource(archivo);
+                messageBodyPart.setDataHandler(new DataHandler(source));
+                messageBodyPart.setFileName(source.getName());
+                correo.addBodyPart(messageBodyPart);
+            }
         } catch (MessagingException e) {
         }
-        
+
     }
-    
+
     private static Properties getProporties() {
         Properties properties = new Properties();
         InputStream input = null;

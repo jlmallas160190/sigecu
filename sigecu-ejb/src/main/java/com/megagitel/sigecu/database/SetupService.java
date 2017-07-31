@@ -437,7 +437,9 @@ public class SetupService implements Serializable {
             while ((linea = br.readLine()) != null) {
                 String[] compoenteEducativo = linea.split(separador);
                 ComponenteEducativo c = getComponenteEducativo(compoenteEducativo);
-                c.setDuracion(c.getCreditos().multiply(detalleParametrizacion != null ? new BigDecimal(detalleParametrizacion.getValor()) : BigDecimal.ONE));
+                if (c != null) {
+                    c.setDuracion(c.getCreditos().multiply(detalleParametrizacion != null ? new BigDecimal(detalleParametrizacion.getValor()) : BigDecimal.ONE));
+                }
             }
         } catch (FileNotFoundException e) {
         } catch (IOException e) {
@@ -478,6 +480,8 @@ public class SetupService implements Serializable {
             componente.setDuracion(componente.getCreditos().multiply(detalleParametrizacion != null ? new BigDecimal(detalleParametrizacion.getValor()) : BigDecimal.ONE));
             componente.setDescripcion(componenteEducativo[2]);
             componente.setGrupoComponenteEducativo(grupoComponenteEducativo);
+            componente.setCosto(BigDecimal.ZERO);
+            componente.setDuracion(componente.getCreditos().multiply(detalleParametrizacion != null ? new BigDecimal(detalleParametrizacion.getValor()) : BigDecimal.ONE));
             componente.setEliminar(Boolean.FALSE);
             getEm().persist(componente);
         } catch (Exception e) {

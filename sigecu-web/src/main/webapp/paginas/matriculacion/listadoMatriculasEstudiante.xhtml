@@ -35,7 +35,14 @@
                                       styleClass="text-right">
                                 <h:outputText value="#{matricula.ofertaAcademica.detalle}"/>
                             </p:column>  
-                           
+                            <p:column headerText="#{lbl['com.megagitel.sigecu.matricula.costo']}" sortBy="#{matricula.costo}"
+                                      styleClass="text-right">
+                                <h:outputText value="#{matricula.costo}"/>
+                            </p:column> 
+                            <p:column headerText="#{lbl['com.megagitel.sigecu.matriculacion.estadoMatricula']}" sortBy="#{matricula.estadoMatricula}"
+                                      styleClass="text-right">
+                                <h:outputText value="#{matricula.estadoMatricula}"/>
+                            </p:column>  
                             <p:column headerText="#{lbl['accion']}">
                                 <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank">
                                     <p:button outcome="pretty:detalleRegistroMatricula" icon="fa fa-edit" >
@@ -44,10 +51,14 @@
                                 </p:panelGrid>
                             </p:column>
                         </p:dataTable>
-                        <p:panelGrid columns="1" styleClass="ui-responsive" >
-                            <p:commandButton id="btn" value="#{btn['regresar']}" update="@form" process="@form"  icon="fa fa-arrow-circle-o-left" 
-                                             onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="pretty:inicio" />
-                        </p:panelGrid>
+                        <f:facet name="footer">
+                            <p:panelGrid columns="2" styleClass="ui-responsive" >
+                                <p:commandButton  value="#{btn['crear']}" update="@form" process="@form" 
+                                                  onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="pretty:matriculacion" />
+                                <p:commandButton id="btn" value="#{btn['regresar']}" update="@form" process="@form"  icon="fa fa-arrow-circle-o-left" 
+                                                 onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="pretty:inicio" />
+                            </p:panelGrid>
+                        </f:facet>
                     </p:panel>
                     <ui:include src="./../../dialogLoading.xhtml"></ui:include>
                 </h:form>

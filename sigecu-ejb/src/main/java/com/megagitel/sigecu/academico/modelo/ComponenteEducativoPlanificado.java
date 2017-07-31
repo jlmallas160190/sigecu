@@ -39,7 +39,6 @@ public class ComponenteEducativoPlanificado implements Serializable {
     private Jornada jornada;
     @OneToMany(mappedBy = "componenteEducativoPlanificado")
     private List<MatriculaComponenteEducativo> matriculaComponenteEducativos;
-
     @Transient
     private Boolean seleccionar;
 
