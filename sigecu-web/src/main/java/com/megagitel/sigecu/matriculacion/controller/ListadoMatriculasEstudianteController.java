@@ -10,7 +10,11 @@ import com.megagitel.sigecu.academico.ejb.MatriculaService;
 import com.megagitel.sigecu.academico.modelo.Estudiante;
 import com.megagitel.sigecu.academico.modelo.Matricula;
 import com.megagitel.sigecu.core.ejb.CatalogoItemService;
+import com.megagitel.sigecu.core.ejb.ParametrizacionService;
 import com.megagitel.sigecu.core.modelo.CatalogoItem;
+import com.megagitel.sigecu.core.modelo.DetalleParametrizacion;
+import com.megagitel.sigecu.core.modelo.Parametrizacion;
+import com.megagitel.sigecu.enumeration.SigecuEnum;
 import com.megagitel.sigecu.seguridad.ejb.UsuarioService;
 import com.megagitel.sigecu.seguridad.modelo.Usuario;
 import com.megagitel.sigecu.util.SigecuController;
@@ -48,9 +52,12 @@ public class ListadoMatriculasEstudianteController extends SigecuController impl
     private EstudianteService estudianteService;
     @EJB
     private CatalogoItemService catalogoItemService;
+    @EJB
+    private ParametrizacionService parametrizacionService;
 
     private Estudiante estudiante;
     private List<Matricula> matriculas;
+    private String patternDecimal;
 
     @PostConstruct
     public void init() {
@@ -89,6 +96,20 @@ public class ListadoMatriculasEstudianteController extends SigecuController impl
 
     public void setMatriculas(List<Matricula> matriculas) {
         this.matriculas = matriculas;
+    }
+
+    public String getPatternDecimal() {
+        Parametrizacion parametrizacion = this.parametrizacionService.getParametrizacion();
+        for (DetalleParametrizacion detalleParametrizacion : parametrizacion.getDetalleParametrizacions()) {
+            if (detalleParametrizacion.getCodigo().equals(SigecuEnum.DETALLE_PARAM_PATTERN_COSTO_MATRICULA.getTipo())) {
+                this.patternDecimal = detalleParametrizacion.getValor();
+            }
+        }
+        return patternDecimal;
+    }
+
+    public void setPatternDecimal(String patternDecimal) {
+        this.patternDecimal = patternDecimal;
     }
 
 }

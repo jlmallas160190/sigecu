@@ -37,7 +37,9 @@
                             </p:column>  
                             <p:column headerText="#{lbl['com.megagitel.sigecu.matricula.costo']}" sortBy="#{matricula.costo}"
                                       styleClass="text-right">
-                                <h:outputText value="#{matricula.costo}"/>
+                                <h:outputText value="#{matricula.costo}">
+                                    <f:convertNumber pattern="#{listadoMatriculasEstudianteController.patternDecimal}"/>
+                                </h:outputText>
                             </p:column> 
                             <p:column headerText="#{lbl['com.megagitel.sigecu.matriculacion.estadoMatricula']}" sortBy="#{matricula.estadoMatricula}"
                                       styleClass="text-right">

@@ -14,6 +14,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -29,6 +31,8 @@ import org.hibernate.envers.Audited;
 @Table(name = "core_parametrizacion")
 @Audited
 @AuditTable(value = "core_parametrizacion_aud", schema = "audit")
+@NamedQueries({
+    @NamedQuery(name = "Parametrizacion.findByCodigo", query = "select c FROM Parametrizacion c where c.codigo=?1 ORDER BY c.codigo DESC")})
 public class Parametrizacion implements Serializable {
 
     @Id

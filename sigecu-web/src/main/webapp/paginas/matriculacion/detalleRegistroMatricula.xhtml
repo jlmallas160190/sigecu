@@ -28,7 +28,9 @@
                             <h:outputLabel value="#{lbl['com.megagitel.sigecu.academico.estudiante']}:"/>
                             <h:outputText value="#{detalleRegistroMatriculaController.matricula.estudiante.nombresCompletos}"/>
                             <h:outputLabel value="#{lbl['com.megagitel.sigecu.matricula.costo']}:"/>
-                            <h:outputText value="#{detalleRegistroMatriculaController.matricula.costo}"/>
+                            <h:outputText value="#{detalleRegistroMatriculaController.matricula.costo}">
+                           <f:convertNumber pattern="#{detalleRegistroMatriculaController.patternDecimal}"/>
+                            </h:outputText>
                             <p:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.fecha']}:"/>
                             <p:outputLabel value="#{detalleRegistroMatriculaController.matricula.fechaRegistro}">
                                 <f:convertDateTime timeZone="America/Guayaquil" pattern="yyyy-MM-dd HH:mm:ss"/>
@@ -37,8 +39,7 @@
                         <p:separator/>
                         <p:dataGrid var="mat" value="#{detalleRegistroMatriculaController.matricula.matriculaComponenteEducativos}" columns="3" layout="grid"
                                     rows="12" paginator="true" id="mats" paginatorPosition="top"
-                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                    rowsPerPageTemplate="6,12,16">
+                                    >
                             <p:panel header="#{lbl['com.megagitel.sigecu.academico.curso']} #{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.nombre}">
                                 <p:panelGrid styleClass="ui-responsive" columns="2">
                                     <p:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.evento']}:"/>
@@ -48,7 +49,9 @@
                                     <p:outputLabel value="#{lbl['com.megagitel.sigecu.academico.duracion']}:"/>
                                     <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.duracion}"/>
                                     <p:outputLabel value="#{lbl['com.megagitel.sigecu.matricula.costo']}:"/>
-                                    <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.costo}"/>
+                                    <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.costo}">
+                                        <f:convertNumber pattern="#{detalleRegistroMatriculaController.patternDecimal}"/>
+                                    </h:outputText>
                                     <p:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.estadoMatricula']}:"/>
                                     <h:outputText value="#{mat.estadoMatricula}"/>
                                     <p:outputLabel value="#{lbl['com.megagitel.sigecu.fechaInicio']}:"/>
@@ -62,10 +65,12 @@
                                 <p:barcode value="#{mat.codigo}"  type="#{detalleRegistroMatriculaController.getDetalleParametrizacion('TYPE_BARCODE', 'upca')}" format="png"/>
                             </p:panel>
                         </p:dataGrid>
+                        <f:facet name="footer">
                         <p:panelGrid columns="1" styleClass="ui-responsive" >
                             <p:commandButton id="btn" value="#{btn['regresar']}" update="@form" process="@form"  icon="fa fa-arrow-circle-o-left" 
                                              onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="pretty:listadoMatriculasEstudiante" />
                         </p:panelGrid>
+                        </f:facet>
                     </p:panel>
                     <ui:include src="./../../dialogLoading.xhtml"></ui:include>
                 </h:form>

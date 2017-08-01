@@ -18,8 +18,10 @@ import com.megagitel.sigecu.academico.modelo.MatriculaComponenteEducativo;
 import com.megagitel.sigecu.academico.modelo.OfertaAcademica;
 import com.megagitel.sigecu.core.ejb.CatalogoItemService;
 import com.megagitel.sigecu.core.ejb.DetalleParametrizacionService;
+import com.megagitel.sigecu.core.ejb.ParametrizacionService;
 import com.megagitel.sigecu.core.modelo.CatalogoItem;
 import com.megagitel.sigecu.core.modelo.DetalleParametrizacion;
+import com.megagitel.sigecu.core.modelo.Parametrizacion;
 import com.megagitel.sigecu.dto.MailDto;
 import com.megagitel.sigecu.enumeration.SigecuEnum;
 import com.megagitel.sigecu.seguridad.ejb.UsuarioService;
@@ -65,13 +67,14 @@ import org.apache.shiro.subject.Subject;
             viewId = "/faces/paginas/matriculacion/registroMatricula.xhtml"
     )})
 public class RegistroMatriculaController extends SigecuController implements Serializable {
-    
+
     private List<Jornada> jornadas;
     private List<ComponenteEducativoPlanificado> componentesEducativoPlanificadosSeleccionados;
     private Matricula matricula;
     private Estudiante estudiante;
     private BigDecimal costoMatricula;
-    
+    private String patternDecimal;
+
     @EJB
     private JornadaService jornadaService;
     @EJB
@@ -87,11 +90,13 @@ public class RegistroMatriculaController extends SigecuController implements Ser
     @EJB
     private CatalogoItemService catalogoItemService;
     @EJB
+    private ParametrizacionService parametrizacionService;
+    @EJB
     private MatriculaComponenteEducativoService matriculaComponenteEducativoService;
-    
+
     @Resource
     private UserTransaction userTransaction;
-    
+
     @PostConstruct
     public void init() {
         this.componentesEducativoPlanificadosSeleccionados = new ArrayList<>();
@@ -101,7 +106,7 @@ public class RegistroMatriculaController extends SigecuController implements Ser
         setMatricula(new Matricula());
         getMatricula();
     }
-    
+
     public void seleccionarComponenteEducativo(ComponenteEducativoPlanificado componenteEducativoPlanificado) {
         if (componenteEducativoPlanificado.getSeleccionar()) {
             this.componentesEducativoPlanificadosSeleccionados.add(componenteEducativoPlanificado);
@@ -109,7 +114,7 @@ public class RegistroMatriculaController extends SigecuController implements Ser
             this.componentesEducativoPlanificadosSeleccionados.remove(componenteEducativoPlanificado);
         }
     }
-    
+
     public String matricular() {
         try {
             userTransaction.begin();
@@ -167,10 +172,10 @@ public class RegistroMatriculaController extends SigecuController implements Ser
             }
             return "";
         }
-        
+
         return "/faces/paginas/matriculacion/listadoMatriculasEstudiante.xhtml?faces-redirect=true&matriculaId=" + this.matricula.getId();
     }
-    
+
     private Boolean verificarCursosRepetidos(ComponenteEducativoPlanificado componenteEducativoPlanificado,
             List<MatriculaComponenteEducativo> matriculaComponenteEducativos) {
         for (MatriculaComponenteEducativo matriculaComponenteEducativo : matriculaComponenteEducativos) {
@@ -180,7 +185,7 @@ public class RegistroMatriculaController extends SigecuController implements Ser
         }
         return Boolean.FALSE;
     }
-    
+
     private void notificarMatriculacionEstudiante(Matricula matricula) {
         MailDto mailDto = new MailDto();
         String mensaje = I18nUtil.getMessages("com.megagitel.sigecu.matriculacion.registro");
@@ -188,7 +193,7 @@ public class RegistroMatriculaController extends SigecuController implements Ser
         for (MatriculaComponenteEducativo matriculaComponenteEducativo : matricula.getMatriculaComponenteEducativos()) {
             cursosString = cursosString.concat(matriculaComponenteEducativo.getComponenteEducativoPlanificado().getOfertaComponenteEducativo().getComponenteEducativo().getNombre()).concat("<br></br>");
         }
-        
+
         mailDto.setMensaje(String.format(mensaje, "<b>" + matricula.getEstudiante().getNombresCompletos() + "</b>", cursosString));
         mailDto.setDatosDestinatario(matricula.getEstudiante().getNombresCompletos());
         mailDto.setDestino(matricula.getEstudiante().getEmail());
@@ -227,7 +232,7 @@ public class RegistroMatriculaController extends SigecuController implements Ser
         List<DetalleParametrizacion> detallesParametrizacion = this.detalleParametrizacionService.findByNamedQueryWithLimit("DetalleParametrizacion.findByCodigo", 0, codigo);
         return !detallesParametrizacion.isEmpty() ? detallesParametrizacion.get(0).getValor() : valorDefecto;
     }
-    
+
     public List<Jornada> getJornadas() {
         try {
             if (this.jornadas.isEmpty()) {
@@ -254,36 +259,36 @@ public class RegistroMatriculaController extends SigecuController implements Ser
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
         }
-        
+
         return jornadas;
     }
-    
+
     public void setJornadas(List<Jornada> jornadas) {
         this.jornadas = jornadas;
     }
-    
+
     public List<ComponenteEducativoPlanificado> getComponentesEducativoPlanificadosSeleccionados() {
         return componentesEducativoPlanificadosSeleccionados;
     }
-    
+
     public void setComponentesEducativoPlanificadosSeleccionados(List<ComponenteEducativoPlanificado> componentesEducativoPlanificadosSeleccionados) {
         this.componentesEducativoPlanificadosSeleccionados = componentesEducativoPlanificadosSeleccionados;
     }
-    
+
     public Matricula getMatricula() {
         if (matricula.getId() == null) {
             Date fechaActual = new Date();
             OfertaAcademica ofertaAcademicaActual = ofertaAcademicaService.getOfertaAcademicaActual(fechaActual);
-            List<Matricula> matriculas = matriculaService.findByNamedQueryWithLimit("Matricula.findByOfertaAcademica", 0, ofertaAcademicaActual, getEstudiante());
+            List<Matricula> matriculas = matriculaService.findByNamedQueryWithLimit("Matricula.findByOfertaAcademicaEstudiante", 0, ofertaAcademicaActual, getEstudiante());
             this.matricula = !matriculas.isEmpty() ? matriculas.get(0) : new Matricula();
         }
         return matricula;
     }
-    
+
     public void setMatricula(Matricula matricula) {
         this.matricula = matricula;
     }
-    
+
     public Estudiante getEstudiante() {
         if (estudiante.getId() == null) {
             Subject subject = SecurityUtils.getSubject();
@@ -296,11 +301,11 @@ public class RegistroMatriculaController extends SigecuController implements Ser
         }
         return estudiante;
     }
-    
+
     public void setEstudiante(Estudiante estudiante) {
         this.estudiante = estudiante;
     }
-    
+
     public BigDecimal getCostoMatricula() {
         this.costoMatricula = BigDecimal.ZERO;
         for (ComponenteEducativoPlanificado componenteEducativoPlanificado : this.componentesEducativoPlanificadosSeleccionados) {
@@ -308,9 +313,23 @@ public class RegistroMatriculaController extends SigecuController implements Ser
         }
         return costoMatricula;
     }
-    
+
     public void setCostoMatricula(BigDecimal costoMatricula) {
         this.costoMatricula = costoMatricula;
     }
-    
+
+    public String getPatternDecimal() {
+        Parametrizacion parametrizacion = this.parametrizacionService.getParametrizacion();
+        for (DetalleParametrizacion detalleParametrizacion : parametrizacion.getDetalleParametrizacions()) {
+            if (detalleParametrizacion.getCodigo().equals(SigecuEnum.DETALLE_PARAM_PATTERN_COSTO_MATRICULA.getTipo())) {
+                this.patternDecimal = detalleParametrizacion.getValor();
+            }
+        }
+        return patternDecimal;
+    }
+
+    public void setPatternDecimal(String patternDecimal) {
+        this.patternDecimal = patternDecimal;
+    }
+
 }

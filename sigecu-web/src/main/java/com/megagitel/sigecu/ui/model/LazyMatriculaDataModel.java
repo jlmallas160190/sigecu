@@ -5,8 +5,8 @@
  */
 package com.megagitel.sigecu.ui.model;
 
-import com.megagitel.sigecu.academico.ejb.JornadaService;
-import com.megagitel.sigecu.academico.modelo.Jornada;
+import com.megagitel.sigecu.academico.ejb.MatriculaService;
+import com.megagitel.sigecu.academico.modelo.Matricula;
 import com.megagitel.sigecu.util.QueryData;
 import com.megagitel.sigecu.util.QuerySortOrder;
 import java.io.Serializable;
@@ -22,109 +22,118 @@ import org.primefaces.model.SortOrder;
  *
  * @author jorgemalla
  */
-public class LazyJornadaDataModel extends LazyDataModel<Jornada> implements Serializable {
-
+public class LazyMatriculaDataModel extends LazyDataModel<Matricula> implements Serializable {
+    
     @EJB
-    private JornadaService jornadaService;
-
-    private List<Jornada> resultado;
+    private MatriculaService matriculaService;
+    private List<Matricula> resultado;
     private String filtro;
     private Date start;
     private Date end;
     private static final int MAX_RESULTS = 1;
     private int firstResult = 0;
-
-    public LazyJornadaDataModel(JornadaService jornadaService) {
+    private Map<String, Object> filtros;
+    
+    public LazyMatriculaDataModel(MatriculaService matriculaService) {
         setPageSize(MAX_RESULTS);
         this.resultado = new ArrayList<>();
-        this.jornadaService = jornadaService;
+        
+        this.matriculaService = matriculaService;
     }
-
+    
     @Override
-    public List<Jornada> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<Matricula> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         int finPagination = first + pageSize;
         QuerySortOrder order = QuerySortOrder.DESC;
         if (sortOrder == SortOrder.ASCENDING) {
             order = QuerySortOrder.ASC;
         }
-        filters.put("eliminar", Boolean.FALSE);
-        QueryData<Jornada> query = this.jornadaService.find(first, finPagination, sortField, order, filters);
+        filters.putAll(filtros);
+        QueryData<Matricula> query = this.matriculaService.find(first, finPagination, sortField, order, filters);
         this.setRowCount(query.getTotalResultCount().intValue());
         return query.getResult();
     }
-
+    
     @Override
-    public Jornada getRowData(String rowKey) {
-        return this.jornadaService.find(Long.valueOf(rowKey));
+    public Matricula getRowData(String rowKey) {
+        return this.matriculaService.find(Long.valueOf(rowKey));
     }
-
+    
     @Override
-    public Object getRowKey(Jornada entity) {
+    public Object getRowKey(Matricula entity) {
         return entity.getId();
     }
-
+    
     public int getNextFirstResult() {
         return firstResult + this.getPageSize();
     }
-
+    
     public int getPreviousFirstResult() {
         return this.getPageSize() >= firstResult ? 0 : firstResult - this.getPageSize();
     }
-
+    
     public boolean isPreviousExists() {
         return firstResult > 0;
     }
-
+    
     public boolean isNextExists() {
-        return jornadaService.count() > this.getPageSize() + firstResult;
+        return matriculaService.count() > this.getPageSize() + firstResult;
     }
-
-    public JornadaService getJornadaService() {
-        return jornadaService;
-    }
-
-    public void setJornadaService(JornadaService jornadaService) {
-        this.jornadaService = jornadaService;
-    }
-
-    public List<Jornada> getResultado() {
-        return resultado;
-    }
-
-    public void setResultado(List<Jornada> resultado) {
-        this.resultado = resultado;
-    }
-
+    
     public String getFiltro() {
         return filtro;
     }
-
+    
     public void setFiltro(String filtro) {
         this.filtro = filtro;
     }
-
+    
     public Date getStart() {
         return start;
     }
-
+    
     public void setStart(Date start) {
         this.start = start;
     }
-
+    
     public Date getEnd() {
         return end;
     }
-
+    
     public void setEnd(Date end) {
         this.end = end;
     }
-
+    
     public int getFirstResult() {
         return firstResult;
     }
-
+    
     public void setFirstResult(int firstResult) {
         this.firstResult = firstResult;
     }
-
+    
+    public MatriculaService getMatriculaService() {
+        return matriculaService;
+    }
+    
+    public void setMatriculaService(MatriculaService matriculaService) {
+        this.matriculaService = matriculaService;
+    }
+    
+    public List<Matricula> getResultado() {
+        return resultado;
+    }
+    
+    public void setResultado(List<Matricula> resultado) {
+        this.resultado = resultado;
+    }
+    
+    public Map<String, Object> getFiltros() {
+        return filtros;
+    }
+    
+    public void setFiltros(Map<String, Object> filtros) {
+        this.filtros = filtros;
+    }
+    
 }

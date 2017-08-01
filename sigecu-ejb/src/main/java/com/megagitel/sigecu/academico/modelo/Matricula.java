@@ -40,9 +40,11 @@ import org.hibernate.envers.Audited;
 @Audited
 @AuditTable(value = "academico_matricula_aud", schema = "audit")
 @NamedQueries({
-    @NamedQuery(name = "Matricula.findByOfertaAcademica", query = "select c FROM Matricula c where c.ofertaAcademica=?1 and c.estudiante=?2")
+    @NamedQuery(name = "Matricula.findByOfertaAcademicaEstudiante", query = "select c FROM Matricula c where c.ofertaAcademica=?1 and c.estudiante=?2")
     ,
-@NamedQuery(name = "Matricula.findByEstudiante", query = "select c FROM Matricula c where  c.estudiante=?1")})
+@NamedQuery(name = "Matricula.findByEstudiante", query = "select c FROM Matricula c where  c.estudiante=?1")
+    ,
+@NamedQuery(name = "Matricula.findByOfertaAcademica", query = "select c FROM Matricula c where c.ofertaAcademica=?1")})
 public class Matricula implements Serializable {
 
     @Id
@@ -71,7 +73,6 @@ public class Matricula implements Serializable {
     private List<MatriculaComponenteEducativo> matriculaComponenteEducativos;
     @Transient
     private String estadoMatricula;
-    
 
     public Matricula() {
         this.costo = BigDecimal.ZERO;

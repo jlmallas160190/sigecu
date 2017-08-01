@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../../index.xhtml">
+
+            <ui:define name="title">
+                #{lbl['com.megagitel.sigecu.academico.matrciulasestudiante']}
+            </ui:define> 
+
+            <ui:define name="content">
+                <h:form>
+                    <p:messages id="msg"/>
+                    <p:panel header="#{lbl['com.megagitel.sigecu.academico.matrciulasestudiante']}">
+                        <p:dataGrid var="ofertaAcademica" value="#{listaMatriculasValidarController.lazyOfertaAcademicaDataModel}" columns="2"  paginatorPosition="bottom"
+                                    rows="50"  paginator="true" lazy="true">
+                            <p:panelGrid columns="2">
+                                <p:commandLink value="#{ofertaAcademica.detalle}" ajax="@form" actionListener="#{listaMatriculasValidarController.setOfertaAcademicaSeleccionada(ofertaAcademica)}"/>
+                            </p:panelGrid>
+                        </p:dataGrid>
+                        <p:dataTable var="matricula" 
+                                     value="#{listaMatriculasValidarController.lazyMatriculaDataModel}" 
+                                     paginator="true" rows="20" 
+                                     sortOrder="DESCENDING"
+                                     reflow="true" 
+                                     rowKey="#{matricula.id}" 
+                                     resizableColumns="true" 
+                                     id="dataTable" lazy="true">
+                            <p:column headerText="#{lbl['com.megagitel.sigecu.matriculacion.fecha']}" sortBy="#{matricula.estudiante.nombresCompletos}"
+                                      styleClass="text-right">
+                                <h:outputText value="#{matricula.estudiante.nombresCompletos}"/>
+                            </p:column>
+                            <p:column headerText="#{lbl['com.megagitel.sigecu.matriculacion.fecha']}" sortBy="#{matricula.fechaRegistro}"
+                                      styleClass="text-right">
+                                <h:outputText value="#{matricula.fechaRegistro}"/>
+                            </p:column>
+
+                            <p:column headerText="#{lbl['accion']}">
+
+                            </p:column>
+                        </p:dataTable>
+
+                    </p:panel>
+                    <ui:include src="./../../dialogLoading.xhtml"></ui:include>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+
+</html>

@@ -42,22 +42,12 @@ public class LazyOfertaAcademicaDataModel extends LazyDataModel<OfertaAcademica>
     @Override
     public List<OfertaAcademica> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         int finPagination = first + pageSize;
-        Date fechaActual = new Date(System.currentTimeMillis());
         QuerySortOrder order = QuerySortOrder.DESC;
         if (sortOrder == SortOrder.ASCENDING) {
             order = QuerySortOrder.ASC;
         }
-        Map<String, Object> _filters = new HashMap<>();
-        Map<String, Date> range = new HashMap<>();
-        if (getStart() != null) {
-            range.put("start", getStart());
-            if (getEnd() != null) {
-                range.put("end", getEnd());
-            } else {
-                range.put("end", fechaActual);
-            }
-        }
-        QueryData<OfertaAcademica> qData = this.ofertaAcademicaService.find(first, finPagination, sortField, order, _filters);
+
+        QueryData<OfertaAcademica> qData = this.ofertaAcademicaService.find(first, finPagination, sortField, order, filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         return qData.getResult();
     }

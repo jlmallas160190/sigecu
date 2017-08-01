@@ -10,9 +10,12 @@ import com.megagitel.sigecu.academico.modelo.Matricula;
 import com.megagitel.sigecu.academico.modelo.MatriculaComponenteEducativo;
 import com.megagitel.sigecu.core.ejb.CatalogoItemService;
 import com.megagitel.sigecu.core.ejb.DetalleParametrizacionService;
+import com.megagitel.sigecu.core.ejb.ParametrizacionService;
 import com.megagitel.sigecu.core.modelo.CatalogoItem;
 import com.megagitel.sigecu.core.modelo.DetalleParametrizacion;
+import com.megagitel.sigecu.core.modelo.Parametrizacion;
 import com.megagitel.sigecu.dto.MailDto;
+import com.megagitel.sigecu.enumeration.SigecuEnum;
 import com.megagitel.sigecu.util.EmailService;
 import com.megagitel.sigecu.util.SigecuController;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
@@ -50,11 +53,14 @@ public class DetalleRegistroMatriculaController extends SigecuController impleme
 
     private Matricula matricula;
     private Long matriculaId;
+    private String patternDecimal;
 
     @EJB
     private MatriculaService matriculaService;
     @EJB
     private DetalleParametrizacionService detalleParametrizacionService;
+    @EJB
+    private ParametrizacionService parametrizacionService;
     @EJB
     private CatalogoItemService catalogoItemService;
 
@@ -123,6 +129,20 @@ public class DetalleRegistroMatriculaController extends SigecuController impleme
 
     public void setMatriculaId(Long matriculaId) {
         this.matriculaId = matriculaId;
+    }
+
+    public String getPatternDecimal() {
+        Parametrizacion parametrizacion = this.parametrizacionService.getParametrizacion();
+        for (DetalleParametrizacion detalleParametrizacion : parametrizacion.getDetalleParametrizacions()) {
+            if (detalleParametrizacion.getCodigo().equals(SigecuEnum.DETALLE_PARAM_PATTERN_COSTO_MATRICULA.getTipo())) {
+                this.patternDecimal = detalleParametrizacion.getValor();
+            }
+        }
+        return patternDecimal;
+    }
+
+    public void setPatternDecimal(String patternDecimal) {
+        this.patternDecimal = patternDecimal;
     }
 
 }

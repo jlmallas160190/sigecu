@@ -19,7 +19,9 @@
                     <p:panel header="#{lbl['com.megagitel.sigecu.matricula.datos']}">
                         <p:panelGrid columns="2" columnClasses="ui-grid-col-8,ui-grid-col-4" styleClass="ui-responsive">
                             <p:outputLabel value="#{lbl['com.megagitel.sigecu.matricula.costo']}"/> 
-                            <p:outputLabel value="#{registroMatriculaController.costoMatricula}"/>
+                            <p:outputLabel value="#{registroMatriculaController.costoMatricula}">
+                                <f:convertNumber pattern="#{detalleRegistroMatriculaController.patternDecimal}"/>
+                            </p:outputLabel>
                         </p:panelGrid>
                     </p:panel>
                     <p:separator/>
@@ -43,7 +45,7 @@
                                             <h:outputLabel value="#{componenteEducativo.ofertaComponenteEducativo.componenteEducativo.duracion}"/>
                                             <p:outputLabel value="#{lbl['com.megagitel.sigecu.matricula.costo']}:"/> 
                                             <h:outputLabel value="#{componenteEducativo.ofertaComponenteEducativo.componenteEducativo.costo}">
-                                                <f:convertNumber pattern="#0.00"/>
+                                                <f:convertNumber pattern="#{detalleRegistroMatriculaController.patternDecimal}"/>
                                             </h:outputLabel>
                                         </p:panelGrid>
                                         <p:selectBooleanCheckbox value="#{componenteEducativo.seleccionar}">
