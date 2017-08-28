@@ -5,16 +5,16 @@
  */
 package com.megagitel.sigecu.dao;
 
+import com.megagitel.sigecu.enumeration.SigecuEnum;
 import com.megagitel.sigecu.util.QueryData;
 import com.megagitel.sigecu.util.QuerySortOrder;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -98,35 +98,36 @@ public abstract class AbstractDao<T> {
         CriteriaQuery<Long> countQ = cb.createQuery(Long.class);
         Root<T> rootCount = countQ.from(entityClass);
         countQ.select(cb.count(rootCount));
-
         List<Predicate> criteria = new ArrayList<>();
         List<Predicate> predicates = null;
+        String keyFilterPath = "";
+        Object valueFilterPath = null;
         if (filters != null) {
             for (String filterProperty : filters.keySet()) {
                 Object filterValue = filters.get(filterProperty);
+                Object filterValueAux = filterValue;
+                if (filterProperty.indexOf(".") > 0) {
+                    filterValue = processMap(filterProperty.substring(filterProperty.indexOf(".") + 1), filterValueAux);
+                    filterProperty = filterProperty.substring(0, filterProperty.indexOf("."));
+                }
+
                 if (filterValue instanceof Map) {
                     predicates = new ArrayList<>();
-                    for (Object key : ((Map) filterValue).keySet()) {
-                        Object value = ((Map) filterValue).get((String) key);
-                        if (value instanceof Date) {
-                            Path<Date> filterPropertyPath = root.<Date>get(filterProperty);
-                            ParameterExpression<Date> pexpStart = cb.parameter(Date.class, "start");
-                            ParameterExpression<Date> pexpEnd = cb.parameter(Date.class, "end");
-                            Predicate predicate = cb.between(filterPropertyPath, pexpStart, pexpEnd);
-                            criteria.add(predicate);
-                            break;
-                        } else if (value instanceof String) {
-                            Path<String> filterPropertyPath = root.<String>get((String) key);
-                            ParameterExpression<String> pexp = cb.parameter(String.class,
-                                    (String) key);
-                            Predicate predicate = cb.like(cb.lower(filterPropertyPath), pexp);
-                            predicates.add(predicate);
-                        } else {
-                            ParameterExpression<?> pexp = cb.parameter(value != null ? value.getClass() : Object.class,
-                                    (String) key);
-                            Predicate predicate = cb.equal(root.get(filterProperty).get((String) key), pexp);
-                            predicates.add(predicate);
-                        }
+                    Path<String> filterPropertyPath = root.<String>get((String) filterProperty);
+                    HashMap resultFilterPath = getFilterPath(filterValue, filterPropertyPath);
+                    keyFilterPath = (String) resultFilterPath.get(SigecuEnum.KEY_FILTER_PATH.getTipo());
+                    valueFilterPath = resultFilterPath.get(SigecuEnum.VALUE_FILTER_PATH.getTipo());
+                    Path<String> filterPath = (Path<String>) resultFilterPath.get(SigecuEnum.FILTER_PATH.getTipo());
+                    Predicate predicate = null;
+                    if (valueFilterPath instanceof String) {
+                        ParameterExpression<String> pexp = cb.parameter(String.class, (String) keyFilterPath);
+                        predicate = cb.like(cb.lower(filterPath), pexp);
+                        valueFilterPath = "%".concat((String) valueFilterPath).concat("%");
+                        predicates.add(predicate);
+                    } else {
+                        ParameterExpression<?> pexp = cb.parameter(valueFilterPath.getClass(), (String) keyFilterPath);
+                        predicate = cb.equal(filterPath, pexp);
+                        predicates.add(predicate);
                     }
                     if (!predicates.isEmpty()) {
                         Predicate[] array = new Predicate[predicates.size()];
@@ -138,10 +139,14 @@ public abstract class AbstractDao<T> {
                     Predicate predicate = filterPropertyPath.in(pexp);
                     criteria.add(predicate);
                 } else if (filterValue instanceof String) {
+                    valueFilterPath = "%".concat((String) filterValue).concat("%");
+                    keyFilterPath = filterProperty;
                     ParameterExpression<String> pexp = cb.parameter(String.class, filterProperty);
                     Predicate predicate = cb.like(cb.lower(root.<String>get(filterProperty)), pexp);
                     criteria.add(predicate);
                 } else {
+                    valueFilterPath = filterValue;
+                    keyFilterPath = filterProperty;
                     ParameterExpression<?> pexp = cb.parameter(filterValue != null ? filterValue.getClass() : Object.class,
                             filterProperty);
                     Predicate predicate = null;
@@ -150,7 +155,6 @@ public abstract class AbstractDao<T> {
                     } else {
                         predicate = cb.equal(root.get(filterProperty), pexp);
                     }
-
                     criteria.add(predicate);
                 }
             }
@@ -189,36 +193,9 @@ public abstract class AbstractDao<T> {
         q.setHint("org.hibernate.cacheable", true);
         TypedQuery<Long> countquery = (TypedQuery<Long>) createQuery(countQ);
         countquery.setHint("org.hibernate.cacheable", true);
-        if (filters != null) {
-            for (String filterProperty : filters.keySet()) {
-                Object filterValue = filters.get(filterProperty);
-                if (filterValue instanceof Map) {
-                    for (Object key : ((Map) filterValue).keySet()) {
-                        Object value = ((Map) filterValue).get((String) key);
-                        if (value instanceof Date) {
-                            q.setParameter(q.getParameter((String) key, Date.class), (Date) value, TemporalType.TIMESTAMP);
-                            countquery.setParameter(q.getParameter((String) key, Date.class), (Date) value, TemporalType.TIMESTAMP);
-                        } else if (value instanceof String) {
-                            String _filterValue = "%" + (String) value + "%";
-                            q.setParameter(q.getParameter((String) key, String.class), _filterValue);
-                            countquery.setParameter(q.getParameter((String) key, String.class), _filterValue);
-                        } else if (value != null) {
-                            q.setParameter((String) key, value);
-                            countquery.setParameter((String) key, value);
-                        }
-                    }
-                } else if (filterValue instanceof List) {
-                    q.setParameter(filterProperty, filterValue);
-                    countquery.setParameter(filterProperty, filterValue);
-                } else if (filterValue instanceof String) {
-                    filterValue = "%" + filterValue + "%";
-                    q.setParameter(filterProperty, filterValue);
-                    countquery.setParameter(filterProperty, filterValue);
-                } else if (filterValue != null) {
-                    q.setParameter(filterProperty, filterValue);
-                    countquery.setParameter(filterProperty, filterValue);
-                }
-            }
+        if (filters != null && !filters.isEmpty()) {
+            q.setParameter(keyFilterPath, valueFilterPath);
+            countquery.setParameter(keyFilterPath, valueFilterPath);
         }
         if (start != -1 && end != -1) {
             q.setMaxResults(end - start);
@@ -228,6 +205,50 @@ public abstract class AbstractDao<T> {
         Long totalResultCount = countquery.getSingleResult();
         queryData.setTotalResultCount(totalResultCount);
         return queryData;
+    }
+
+    private HashMap getFilterPath(Object filterValue, Path<String> filterPropertyPath) {
+        HashMap<String, Object> data = new HashMap<>();
+        for (Object key : ((Map) filterValue).keySet()) {
+            filterPropertyPath = filterPropertyPath.get(String.valueOf(key));
+            Object value = ((Map) filterValue).get((String) key);
+            if (value instanceof Map) {
+                data = getFilterPath(value, filterPropertyPath);
+            } else {
+                data.put(SigecuEnum.KEY_FILTER_PATH.getTipo(), key);
+                data.put(SigecuEnum.VALUE_FILTER_PATH.getTipo(), value);
+                data.put(SigecuEnum.FILTER_PATH.getTipo(), filterPropertyPath);
+            }
+        }
+        return data;
+    }
+
+    private Map<String, Object> processMap(String filters, Object value) {
+        HashMap<String, Object> mapCurrently = new HashMap<>();
+        HashMap<String, Object> mapFinal = new HashMap<>();
+        String keyCurrently = "";
+        String[] filterArray = filters.split("\\.");
+        int contador = 0;
+        for (String filter : filterArray) {
+            if (contador == 0) {
+                mapCurrently.put(filter, null);
+                mapFinal = mapCurrently;
+                keyCurrently = filter;
+            } else {
+                mapCurrently.get(keyCurrently);
+                HashMap<String, Object> mapNew = new HashMap<>();
+                mapNew.put(filter, null);
+
+                mapCurrently.put(keyCurrently, mapNew);
+                mapCurrently = mapNew;
+
+                keyCurrently = filter;
+            }
+            contador++;
+        }
+        mapCurrently.get(keyCurrently);
+        mapCurrently.put(keyCurrently, value);
+        return mapFinal;
     }
 
     protected CriteriaBuilder getCriteriaBuilder() {

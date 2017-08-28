@@ -17,36 +17,39 @@
             <ui:define name="content">
                 <h:form>
                     <p:messages id="msg"/>
-                    <p:panel header="#{lbl['com.megagitel.sigecu.academico.matrciulasestudiante']}">
-                        <p:dataGrid var="ofertaAcademica" value="#{listaMatriculasValidarController.lazyOfertaAcademicaDataModel}" columns="2"  paginatorPosition="bottom"
-                                    rows="50"  paginator="true" lazy="true">
-                            <p:panelGrid columns="2">
-                                <p:commandLink value="#{ofertaAcademica.detalle}" ajax="@form" actionListener="#{listaMatriculasValidarController.setOfertaAcademicaSeleccionada(ofertaAcademica)}"/>
-                            </p:panelGrid>
-                        </p:dataGrid>
-                        <p:dataTable var="matricula" 
-                                     value="#{listaMatriculasValidarController.lazyMatriculaDataModel}" 
-                                     paginator="true" rows="20" 
-                                     sortOrder="DESCENDING"
-                                     reflow="true" 
-                                     rowKey="#{matricula.id}" 
-                                     resizableColumns="true" 
-                                     id="dataTable" lazy="true">
-                            <p:column headerText="#{lbl['com.megagitel.sigecu.matriculacion.fecha']}" sortBy="#{matricula.estudiante.nombresCompletos}"
-                                      styleClass="text-right">
-                                <h:outputText value="#{matricula.estudiante.nombresCompletos}"/>
-                            </p:column>
-                            <p:column headerText="#{lbl['com.megagitel.sigecu.matriculacion.fecha']}" sortBy="#{matricula.fechaRegistro}"
-                                      styleClass="text-right">
-                                <h:outputText value="#{matricula.fechaRegistro}"/>
-                            </p:column>
 
-                            <p:column headerText="#{lbl['accion']}">
+                    <p:dataTable widgetVar="ofertaAcademicaDTUIWidget" var="ofertaAcademica" value="#{listaMatriculasValidarController.lazyOfertaAcademicaDataModel}"  paginatorPosition="bottom"
+                                 rows="50"  paginator="true" lazy="true">
+                        <p:column filterBy="#{ofertaAcademica.id}" >
+                            <f:facet name="filter">
+                                <p:inputText onkeyup="PF('ofertaAcademicaDTUIWidget').filter();" converter="javax.faces.Long" class="ui-column-filter"/> 
+                            </f:facet>
+                            <p:commandLink value="#{ofertaAcademica.id}" ajax="@form" actionListener="#{listaMatriculasValidarController.setOfertaAcademicaSeleccionada(ofertaAcademica)}"/>
+                        </p:column>
+                    </p:dataTable>
+                    <br/>
+                    <p:dataTable var="mat" 
+                                 value="#{listaMatriculasValidarController.lazyMatriculaDataModel}" 
+                                 paginator="true" rows="20" 
+                                 sortOrder="DESCENDING"
+                                 paginatorPosition="bottom"
+                                 reflow="true" 
+                                 rowKey="#{mat.id}" 
+                                 resizableColumns="true" 
+                                 id="dtMatriculas" lazy="true">
+                        <p:column filterBy="#{mat.estudiante.numeroIdentificacion}"  >
+                            <h:outputText value="#{mat.estudiante.numeroIdentificacion}"/>
+                        </p:column>
+                        <p:column filterBy="#{mat.estudiante.primerNombre}"  >
+                            <h:outputText value="#{mat.estudiante.primerNombre} #{mat.estudiante.segundoNombre}"/>
+                        </p:column>
+                        <p:column filterBy="#{mat.estudiante.primerApellido}"  >
+                            <h:outputText value="#{mat.estudiante.primerApellido} #{mat.estudiante.segundoApellido}"/>
+                        </p:column>
 
-                            </p:column>
-                        </p:dataTable>
+                    </p:dataTable>
 
-                    </p:panel>
+
                     <ui:include src="./../../dialogLoading.xhtml"></ui:include>
                 </h:form>
             </ui:define>

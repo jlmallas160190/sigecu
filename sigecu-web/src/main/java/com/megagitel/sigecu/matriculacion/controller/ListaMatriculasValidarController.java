@@ -7,6 +7,7 @@ package com.megagitel.sigecu.matriculacion.controller;
 
 import com.megagitel.sigecu.academico.ejb.MatriculaService;
 import com.megagitel.sigecu.academico.ejb.OfertaAcademicaService;
+import com.megagitel.sigecu.academico.modelo.Matricula;
 import com.megagitel.sigecu.academico.modelo.OfertaAcademica;
 import com.megagitel.sigecu.ui.model.LazyMatriculaDataModel;
 import com.megagitel.sigecu.ui.model.LazyOfertaAcademicaDataModel;
@@ -14,8 +15,9 @@ import com.megagitel.sigecu.util.SigecuController;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
@@ -38,6 +40,7 @@ public class ListaMatriculasValidarController extends SigecuController implement
     private LazyMatriculaDataModel lazyMatriculaDataModel;
     private LazyOfertaAcademicaDataModel lazyOfertaAcademicaDataModel;
     private OfertaAcademica ofertaAcademicaSeleccionada;
+    private List<Matricula> matriculasFilter;
 
     @EJB
     private MatriculaService matriculaService;
@@ -91,6 +94,14 @@ public class ListaMatriculasValidarController extends SigecuController implement
 
     public void setOfertaAcademicaSeleccionada(OfertaAcademica ofertaAcademicaSeleccionada) {
         this.ofertaAcademicaSeleccionada = ofertaAcademicaSeleccionada;
+    }
+
+    public List<Matricula> getMatriculasFilter() {
+        return matriculasFilter;
+    }
+
+    public void setMatriculasFilter(List<Matricula> matriculasFilter) {
+        this.matriculasFilter = matriculasFilter;
     }
 
 }
