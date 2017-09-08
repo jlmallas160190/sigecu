@@ -58,7 +58,11 @@ public class ListaMatriculasValidarController extends SigecuController implement
         lazyMatriculaDataModel.setStart(getStart());
         lazyMatriculaDataModel.setEnd(getEnd());
         HashMap<String, Object> filtros = new HashMap<>();
-        filtros.put("ofertaAcademica", getOfertaAcademicaSeleccionada());
+        if (getOfertaAcademicaSeleccionada() != null) {
+            filtros.put("ofertaAcademica", getOfertaAcademicaSeleccionada());
+        }
+        filtros.put("estado", 329);
+
         lazyMatriculaDataModel.setFiltros(filtros);
     }
 

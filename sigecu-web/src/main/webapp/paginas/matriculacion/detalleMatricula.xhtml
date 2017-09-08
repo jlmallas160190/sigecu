@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../../index.xhtml">
+
+            <ui:define name="title">
+                #{lbl['com.megagitel.sigecu.matriculacion.detalle']}
+            </ui:define> 
+            <ui:define name="params">
+                <f:metadata>
+                    <f:viewParam name="matriculaId" value="#{detalleMatriculaController.matriculaId}" />
+                </f:metadata>
+            </ui:define>
+            <ui:define name="content">
+                <h:form>
+                    <p:messages id="msg"/>
+                    <p:panel header="#{lbl['com.megagitel.sigecu.matriculacion.detalle']}">
+                        <p:panelGrid columns="4"  styleClass="ui-responsive">
+                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.ofertaAcademica']}:"/>
+                            <h:outputText value="#{detalleMatriculaController.matricula.ofertaAcademica.detalle.toUpperCase()}"/>
+                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.academico.estudiante']}:"/>
+                            <h:outputText value="#{detalleMatriculaController.matricula.estudiante.nombresCompletos}"/>
+                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.matricula.costo']}:"/>
+                            <h:outputText value="#{detalleMatriculaController.matricula.costo}">
+                                <f:convertNumber pattern="#{detalleMatriculaController.patternDecimal}"/>
+                            </h:outputText>
+                            <p:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.fecha']}:"/>
+                            <p:outputLabel value="#{detalleMatriculaController.matricula.fechaRegistro}">
+                                <f:convertDateTime timeZone="America/Guayaquil" pattern="yyyy-MM-dd HH:mm:ss"/>
+                            </p:outputLabel>
+                        </p:panelGrid>
+                        <p:separator/>
+                        <p:dataGrid var="mat" value="#{detalleMatriculaController.matricula.matriculaComponenteEducativos}" columns="3" layout="grid"
+                                    rows="12" paginator="true" id="mats" paginatorPosition="top"
+                                    >
+                            <p:panel header="#{lbl['com.megagitel.sigecu.academico.curso']} #{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.nombre}">
+                                <p:panelGrid styleClass="ui-responsive" columns="2">
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.evento']}:"/>
+                                    <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.ofertadorComponenteEducativo.nombre}"/>
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.academico.categoria']}:"/>
+                                    <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.grupoComponenteEducativo.nombre}"/>
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.academico.duracion']}:"/>
+                                    <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.duracion}"/>
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.matricula.costo']}:"/>
+                                    <h:outputText value="#{mat.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.costo}">
+                                        <f:convertNumber pattern="#{detalleMatriculaController.patternDecimal}"/>
+                                    </h:outputText>
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.estadoMatricula']}:"/>
+                                    <h:outputText value="#{mat.estadoMatricula}"/>
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.fechaInicio']}:"/>
+                                    <h:outputText value="#{mat.componenteEducativoPlanificado.jornada.fechaInicio}"/>
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.fechaFin']}:"/>
+                                    <h:outputText value="#{mat.componenteEducativoPlanificado.jornada.fechaFin}"/>
+                                    <p:outputLabel value="#{lbl['com.megagitel.sigecu.paralelo']}:"/>
+                                    <h:outputText value="#{mat.componenteEducativoPlanificado.jornada.paralelo.nombre}"/>
+                                </p:panelGrid>
+                                <f:facet name="footer">
+                                    <p:panelGrid columns="1" styleClass="ui-responsive" >
+                                        <p:commandButton value="Matricular" actionListener="#{detalleMatriculaController.matricular(mat)}" >
+                                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                                        </p:commandButton>
+                                    </p:panelGrid>
+                                </f:facet>
+                                <p:separator/>
+                                <p:barcode value="#{mat.codigo}"  type="upca" format="png"/>
+                            </p:panel>
+                        </p:dataGrid>
+                        <f:facet name="footer">
+                            <p:panelGrid columns="1" styleClass="ui-responsive" >
+                                <p:commandButton id="btn" value="#{btn['regresar']}" update="@form" process="@form"  icon="fa fa-arrow-circle-o-left" 
+                                                 onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="pretty:listadoMatriculasValidar" />
+                            </p:panelGrid>
+                        </f:facet>
+                    </p:panel>
+                    <ui:include src="./../../dialogLoading.xhtml"></ui:include>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+
+</html>

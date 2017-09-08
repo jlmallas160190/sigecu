@@ -11,24 +11,28 @@
         <ui:composition template="./../../index.xhtml">
 
             <ui:define name="title">
-                #{lbl['com.megagitel.sigecu.academico.matrciulasestudiante']}
+                #{lbl['com.megagitel.sigecu.matricula.matricular']}
             </ui:define> 
 
             <ui:define name="content">
                 <h:form>
                     <p:messages id="msg"/>
 
-                    <p:dataTable widgetVar="ofertaAcademicaDTUIWidget" var="ofertaAcademica" value="#{listaMatriculasValidarController.lazyOfertaAcademicaDataModel}"  paginatorPosition="bottom"
+                    <p:dataTable widgetVar="ofertaAcademicaDTUIWidget" var="ofertaAcademica" value="#{listaMatriculasValidarController.lazyOfertaAcademicaDataModel}" 
+                                 paginatorPosition="bottom"
                                  rows="50"  paginator="true" lazy="true">
-                        <p:column filterBy="#{ofertaAcademica.id}" >
-                            <f:facet name="filter">
-                                <p:inputText onkeyup="PF('ofertaAcademicaDTUIWidget').filter();" converter="javax.faces.Long" class="ui-column-filter"/> 
-                            </f:facet>
-                            <p:commandLink value="#{ofertaAcademica.id}" ajax="@form" actionListener="#{listaMatriculasValidarController.setOfertaAcademicaSeleccionada(ofertaAcademica)}"/>
+                        <f:facet name="header">
+                            #{lbl['com.megagitel.sigecu.academico.ofertasAcademicas']}
+                        </f:facet>
+                        <p:column >
+                            <!-- <f:facet name="filter">
+                                 <p:inputText onkeyup="PF('ofertaAcademicaDTUIWidget').filter();" converter="javax.faces.Long" class="ui-column-filter"/> 
+                             </f:facet>-->
+                            <p:commandButton style="text-transform: capitalize" value="#{ofertaAcademica.detalle}" ajax="@form" actionListener="#{listaMatriculasValidarController.setOfertaAcademicaSeleccionada(ofertaAcademica)}"/>
                         </p:column>
                     </p:dataTable>
                     <br/>
-                    <p:dataTable var="mat" 
+                    <p:dataTable var="mat" widgetVar="matriculasDTUIWidget"
                                  value="#{listaMatriculasValidarController.lazyMatriculaDataModel}" 
                                  paginator="true" rows="20" 
                                  sortOrder="DESCENDING"
@@ -37,16 +41,56 @@
                                  rowKey="#{mat.id}" 
                                  resizableColumns="true" 
                                  id="dtMatriculas" lazy="true">
-                        <p:column filterBy="#{mat.estudiante.numeroIdentificacion}"  >
+                        <f:facet name="header">
+                            #{lbl['com.megagitel.sigecu.academico.matriculas']}
+                        </f:facet>
+                        <p:column filterBy="#{mat.estudiante.numeroIdentificacion}" filterMatchMode="contains" >
+                            <f:facet name="header">
+                                #{lbl['numeroIdentificacion']}
+                            </f:facet>
                             <h:outputText value="#{mat.estudiante.numeroIdentificacion}"/>
                         </p:column>
-                        <p:column filterBy="#{mat.estudiante.primerNombre}"  >
+                        <p:column filterBy="#{mat.estudiante.primerNombre}" filterMatchMode="contains" >
+                            <f:facet name="header">
+                                #{lbl['com.megagitel.sigecu.comun.nombres']}
+                            </f:facet>
                             <h:outputText value="#{mat.estudiante.primerNombre} #{mat.estudiante.segundoNombre}"/>
                         </p:column>
-                        <p:column filterBy="#{mat.estudiante.primerApellido}"  >
+                        <p:column filterBy="#{mat.estudiante.primerApellido}" filterMatchMode="contains" >
+                            <f:facet name="header">
+                                #{lbl['com.megagitel.sigecu.comun.apellidos']}
+                            </f:facet>
                             <h:outputText value="#{mat.estudiante.primerApellido} #{mat.estudiante.segundoApellido}"/>
                         </p:column>
+                        
+                        <p:column  >
+                            <f:facet name="header">
+                                #{lbl['com.megagitel.sigecu.matriculacion.fecha']}
+                            </f:facet>
+                            <!--<f:facet name="filter">
+                                <p:calendar pattern="yyyy-MM-dd">
+                                    <p:ajax event="dateSelect" oncomplete="PF('matriculasDTUIWidget').filter()" update="dtMatriculas" />
+                                </p:calendar>
 
+                            </f:facet>-->
+                            <h:outputText value="#{mat.fechaRegistro}">
+                                <f:convertDateTime pattern="yyyy-MM-dd"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column  >
+                            <f:facet name="header">
+                                #{lbl['com.megagitel.sigecu.matricula.costo']}
+                            </f:facet>
+                            <h:outputText value="#{mat.costo}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{lbl['accion']}">
+                            <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank">
+                                <p:button outcome="pretty:detalleMatricula" title="#{btn['com.megagitel.sigecu.matriculacion.matricular']}" icon="fa fa-edit" >
+                                   <f:param name="matriculaId" value="#{mat.id}" /> 
+                                </p:button>
+                            </p:panelGrid>
+                        </p:column>
                     </p:dataTable>
 
 

@@ -10,10 +10,8 @@ import com.megagitel.sigecu.academico.modelo.Matricula;
 import com.megagitel.sigecu.util.QueryData;
 import com.megagitel.sigecu.util.QuerySortOrder;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
@@ -49,6 +47,7 @@ public class LazyMatriculaDataModel extends LazyDataModel<Matricula> implements 
         if (sortOrder == SortOrder.ASCENDING) {
             order = QuerySortOrder.ASC;
         }
+        filters.putAll(this.filtros);
         QueryData<Matricula> query = this.matriculaService.find(first, finPagination, sortField, order, filters);
         this.setRowCount(query.getTotalResultCount().intValue());
         return query.getResult();

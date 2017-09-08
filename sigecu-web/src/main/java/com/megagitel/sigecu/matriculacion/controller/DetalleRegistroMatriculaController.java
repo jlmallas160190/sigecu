@@ -81,28 +81,6 @@ public class DetalleRegistroMatriculaController extends SigecuController impleme
         }
     }
 
-    public void generarImagenBarCode(String code) {
-        try {
-            String path = getDetalleParametrizacion("RUTA_BARCODE", "");
-            UPCEANBean bean = new UPCABean();
-            final int dpi = 200;
-            bean.setModuleWidth(UnitConv.in2mm(2.8f / dpi));
-            bean.doQuietZone(false);
-            File outputFile = new File(path + code + ".png");
-            FileOutputStream out = new FileOutputStream(outputFile);
-            BitmapCanvasProvider canvas = new BitmapCanvasProvider(
-                    out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
-            bean.generateBarcode(canvas, code);
-            canvas.finish();
-        } catch (IOException ex) {
-            try {
-                throw ex;
-            } catch (IOException ex1) {
-                Logger.getLogger(DetalleRegistroMatriculaController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-        }
-    }
-
     public String getDetalleParametrizacion(String codigo, String valorDefecto) {
         List<DetalleParametrizacion> detallesParametrizacion = this.detalleParametrizacionService.findByNamedQueryWithLimit("DetalleParametrizacion.findByCodigo", 0, codigo);
         return !detallesParametrizacion.isEmpty() ? detallesParametrizacion.get(0).getValor() : valorDefecto;

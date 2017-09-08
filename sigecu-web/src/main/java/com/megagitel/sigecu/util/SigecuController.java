@@ -5,7 +5,10 @@
  */
 package com.megagitel.sigecu.util;
 
+import com.megagitel.sigecu.core.ejb.DetalleParametrizacionService;
+import com.megagitel.sigecu.core.modelo.DetalleParametrizacion;
 import java.util.Date;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
@@ -32,6 +35,11 @@ public abstract class SigecuController {
 
     public void setEnd(Date end) {
         this.end = end;
+    }
+
+    public String getDetalleParametrizacion(DetalleParametrizacionService detalleParametrizacionService, String codigo, String valorDefecto) {
+        List<DetalleParametrizacion> detallesParametrizacion = detalleParametrizacionService.findByNamedQueryWithLimit("DetalleParametrizacion.findByCodigo", 0, codigo);
+        return !detallesParametrizacion.isEmpty() ? detallesParametrizacion.get(0).getValor() : valorDefecto;
     }
 
     public void agregarMensajeExitoso(String mensaje) {
