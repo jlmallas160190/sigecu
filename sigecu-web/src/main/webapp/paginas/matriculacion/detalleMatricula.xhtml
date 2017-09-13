@@ -62,27 +62,34 @@
                                     <h:outputText value="#{mat.componenteEducativoPlanificado.jornada.paralelo.nombre}"/>
                                 </p:panelGrid>
                                 <f:facet name="footer">
-                                    <p:panelGrid columns="1" styleClass="ui-responsive" >
-                                        <p:commandButton value="Matricular" actionListener="#{detalleMatriculaController.matricular(mat)}" >
-                                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                                    <p:panelGrid columns="2" styleClass="ui-responsive" >
+                                        <p:commandButton rendered="#{mat.estado==329}" value="#{btn['com.megagitel.sigecu.matriculacion.matricular']}" 
+                                                         update="@form"
+                                                         actionListener="#{detalleMatriculaController.matricular(mat)}" >
+                                            <p:confirm header="#{lbl['com.megagitel.sigecu.confirmar']}" message="#{msg['com.megagitel.sigecu.matriculacion.matricular']}" icon="ui-icon-alert" />
+                                        </p:commandButton>
+                                        <p:commandButton rendered="#{mat.estado==330}" value="#{btn['com.megagitel.sigecu.matriculacion.liberar']}"
+                                                         update="@form"
+                                                         actionListener="#{detalleMatriculaController.liberar(mat)}" >
+                                            <p:confirm header="#{lbl['com.megagitel.sigecu.confirmar']}" message="#{msg['com.megagitel.sigecu.matriculacion.liberar']}" icon="ui-icon-alert" />
                                         </p:commandButton>
                                     </p:panelGrid>
                                 </f:facet>
                                 <p:separator/>
-                                <p:barcode value="#{mat.codigo}"  type="upca" format="png"/>
+                                <p:barcode rendered="#{mat.estado==330}" value="#{mat.codigo}"  type="#{detalleMatriculaController.tipoBarCode}" format="png"/>
                             </p:panel>
                         </p:dataGrid>
                         <f:facet name="footer">
                             <p:panelGrid columns="1" styleClass="ui-responsive" >
                                 <p:commandButton id="btn" value="#{btn['regresar']}" update="@form" process="@form"  icon="fa fa-arrow-circle-o-left" 
-                                                 onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="pretty:listadoMatriculasValidar" />
+                                                 onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="pretty:listadoMatriculasMatricular" />
                             </p:panelGrid>
                         </f:facet>
                     </p:panel>
                     <ui:include src="./../../dialogLoading.xhtml"></ui:include>
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        <p:commandButton value="#{btn['com.megagitel.sigecu.aceptar']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="#{btn['com.megagitel.sigecu.cancelar']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </p:confirmDialog>
                 </h:form>
             </ui:define>

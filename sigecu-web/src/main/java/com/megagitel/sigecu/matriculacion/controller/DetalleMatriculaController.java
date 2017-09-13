@@ -19,6 +19,7 @@ import com.megagitel.sigecu.util.BarCodeService;
 import com.megagitel.sigecu.util.SigecuController;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -54,6 +55,7 @@ public class DetalleMatriculaController extends SigecuController implements Seri
     private Long matriculaId;
     private String patternDecimal;
     private CatalogoItem estadoMatriculaMatriculada;
+    private CatalogoItem estadoMatriculaRegistrada;
 
     @EJB
     private MatriculaService matriculaService;
@@ -93,6 +95,37 @@ public class DetalleMatriculaController extends SigecuController implements Seri
         } catch (RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
             Logger.getLogger(DetalleMatriculaController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void eliminarBarCode(String archivo) {
+        File path = new File(this.getDetalleParametrizacion(detalleParametrizacionService, SigecuEnum.DETALLE_PARAM_RUTA_BARCODE.getTipo(), "") + "/" + archivo + ".png");
+        if (path.exists()) {
+            path.delete();
+        }
+    }
+
+    public void liberar(MatriculaComponenteEducativo matriculaComponenteEducativo) {
+        try {
+            userTransaction.begin();
+            matriculaComponenteEducativo.setEstado(getEstadoMatriculaRegistrada() != null ? getEstadoMatriculaRegistrada().getId() : null);
+            eliminarBarCode(matriculaComponenteEducativo.getCodigo());
+            matricula.setEstado(getEstadoMatriculaRegistrada().getId());
+            matriculaService.edit(matricula);
+            userTransaction.commit();
+        } catch (NotSupportedException | SystemException e) {
+            try {
+                userTransaction.rollback();
+            } catch (IllegalStateException | SecurityException | SystemException ex) {
+                Logger.getLogger(DetalleMatriculaController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+            Logger.getLogger(DetalleMatriculaController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public String getTipoBarCode() {
+        return this.getDetalleParametrizacion(detalleParametrizacionService, SigecuEnum.TIPO_CODIGO_BARRA.getTipo(), SigecuEnum.TIPO_CODIGO_BARRA_UPCA.getTipo());
     }
 
     public Boolean verificarEstadosMaticulaComponentes() {
@@ -167,6 +200,18 @@ public class DetalleMatriculaController extends SigecuController implements Seri
 
     public void setEstadoMatriculaMatriculada(CatalogoItem estadoMatriculaMatriculada) {
         this.estadoMatriculaMatriculada = estadoMatriculaMatriculada;
+    }
+
+    public CatalogoItem getEstadoMatriculaRegistrada() {
+        if (estadoMatriculaRegistrada == null) {
+            List<CatalogoItem> matriculaRegistradaList = catalogoItemService.findByNamedQueryWithLimit("CatalogoItem.findByCodigo", 0, SigecuEnum.ESTADO_MATRICULA_REGISTRAD0.getTipo());
+            estadoMatriculaRegistrada = !matriculaRegistradaList.isEmpty() ? matriculaRegistradaList.get(0) : null;
+        }
+        return estadoMatriculaRegistrada;
+    }
+
+    public void setEstadoMatriculaRegistrada(CatalogoItem estadoMatriculaRegistrada) {
+        this.estadoMatriculaRegistrada = estadoMatriculaRegistrada;
     }
 
 }

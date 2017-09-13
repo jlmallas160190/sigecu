@@ -9,6 +9,9 @@ import com.megagitel.sigecu.academico.ejb.MatriculaService;
 import com.megagitel.sigecu.academico.ejb.OfertaAcademicaService;
 import com.megagitel.sigecu.academico.modelo.Matricula;
 import com.megagitel.sigecu.academico.modelo.OfertaAcademica;
+import com.megagitel.sigecu.core.ejb.CatalogoItemService;
+import com.megagitel.sigecu.core.modelo.CatalogoItem;
+import com.megagitel.sigecu.enumeration.SigecuEnum;
 import com.megagitel.sigecu.ui.model.LazyMatriculaDataModel;
 import com.megagitel.sigecu.ui.model.LazyOfertaAcademicaDataModel;
 import com.megagitel.sigecu.util.SigecuController;
@@ -17,7 +20,6 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
@@ -31,11 +33,11 @@ import javax.inject.Named;
 @ViewScoped
 @URLMappings(mappings = {
     @URLMapping(
-            id = "listadoMatriculasValidar",
-            pattern = "/admin/listadoMatriculasValidar",
-            viewId = "/faces/paginas/matriculacion/listadoMatriculasValidar.xhtml"
+            id = "listadoMatriculasMatricular",
+            pattern = "/admin/listadoMatriculasMatricular",
+            viewId = "/faces/paginas/matriculacion/listadoMatriculasMatricular.xhtml"
     )})
-public class ListaMatriculasValidarController extends SigecuController implements Serializable {
+public class ListadoMatriculasMatricularController extends SigecuController implements Serializable {
 
     private LazyMatriculaDataModel lazyMatriculaDataModel;
     private LazyOfertaAcademicaDataModel lazyOfertaAcademicaDataModel;
@@ -46,6 +48,8 @@ public class ListaMatriculasValidarController extends SigecuController implement
     private MatriculaService matriculaService;
     @EJB
     private OfertaAcademicaService ofertaAcademicaService;
+    @EJB
+    private CatalogoItemService catalogoItemService;
 
     @PostConstruct
     public void init() {
@@ -61,8 +65,8 @@ public class ListaMatriculasValidarController extends SigecuController implement
         if (getOfertaAcademicaSeleccionada() != null) {
             filtros.put("ofertaAcademica", getOfertaAcademicaSeleccionada());
         }
-        filtros.put("estado", 329);
-
+        List<CatalogoItem> matriculaRegistradaList = catalogoItemService.findByNamedQueryWithLimit("CatalogoItem.findByCodigo", 0, SigecuEnum.ESTADO_MATRICULA_REGISTRAD0.getTipo());
+        filtros.put("estado", !matriculaRegistradaList.isEmpty() ? matriculaRegistradaList.get(0).getId() : 329);
         lazyMatriculaDataModel.setFiltros(filtros);
     }
 

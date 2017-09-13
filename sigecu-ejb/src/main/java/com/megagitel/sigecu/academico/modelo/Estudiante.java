@@ -7,6 +7,7 @@ package com.megagitel.sigecu.academico.modelo;
 
 import com.megagitel.sigecu.core.modelo.Persona;
 import com.megagitel.sigecu.seguridad.modelo.Usuario;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
@@ -21,7 +22,7 @@ import org.hibernate.envers.Audited;
 @Table(name = "academico_estudiante")
 @Audited
 @AuditTable(value = "academico_estudiante_aud", schema = "audit")
-public class Estudiante extends Persona {
+public class Estudiante extends Persona implements Serializable{
 
     @OneToMany(mappedBy = "estudiante", fetch = FetchType.LAZY)
     private List<Matricula> matriculas;

@@ -18,7 +18,7 @@
                 <h:form>
                     <p:messages id="msg"/>
 
-                    <p:dataTable widgetVar="ofertaAcademicaDTUIWidget" var="ofertaAcademica" value="#{listaMatriculasValidarController.lazyOfertaAcademicaDataModel}" 
+                    <p:dataTable widgetVar="ofertaAcademicaDTUIWidget" var="ofertaAcademica" value="#{listadoMatriculasMatricularController.lazyOfertaAcademicaDataModel}" 
                                  paginatorPosition="bottom"
                                  rows="50"  paginator="true" lazy="true">
                         <f:facet name="header">
@@ -28,12 +28,12 @@
                             <!-- <f:facet name="filter">
                                  <p:inputText onkeyup="PF('ofertaAcademicaDTUIWidget').filter();" converter="javax.faces.Long" class="ui-column-filter"/> 
                              </f:facet>-->
-                            <p:commandButton style="text-transform: capitalize" value="#{ofertaAcademica.detalle}" ajax="@form" actionListener="#{listaMatriculasValidarController.setOfertaAcademicaSeleccionada(ofertaAcademica)}"/>
+                            <p:commandButton style="text-transform: capitalize" value="#{ofertaAcademica.detalle}" ajax="@form" actionListener="#{listadoMatriculasMatricularController.setOfertaAcademicaSeleccionada(ofertaAcademica)}"/>
                         </p:column>
                     </p:dataTable>
                     <br/>
                     <p:dataTable var="mat" widgetVar="matriculasDTUIWidget"
-                                 value="#{listaMatriculasValidarController.lazyMatriculaDataModel}" 
+                                 value="#{listadoMatriculasMatricularController.lazyMatriculaDataModel}" 
                                  paginator="true" rows="20" 
                                  sortOrder="DESCENDING"
                                  paginatorPosition="bottom"
