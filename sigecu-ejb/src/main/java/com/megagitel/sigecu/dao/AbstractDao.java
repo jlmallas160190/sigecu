@@ -221,7 +221,9 @@ public abstract class AbstractDao<T> {
                         q.setParameter(k, "%" + v + "%");
                         countquery.setParameter(k, "%" + v + "%");
                     }
-
+                } else if (filterValue instanceof String) {
+                    q.setParameter(filterProperty, "%" + filterValue + "%");
+                    countquery.setParameter(filterProperty, "%" + filterValue + "%");
                 } else if (filterValue instanceof Date) {
                     q.setParameter(q.getParameter((String) filterProperty, Date.class), (Date) filterValue, TemporalType.TIMESTAMP);
                     countquery.setParameter(q.getParameter((String) filterProperty, Date.class), (Date) filterValue, TemporalType.TIMESTAMP);

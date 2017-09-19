@@ -30,7 +30,11 @@ import org.hibernate.envers.Audited;
 @NamedQueries({
     @NamedQuery(name = "MatriculaComponenteEducativo.findMatricula", query = "select c FROM MatriculaComponenteEducativo c where c.matricula=?1")
     ,
+    @NamedQuery(name = "MatriculaComponenteEducativo.findMatriculaEstado", query = "select c FROM MatriculaComponenteEducativo c where c.matricula=?1 and c.estado=?2")
+    ,
     @NamedQuery(name = "MatriculaComponenteEducativo.findCodigo", query = "select c FROM MatriculaComponenteEducativo c where c.codigo=?1")
+    ,
+    @NamedQuery(name = "MatriculaComponenteEducativo.findCodigoEstado", query = "select c FROM MatriculaComponenteEducativo c where c.codigo=?1 and c.estado=?2")
 })
 @Audited
 @AuditTable(value = "academico_matricula_componente_educativo_aud", schema = "audit")

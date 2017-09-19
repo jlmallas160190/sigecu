@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -32,7 +33,7 @@ import javax.mail.internet.MimeMultipart;
  * @author jorgemalla
  */
 public class EmailService implements Serializable {
-
+    
     public static boolean enviar(final MailDto mailDto) {
         Properties properties = EmailService.getProporties();
         Properties props = new Properties();
@@ -48,13 +49,16 @@ public class EmailService implements Serializable {
         // Se inicia una nueva sesion  
         Session session = Session.getDefaultInstance(props);
         MimeMessage mimeMessage = new MimeMessage(session);
-
+        
         try {
+            BodyPart text = new MimeBodyPart();
+            text.setContent(mailDto.getMensaje(), "text/html");
             MimeMultipart correo = new MimeMultipart();
+            correo.addBodyPart(text);            
+            agregarArchivos(!mailDto.getArchivos().isEmpty() ? mailDto.getArchivos() : new ArrayList<String>(), correo);
             mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(mailDto.getDestino()));
             mimeMessage.setSubject(properties.getProperty("subjectEmail"));
-            mimeMessage.setContent(mailDto.getMensaje(), "text/html");
-            agregarArchivos(!mailDto.getArchivos().isEmpty() ? mailDto.getArchivos() : new ArrayList<String>(), correo);
+            mimeMessage.setContent(correo);
             Transport t = session.getTransport("smtp");
             t.connect(properties.getProperty("email"), properties.getProperty("passwordEmail"));
             t.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
@@ -69,7 +73,7 @@ public class EmailService implements Serializable {
         }
         return true;
     }
-
+    
     private static void agregarArchivos(List<String> archivos, MimeMultipart correo) {
         try {
             for (String archivo : archivos) {
@@ -81,9 +85,9 @@ public class EmailService implements Serializable {
             }
         } catch (MessagingException e) {
         }
-
+        
     }
-
+    
     private static Properties getProporties() {
         Properties properties = new Properties();
         InputStream input = null;

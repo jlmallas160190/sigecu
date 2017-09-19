@@ -10,7 +10,6 @@ import com.megagitel.sigecu.academico.modelo.Estudiante;
 import com.megagitel.sigecu.core.ejb.DetalleParametrizacionService;
 import com.megagitel.sigecu.enumeration.SigecuEnum;
 import com.megagitel.sigecu.ui.model.LazyEstudianteDataModel;
-import com.megagitel.sigecu.ui.model.LazyJornadaDataModel;
 import com.megagitel.sigecu.util.SigecuController;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;

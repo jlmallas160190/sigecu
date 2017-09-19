@@ -87,7 +87,8 @@
                         <p:column headerText="#{lbl['accion']}">
                             <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank">
                                 <p:button outcome="pretty:detalleMatricula" title="#{btn['com.megagitel.sigecu.matriculacion.matricular']}" icon="fa fa-edit" >
-                                   <f:param name="matriculaId" value="#{mat.id}" /> 
+                                   <f:param name="matriculaId" value="#{mat.id}" />
+                                   <f:param name="regresar" value="pretty:listadoMatriculasMatricular" />
                                 </p:button>
                             </p:panelGrid>
                         </p:column>

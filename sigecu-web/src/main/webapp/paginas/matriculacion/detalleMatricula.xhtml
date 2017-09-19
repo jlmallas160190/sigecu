@@ -16,6 +16,7 @@
             <ui:define name="params">
                 <f:metadata>
                     <f:viewParam name="matriculaId" value="#{detalleMatriculaController.matriculaId}" />
+                    <f:viewParam name="regresar" value="#{detalleMatriculaController.regresar}" />
                 </f:metadata>
             </ui:define>
             <ui:define name="content">
@@ -64,12 +65,12 @@
                                 <f:facet name="footer">
                                     <p:panelGrid columns="2" styleClass="ui-responsive" >
                                         <p:commandButton rendered="#{mat.estado==329}" value="#{btn['com.megagitel.sigecu.matriculacion.matricular']}" 
-                                                         update="@form"
+                                                         update="@form" onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()"
                                                          actionListener="#{detalleMatriculaController.matricular(mat)}" >
                                             <p:confirm header="#{lbl['com.megagitel.sigecu.confirmar']}" message="#{msg['com.megagitel.sigecu.matriculacion.matricular']}" icon="ui-icon-alert" />
                                         </p:commandButton>
                                         <p:commandButton rendered="#{mat.estado==330}" value="#{btn['com.megagitel.sigecu.matriculacion.liberar']}"
-                                                         update="@form"
+                                                         update="@form" onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()"
                                                          actionListener="#{detalleMatriculaController.liberar(mat)}" >
                                             <p:confirm header="#{lbl['com.megagitel.sigecu.confirmar']}" message="#{msg['com.megagitel.sigecu.matriculacion.liberar']}" icon="ui-icon-alert" />
                                         </p:commandButton>
@@ -82,7 +83,9 @@
                         <f:facet name="footer">
                             <p:panelGrid columns="1" styleClass="ui-responsive" >
                                 <p:commandButton id="btn" value="#{btn['regresar']}" update="@form" process="@form"  icon="fa fa-arrow-circle-o-left" 
-                                                 onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="pretty:listadoMatriculasMatricular" />
+                                                 onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{detalleMatriculaController.getRegresar()}">
+
+                                </p:commandButton>
                             </p:panelGrid>
                         </f:facet>
                     </p:panel>

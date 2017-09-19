@@ -59,7 +59,7 @@
                         <f:facet name="footer">
                             <p:panelGrid columns="2" styleClass="ui-responsive" >
                                 <p:commandButton  value="#{btn['com.megagitel.sigecu.matriculacion.matricular']}" update="@form" process="@form"  icon="fa fa-save" 
-                                                  onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{registroMatriculaController.matricular()}" >
+                                                  onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="#{registroMatriculaController.registrar()}" >
                                     <p:confirm header="Confirmation" message="#{msg['com.megagitel.sigecu.matriculacion.confiramarregistro']}" icon="ui-icon-alert" />
                                 </p:commandButton>
                                 <p:commandButton id="btn" value="#{btn['regresar']}" update="@form" process="@form"  icon="fa fa-arrow-circle-o-left" 

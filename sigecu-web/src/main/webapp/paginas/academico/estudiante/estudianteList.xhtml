@@ -25,11 +25,20 @@
                                      rowKey="#{estudiante.id}" 
                                      resizableColumns="true" 
                                      id="dataTable" lazy="true">
-                            
-                            <p:column headerText="#{lbl['com.megagitel.sigecu.comun.nombres']}" sortBy="#{estudiante.primerNombre}">
-                                <h:outputText value="#{estudiante.primerNombre}"/>
+                            <p:column headerText="#{lbl['numeroIdentificacion']}" filterBy="#{estudiante.numeroIdentificacion}"
+                                      filterMatchMode="contains"
+                                      sortBy="#{estudiante.numeroIdentificacion}">
+                                <h:outputText value="#{estudiante.numeroIdentificacion}"/>
                             </p:column>
-                            
+                            <p:column headerText="#{lbl['com.megagitel.sigecu.comun.nombres']}" filterBy="#{estudiante.primerNombre}" sortBy="#{estudiante.primerNombre}">
+                                <h:outputText value="#{estudiante.primerNombre} #{estudiante.segundoNombre}"/>
+                            </p:column>
+                            <p:column headerText="#{lbl['com.megagitel.sigecu.comun.apellidos']}" filterBy="#{estudiante.primerApellido}" sortBy="#{estudiante.primerApellido}">
+                                <h:outputText value="#{estudiante.primerApellido} #{estudiante.segundoApellido}"/>
+                            </p:column>
+                            <p:column headerText="#{lbl['email']}" filterBy="#{estudiante.email}" sortBy="#{estudiante.emai}">
+                                <h:outputText value="#{estudiante.email}"/>
+                            </p:column>
                             <p:column headerText="#{lbl['accion']}">
                                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank">
                                     <p:button outcome="pretty:estudiante" icon="fa fa-edit" >
@@ -38,6 +47,7 @@
                                 </p:panelGrid>
                             </p:column>
                         </p:dataTable>
+
                     </p:panel>
                     <ui:include src="./../../../dialogLoading.xhtml"></ui:include>
                 </h:form>

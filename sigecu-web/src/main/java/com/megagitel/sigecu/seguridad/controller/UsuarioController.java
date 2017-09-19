@@ -25,13 +25,22 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 
 /**
@@ -56,6 +65,9 @@ public class UsuarioController implements Serializable {
     private GrupoUsuarioService grupoUsuarioService;
     @EJB
     private EstudianteService estudianteService;
+    @Resource
+    private UserTransaction userTransaction;
+
     private Estudiante estudiante;
     private DireccionPersona direccion;
     private List<CatalogoItem> tiposDocumento;
@@ -85,7 +97,7 @@ public class UsuarioController implements Serializable {
 
     public String guardar() {
         try {
-
+            userTransaction.begin();
             if (this.estudiante.getId() == null) {
                 Usuario usuario = new Usuario();
                 List<GrupoUsuario> grupoUsuarios = this.grupoUsuarioService.findByNamedQueryWithLimit("GrupoUsuario.findByCodigo", 0, SigecuEnum.ESTUDIANTE.getTipo());
@@ -110,20 +122,29 @@ public class UsuarioController implements Serializable {
                 this.estudiante.setUsuario(usuario);
                 usuario.setPersona(estudiante);
                 direccion.setPersona(usuario.getPersona());
-                boolean send = this.sendTokenResetPassword();
-                if (!send) {
-                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, I18nUtil.getMessages("email.nosend"), null);
-                    FacesContext.getCurrentInstance().addMessage(null, message);
-                    return "";
-                }
                 this.estudianteService.create(estudiante);
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, I18nUtil.getMessages("com.megagitel.sigecu.seguridad.usuario.grabarExitoso"), null);
                 FacesContext.getCurrentInstance().addMessage(null, message);
+                userTransaction.commit();
+                boolean send = this.sendTokenResetPassword();
+                if (!send) {
+                    message = new FacesMessage(FacesMessage.SEVERITY_ERROR, I18nUtil.getMessages("email.nosend"), null);
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    return "";
+                }
             }
-        } catch (Exception e) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, I18nUtil.getMessages("com.megagitel.sigecu.seguridad.usuario.grabarError"), null);
-            FacesContext.getCurrentInstance().addMessage(null, message);
-            return "";
+        } catch (IllegalStateException | SecurityException | HeuristicMixedException | HeuristicRollbackException
+                | NotSupportedException | RollbackException | SystemException e) {
+
+            try {
+                userTransaction.rollback();
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, I18nUtil.getMessages("com.megagitel.sigecu.seguridad.usuario.grabarError"), null);
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return "";
+            } catch (IllegalStateException | SecurityException | SystemException ex) {
+                Logger.getLogger(UsuarioController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
         return "pretty:login";
     }
@@ -155,6 +176,15 @@ public class UsuarioController implements Serializable {
         List<CatalogoItem> cedulas = this.catalogoItemService.findByNamedQueryWithLimit("CatalogoItem.findByCodigo", 0, SigecuEnum.TIPO_DOCUMENTO_CEDULA.getTipo());
         CatalogoItem cedula = !cedulas.isEmpty() ? cedulas.get(0) : null;
         return cedula != null ? Objects.equals(cedula.getId(), estudiante.getTipoIdentificacion()) : false;
+    }
+
+    public boolean validarRuc() {
+        if (estudiante.getTipoIdentificacion() == null) {
+            return false;
+        }
+        List<CatalogoItem> rucs = this.catalogoItemService.findByNamedQueryWithLimit("CatalogoItem.findByCodigo", 0, SigecuEnum.TIPO_DOCUMENTO_RUC.getTipo());
+        CatalogoItem ruc = !rucs.isEmpty() ? rucs.get(0) : null;
+        return ruc != null ? Objects.equals(ruc.getId(), estudiante.getTipoIdentificacion()) : false;
     }
 
     public DireccionPersona getDireccion() {

@@ -32,6 +32,17 @@ public class ValidadorCampos {
         return false;
     }
 
+    public static boolean esRuc(String ruc) {
+        if (ruc.length() == 13) {
+            String cedula = ruc.substring(0, 10);
+            String verificador = ruc.substring(10, 13);
+            if (esNumeroIdentificacionNacional(cedula) && verificador.equals("001")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean esNumeroIdentificacionNacional(String numeroIdentificacion) {
         int dig1;
         int operacion1;
@@ -57,7 +68,12 @@ public class ValidadorCampos {
         char A;
         int contador = 0;
         boolean bandera = false;
-        if (numeroIdentificacion.length() == 10 || numeroIdentificacion.length() == 13) {
+
+//        if (numeroIdentificacion.length() == 13 && tipoDocumentacion.equals(SigecuEnum.TIPO_DOCUMENTO_RUC.getTipo())) {
+//            ruc = numeroIdentificacion.substring(10, 13);
+//            numeroIdentificacion = numeroIdentificacion.substring(0, 10);
+//        }
+        if (numeroIdentificacion.length() == 10) {
             for (int i = 0; i < numeroIdentificacion.length(); i++) {
                 A = numeroIdentificacion.charAt(i);
                 if (Character.isDigit(A)) {
@@ -123,28 +139,24 @@ public class ValidadorCampos {
                     } else {
                         if (dig3 == 7 || dig3 == 8) {
                             bandera = false;
-                        } else {
-                            if (dig3 == 6) {
-                                //sociedades publicas
-                            } else {
-                                if (dig3 == 9) {
-                                    //sociedades privadas
-                                }
-                            }
                         }
+//                        } else {
+//                            if (dig3 == 6) {
+//                                //sociedades publicas
+//                            } else {
+//                                if (dig3 == 9) {
+//                                    //sociedades privadas
+//                                }
+//                            }
+//                        }
                     }
                 } else {
                     bandera = false;
                 }
             }
-        } else {
-            bandera = false;
         }
-        if (bandera == true && numeroIdentificacion.length() == 13) {
-            if (!(Integer.valueOf(numeroIdentificacion.substring(10, 11)) == 0 && Integer.valueOf(numeroIdentificacion.substring(11, 12)) == 1 && Integer.valueOf(numeroIdentificacion.substring(12, 13)) == 1)) {
-                bandera = false;
-            }
-        }
+
         return bandera;
+
     }
 }

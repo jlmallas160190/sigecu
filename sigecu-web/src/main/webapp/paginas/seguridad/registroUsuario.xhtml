@@ -49,6 +49,9 @@
                                     <c:if test="#{usuarioController.validarCedula()}">
                                         <f:validator validatorId="numeroIdentificacionValidator"/>
                                     </c:if>
+                                    <c:if test="#{usuarioController.validarRuc()}">
+                                        <f:validator validatorId="rucValidator"/>
+                                    </c:if>
                                     <p:ajax event="keyup" update="msgNumeroIdentificacion"/>
                                 </p:inputText>
                                 <p:message id="msgNumeroIdentificacion" display="icon" for="numeroIdentificacion"/>

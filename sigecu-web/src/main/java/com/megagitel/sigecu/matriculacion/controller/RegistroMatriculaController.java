@@ -115,7 +115,7 @@ public class RegistroMatriculaController extends SigecuController implements Ser
         }
     }
 
-    public String matricular() {
+    public String registrar() {
         try {
             userTransaction.begin();
             if (this.estudiante != null) {
@@ -199,34 +199,6 @@ public class RegistroMatriculaController extends SigecuController implements Ser
         mailDto.setDestino(matricula.getEstudiante().getEmail());
         EmailService.enviar(mailDto);
     }
-//    public String getCodigoBarra() {
-//        boolean existeCodigo = true;
-//        String codigoFinal = "";
-//        while (existeCodigo == true) {
-//            String codigo = generarCodigoBarra();
-//            List<MatriculaComponenteEducativo> matriculaComponenteEducativos = this.matriculaComponenteEducativoService.findByNamedQueryWithLimit("MatriculaComponenteEducativo.findCodigo", 0, codigo);
-//            if (matriculaComponenteEducativos.isEmpty()) {
-//                existeCodigo = false;
-//                codigoFinal = codigo;
-//            }
-//        }
-//        return codigoFinal;
-//    }
-//    public String generarCodigoBarra() {
-//        String tipoCodigoBarra = getDetalleParametrizacion(SigecuEnum.TIPO_CODIGO_BARRA.getTipo(), "upca");
-//        long limite = 1000;
-//        int limiteSubStr = 0;
-//        if (tipoCodigoBarra.equals(SigecuEnum.TIPO_CODIGO_BARRA_UPCA.getTipo())) {
-//            limite = 100000;
-//            limiteSubStr = 12;
-//        }
-//        long timeSeed = System.nanoTime();
-//        double randSeed = Math.random() * limite;
-//        long midSeed = (long) (timeSeed * randSeed);
-//        String midSeedStr = midSeed + "";
-//        String codigo = midSeedStr.substring(0, limiteSubStr);
-//        return codigo;
-//    }
 
     public String getDetalleParametrizacion(String codigo, String valorDefecto) {
         List<DetalleParametrizacion> detallesParametrizacion = this.detalleParametrizacionService.findByNamedQueryWithLimit("DetalleParametrizacion.findByCodigo", 0, codigo);

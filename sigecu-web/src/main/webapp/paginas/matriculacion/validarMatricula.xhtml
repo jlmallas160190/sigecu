@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <body>
+        <ui:composition template="./../../template.xhtml">
+            <ui:define name="title">
+                #{lbl['com.megagitel.sigecu.matriculacion.validar']}
+            </ui:define>
+            <ui:define name="content">
+                <h:form>
+                    <p:panel header="#{lbl['com.megagitel.sigecu.matriculacion.validar']}">
+                     <div class="ui-fluid">
+                        <p:panelGrid columns="3" columnClasses="ui-grid-col-6,ui-grid-col-3,ui-grid-col-3" styleClass="ui-panelgrid-blank">
+                            <p:password value="#{validarMatriculaController.codigoBarra}"/>
+                            <p:commandButton value="#{btn['com.megagitel.sigecu.verificar']}" action="#{validarMatriculaController.validarMatricula()}"
+                                             update="@form" onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()"/>
+                            <p:commandButton value="#{btn['com.megagitel.sigecu.nuevo']}" action="#{validarMatriculaController.nuevo()}"
+                                             update="@form" onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()"/>
+                        </p:panelGrid>                       
+                     </div>
+                    </p:panel>
+                    <p:messages id="msg"/>
+                    <p:panel rendered="#{validarMatriculaController.matriculaComponenteEducativo.id!=null}" header="#{lbl['com.megagitel.sigecu.matricula.datos']}">
+                        
+                        <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">
+                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.academico.curso']}"/>
+                            <h:outputText value="#{validarMatriculaController.matriculaComponenteEducativo.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.nombre}"/>
+                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.matricula.costo']}"/>
+                            <h:outputText value="#{validarMatriculaController.matriculaComponenteEducativo.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.costo}"/>
+                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.academico.duracion']}"/>
+                            <h:outputText value="#{validarMatriculaController.matriculaComponenteEducativo.componenteEducativoPlanificado.ofertaComponenteEducativo.componenteEducativo.duracion}"/>                            
+                        </p:panelGrid>
+                    </p:panel>
+                    <ui:include src="/dialogLoading.xhtml"></ui:include>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -34,18 +34,26 @@
                                 <p:dataGrid var="mat" value="#{estudianteController.estudiante.matriculas}" columns="1" layout="grid"
                                             rows="#{estudianteController.tableRows}" paginator="true" id="mats">
                                     <p:panel  style="text-align:center">
-                                        <h:panelGrid columns="1" style="width:100%">
-                                            <h:outputText value="#{mat.estadoMatricula}"/>
+                                        <h:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-6" >
+                                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.fecha']}:"/>
+                                            <h:outputText value="#{mat.fechaRegistro}"/>
+                                            <h:outputLabel value="#{lbl['com.megagitel.sigecu.matricula.costo']}:"/>
                                             <h:outputText value="#{mat.costo}"/>
                                             <p:button outcome="pretty:detalleMatricula" icon="fa fa-edit" >
                                                 <f:param name="matriculaId" value="#{mat.id}" />
+                                                <f:param name="regresar" value="/faces/paginas/academico/estudiante/estudianteAdmin.xhtml?faces-redirect=true&amp;estudianteId=#{estudianteController.estudianteId}"/>
                                             </p:button>
                                         </h:panelGrid>
                                     </p:panel>
                                 </p:dataGrid>
                             </p:tab>
                         </p:tabView>
-
+                        <f:facet name="footer">
+                            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank">
+                                <p:commandButton id="btn" value="#{btn['regresar']}" update="@form" process="@form"  icon="fa fa-arrow-circle-o-left" 
+                                                 onstart="PF('dlgLoading').show()" oncomplete="PF('dlgLoading').hide()" action="pretty:estudiantes" />
+                            </p:panelGrid> 
+                        </f:facet>
                     </p:panel> 
                     <ui:include src="/dialogLoading.xhtml"></ui:include>
 
