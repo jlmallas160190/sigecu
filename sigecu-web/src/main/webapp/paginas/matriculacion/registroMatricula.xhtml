@@ -47,6 +47,10 @@
                                             <h:outputLabel value="#{componenteEducativo.ofertaComponenteEducativo.componenteEducativo.costo}">
                                                 <f:convertNumber pattern="#{detalleRegistroMatriculaController.patternDecimal}"/>
                                             </h:outputLabel>
+                                            <p:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.paralelo.numeromaximo']}:"/>
+                                            <h:outputLabel value="#{componenteEducativo.jornada.paralelo.numeroMaximoMatriculados}"/>
+                                            <p:outputLabel value="#{lbl['com.megagitel.sigecu.matriculacion.numeromatriculados']}:"/>
+                                            <h:outputLabel value="#{componenteEducativo.numeroMatriculados}"/>
                                         </p:panelGrid>
                                         <p:selectBooleanCheckbox value="#{componenteEducativo.seleccionar}">
                                             <p:ajax update="@form" listener="#{registroMatriculaController.seleccionarComponenteEducativo(componenteEducativo)}" />

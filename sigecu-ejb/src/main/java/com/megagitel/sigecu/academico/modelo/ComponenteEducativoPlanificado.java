@@ -106,4 +106,8 @@ public class ComponenteEducativoPlanificado implements Serializable {
     public String toString() {
         return this.id + "";
     }
+
+    public Integer getNumeroMatriculados() {
+        return this.matriculaComponenteEducativos.size();
+    }
 }

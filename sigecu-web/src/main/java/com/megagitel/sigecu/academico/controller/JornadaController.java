@@ -49,7 +49,7 @@ import javax.inject.Named;
             viewId = "/faces/paginas/academico/jornada/jornadaAdmin.xhtml"
     ),})
 public class JornadaController extends SigecuController implements Serializable {
-    
+
     @EJB
     private JornadaService jornadaService;
     @EJB
@@ -60,15 +60,15 @@ public class JornadaController extends SigecuController implements Serializable 
     private DetalleParametrizacionService detalleParametrizacionService;
     @EJB
     private OfertaAcademicaService ofertaAcademicaService;
-    
+
     private Jornada jornada;
     private Long jornadaId;
     private OfertadorComponenteEducativo ofertadorComponenteEducativo;
-    
+
     private List<OfertadorComponenteEducativo> ofertadorComponenteEducativos;
     private List<Paralelo> paralelos;
     private LazyJornadaDataModel dataModel;
-    
+
     @PostConstruct
     public void init() {
         this.jornada = new Jornada();
@@ -76,7 +76,7 @@ public class JornadaController extends SigecuController implements Serializable 
         this.paralelos = new ArrayList<>();
         this.ofertadorComponenteEducativos = new ArrayList<>();
     }
-    
+
     public void filter() {
         if (dataModel == null) {
             dataModel = new LazyJornadaDataModel(this.jornadaService);
@@ -84,7 +84,7 @@ public class JornadaController extends SigecuController implements Serializable 
         dataModel.setStart(getStart());
         dataModel.setEnd(getEnd());
     }
-    
+
     public void agregarComponentesEducativosPlanificados(Paralelo paralelo) {
         for (OfertaComponenteEducativo oce : this.jornada.getParalelo().getOfertadorComponenteEducativo().getOfertaComponenteEducativos()) {
             if (!this.contieneComponenteEducativo(oce)) {
@@ -94,28 +94,35 @@ public class JornadaController extends SigecuController implements Serializable 
             }
         }
     }
-    
+
     public String crear() {
         return "pretty:jornada";
     }
-    
+
     public String guardar() {
         try {
-            if (this.jornada.getId() == null) {
-                this.jornada.setEliminar(Boolean.FALSE);
-                this.jornadaService.create(jornada);
+            if ((jornada.getFechaInicio().after(jornada.getParalelo().getOfertadorComponenteEducativo().getOfertaAcademica().getFechaInicio())
+                    && jornada.getFechaInicio().before(jornada.getParalelo().getOfertadorComponenteEducativo().getOfertaAcademica().getFechaFin()))
+                    && (jornada.getFechaFin().after(jornada.getFechaInicio()) && jornada.getFechaFin().before(jornada.getParalelo().getOfertadorComponenteEducativo().getOfertaAcademica().getFechaFin()))) {
+                if (this.jornada.getId() == null) {
+
+                    this.jornada.setEliminar(Boolean.FALSE);
+                    this.jornadaService.create(jornada);
+                } else {
+
+                    this.jornadaService.edit(jornada);
+                }
+                agregarMensajeExitoso("save.succesful");
             } else {
-                this.jornadaService.edit(jornada);
+                agregarMensajeError("com.megagitel.sigecu.academico.jornada.fechaserror");
             }
-            agregarMensajeExitoso("save.succesful");
-            
         } catch (Exception e) {
             agregarMensajeFatal("save.error");
             return "";
         }
         return "";
     }
-    
+
     public String eliminar(Jornada jornada) {
         try {
             if (jornada.getId() != null) {
@@ -128,11 +135,11 @@ public class JornadaController extends SigecuController implements Serializable 
         agregarMensajeExitoso("remove.succesful");
         return "";
     }
-    
+
     public void seleccionarOfertador() {
         this.paralelos = this.paraleloService.findByNamedQueryWithLimit("Paralelo.findByOfertador", 0, this.ofertadorComponenteEducativo);
     }
-    
+
     public boolean contieneComponenteEducativo(OfertaComponenteEducativo oce) {
         for (ComponenteEducativoPlanificado cep : this.jornada.getComponenteEducativoPlanificados()) {
             if (oce.equals(cep.getOfertaComponenteEducativo())) {
@@ -141,12 +148,12 @@ public class JornadaController extends SigecuController implements Serializable 
         }
         return false;
     }
-    
+
     public String getDetalleParametrizacion(String codigo, String valorDefecto) {
         List<DetalleParametrizacion> detallesParametrizacion = this.detalleParametrizacionService.findByNamedQueryWithLimit("DetalleParametrizacion.findByCodigo", 0, codigo);
         return !detallesParametrizacion.isEmpty() ? detallesParametrizacion.get(0).getValor() : valorDefecto;
     }
-    
+
     public Jornada getJornada() {
         if (this.jornadaId != null && this.jornada.getId() == null) {
             this.jornada = jornadaService.find(jornadaId);
@@ -154,19 +161,19 @@ public class JornadaController extends SigecuController implements Serializable 
         }
         return jornada;
     }
-    
+
     public void setJornada(Jornada jornada) {
         this.jornada = jornada;
     }
-    
+
     public Long getJornadaId() {
         return jornadaId;
     }
-    
+
     public void setJornadaId(Long jornadaId) {
         this.jornadaId = jornadaId;
     }
-    
+
     public List<OfertadorComponenteEducativo> getOfertadorComponenteEducativos() {
         if (this.ofertadorComponenteEducativos.isEmpty()) {
             Date fechaActual = new Date();
@@ -175,34 +182,34 @@ public class JornadaController extends SigecuController implements Serializable 
         }
         return ofertadorComponenteEducativos;
     }
-    
+
     public void setOfertadorComponenteEducativos(List<OfertadorComponenteEducativo> ofertadorComponenteEducativos) {
         this.ofertadorComponenteEducativos = ofertadorComponenteEducativos;
     }
-    
+
     public List<Paralelo> getParalelos() {
         return paralelos;
     }
-    
+
     public void setParalelos(List<Paralelo> paralelos) {
         this.paralelos = paralelos;
     }
-    
+
     public LazyJornadaDataModel getDataModel() {
         this.filter();
         return dataModel;
     }
-    
+
     public void setDataModel(LazyJornadaDataModel dataModel) {
         this.dataModel = dataModel;
     }
-    
+
     public OfertadorComponenteEducativo getOfertadorComponenteEducativo() {
         return ofertadorComponenteEducativo;
     }
-    
+
     public void setOfertadorComponenteEducativo(OfertadorComponenteEducativo ofertadorComponenteEducativo) {
         this.ofertadorComponenteEducativo = ofertadorComponenteEducativo;
     }
-    
+
 }

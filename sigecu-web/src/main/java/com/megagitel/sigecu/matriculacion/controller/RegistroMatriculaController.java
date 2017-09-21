@@ -42,6 +42,8 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.transaction.HeuristicMixedException;
@@ -122,22 +124,30 @@ public class RegistroMatriculaController extends SigecuController implements Ser
                 if (!this.componentesEducativoPlanificadosSeleccionados.isEmpty()) {
                     List<CatalogoItem> catalogoItems = catalogoItemService.findByNamedQueryWithLimit("CatalogoItem.findByCodigo", 0, SigecuEnum.ESTADO_MATRICULA_REGISTRAD0.getTipo());
                     for (ComponenteEducativoPlanificado componenteEducativoPlanificado : this.componentesEducativoPlanificadosSeleccionados) {
-                        Boolean verificarCursosRepetidos = this.verificarCursosRepetidos(componenteEducativoPlanificado, matricula.getMatriculaComponenteEducativos());
-                        if (!verificarCursosRepetidos) {
-                            List<MatriculaComponenteEducativo> matriculaComponenteEducativos = new ArrayList<>();
-                            if (matricula.getId() != null) {
-                                matriculaComponenteEducativos = matriculaComponenteEducativoService.findByNamedQueryWithLimit("MatriculaComponenteEducativo.findMatricula", 0, matricula);
-                            }
-                            MatriculaComponenteEducativo matriculaComponenteEducativo = !matriculaComponenteEducativos.isEmpty() ? matriculaComponenteEducativos.get(0) : null;
-                            if (matriculaComponenteEducativo == null) {
-                                matriculaComponenteEducativo = new MatriculaComponenteEducativo();
-                                matriculaComponenteEducativo.setEstado(!catalogoItems.isEmpty() ? catalogoItems.get(0).getId() : null);
-                                matriculaComponenteEducativo.setComponenteEducativoPlanificado(componenteEducativoPlanificado);
-                                matricula.agregarMatriculasComponentes(matriculaComponenteEducativo);
+                        if (validarNumeroMatriculadoParalelo(componenteEducativoPlanificado)) {
+                            Boolean verificarCursosRepetidos = this.verificarCursosRepetidos(componenteEducativoPlanificado, matricula.getMatriculaComponenteEducativos());
+                            if (!verificarCursosRepetidos) {
+                                List<MatriculaComponenteEducativo> matriculaComponenteEducativos = new ArrayList<>();
+                                if (matricula.getId() != null) {
+                                    matriculaComponenteEducativos = matriculaComponenteEducativoService.findByNamedQueryWithLimit("MatriculaComponenteEducativo.findMatricula", 0, matricula);
+                                }
+                                MatriculaComponenteEducativo matriculaComponenteEducativo = !matriculaComponenteEducativos.isEmpty() ? matriculaComponenteEducativos.get(0) : null;
+                                if (matriculaComponenteEducativo == null) {
+                                    matriculaComponenteEducativo = new MatriculaComponenteEducativo();
+                                    matriculaComponenteEducativo.setEstado(!catalogoItems.isEmpty() ? catalogoItems.get(0).getId() : null);
+                                    matriculaComponenteEducativo.setComponenteEducativoPlanificado(componenteEducativoPlanificado);
+                                    matricula.agregarMatriculasComponentes(matriculaComponenteEducativo);
+                                }
+                            } else {
+                                this.matricula.setMatriculaComponenteEducativos(new ArrayList<MatriculaComponenteEducativo>());
+                                agregarMensajeError("com.megagitel.sigecu.matriculacion.cursosrepetidos");
+                                return "";
                             }
                         } else {
-                            this.matricula.setMatriculaComponenteEducativos(new ArrayList<MatriculaComponenteEducativo>());
-                            agregarMensajeError("com.megagitel.sigecu.matriculacion.cursosrepetidos");
+                            String mensaje = I18nUtil.getMessages("com.megagitel.sigecu.matriculacion.cupoerror");
+                            mensaje = String.format(mensaje, componenteEducativoPlanificado.getJornada().getParalelo().getNombre(), componenteEducativoPlanificado.getOfertaComponenteEducativo().getComponenteEducativo().getNombre());
+                            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, null);
+                            FacesContext.getCurrentInstance().addMessage(null, message);
                             return "";
                         }
                     }
@@ -174,6 +184,14 @@ public class RegistroMatriculaController extends SigecuController implements Ser
         }
 
         return "/faces/paginas/matriculacion/listadoMatriculasEstudiante.xhtml?faces-redirect=true&matriculaId=" + this.matricula.getId();
+    }
+
+    private Boolean validarNumeroMatriculadoParalelo(ComponenteEducativoPlanificado componenteEducativoPlanificado) {
+        List<MatriculaComponenteEducativo> matriculaComponenteEducativos = this.matriculaComponenteEducativoService.findByNamedQueryWithLimit("MatriculaComponenteEducativo.findComponentePlanificado", 0, componenteEducativoPlanificado);
+        if (componenteEducativoPlanificado.getJornada().getParalelo().getNumeroMaximoMatriculados() >= matriculaComponenteEducativos.size() + 1) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 
     private Boolean verificarCursosRepetidos(ComponenteEducativoPlanificado componenteEducativoPlanificado,

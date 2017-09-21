@@ -56,9 +56,10 @@ public class ValidarMatriculaController extends SigecuController implements Seri
             List<MatriculaComponenteEducativo> matriculaComponenteEducativos = this.matriculaComponenteEducativoService.findByNamedQueryWithLimit("MatriculaComponenteEducativo.findCodigoEstado", 0, codigoBarra, getEstadoMatriculado().getId());
             matriculaComponenteEducativo = !matriculaComponenteEducativos.isEmpty() ? matriculaComponenteEducativos.get(0) : null;
             if (matriculaComponenteEducativo != null && matriculaComponenteEducativo.getId() != null) {
+                matriculaComponenteEducativo.setEstadoMatricula(getEstadoMatriculado().getNombre());
                 agregarMensajeExitoso("com.megagitel.sigecu.matriculacion.codigobarraexitoso");
             } else {
-                agregarMensajeError("com.megagitel.sigecu.matriculacion.codigobarraexitoso");
+                agregarMensajeError("com.megagitel.sigecu.matriculacion.codigobarraerror");
             }
         } catch (Exception e) {
         }
