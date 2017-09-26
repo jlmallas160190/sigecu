@@ -20,22 +20,12 @@ import com.megagitel.sigecu.util.EmailService;
 import com.megagitel.sigecu.util.SigecuController;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import org.krysalis.barcode4j.impl.upcean.UPCABean;
-import org.krysalis.barcode4j.impl.upcean.UPCEANBean;
-import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
-import org.krysalis.barcode4j.tools.UnitConv;
 
 /**
  *
@@ -112,7 +102,7 @@ public class DetalleRegistroMatriculaController extends SigecuController impleme
     public String getPatternDecimal() {
         Parametrizacion parametrizacion = this.parametrizacionService.getParametrizacion();
         for (DetalleParametrizacion detalleParametrizacion : parametrizacion.getDetalleParametrizacions()) {
-            if (detalleParametrizacion.getCodigo().equals(SigecuEnum.DETALLE_PARAM_PATTERN_COSTO_MATRICULA.getTipo())) {
+            if (detalleParametrizacion.getCodigo().equals(SigecuEnum.DETALLE_PARAM_CURRENCY.getTipo())) {
                 this.patternDecimal = detalleParametrizacion.getValor();
             }
         }

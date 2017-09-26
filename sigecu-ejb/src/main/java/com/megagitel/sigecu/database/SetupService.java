@@ -14,6 +14,7 @@ import com.megagitel.sigecu.core.modelo.Institucion;
 import com.megagitel.sigecu.core.modelo.Parametrizacion;
 import com.megagitel.sigecu.enumeration.SigecuEnum;
 import com.megagitel.sigecu.seguridad.modelo.GrupoUsuario;
+import com.megagitel.sigecu.seguridad.modelo.Menu;
 import com.megagitel.sigecu.seguridad.modelo.Usuario;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -60,6 +61,7 @@ public class SetupService implements Serializable {
             this.cargarDetallesParametrizacion(properties.getProperty("rutaDetallesParam"));
             this.cargarGruposComponenteEducativo(properties.getProperty("rutaGruposComponentesEducativos"));
             this.cargarComponenteEducativo(properties.getProperty("rutaComponentesEducativos"));
+            this.cargarMenu(properties.getProperty("rutaMenus"));
         } catch (IOException e) {
             try {
                 throw e;
@@ -538,6 +540,68 @@ public class SetupService implements Serializable {
             throw e;
         }
         return !detalleParametrizacions.isEmpty() ? detalleParametrizacions.get(0) : null;
+    }
+
+    private void cargarMenu(String archivo) {
+        BufferedReader br = null;
+        String linea = "";
+        String separador = ";";
+        try {
+            br = new BufferedReader(new FileReader(archivo));
+            while ((linea = br.readLine()) != null) {
+                String[] menu = linea.split(separador);
+                getMenu(menu);
+            }
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+    }
+
+    private Menu getMenu(String[] menu) {
+        Menu singleResult = null;
+        try {
+            Query query = getEm().createQuery("SELECT c FROM Menu c WHERE" + ""
+                    + " (c.codigo=:codigo)");
+            query.setParameter("codigo", menu[0]);
+            singleResult = (Menu) query.getSingleResult();
+        } catch (NoResultException e) {
+            this.crearMenu(menu);
+        }
+        return singleResult;
+    }
+
+    private void crearMenu(String[] menu) {
+        try {
+            Menu padre = this.buscarMenu(menu[3]);
+            Menu m = new Menu();
+            m.setCodigo(menu[0]);
+            m.setNombre(menu[2]);
+            m.setFormulario(menu[1]);
+            m.setMenu(padre);
+            getEm().persist(m);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    private Menu buscarMenu(String codigo) {
+        Menu singleResult = null;
+        try {
+            Query query = getEm().createQuery("SELECT c FROM Menu c WHERE" + ""
+                    + " (c.codigo=:codigo)");
+            query.setParameter("codigo", codigo);
+            singleResult = (Menu) query.getSingleResult();
+        } catch (NoResultException e) {
+            throw e;
+        }
+        return singleResult;
     }
 
     public EntityManager getEm() {

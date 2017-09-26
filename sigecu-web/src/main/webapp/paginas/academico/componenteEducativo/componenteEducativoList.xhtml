@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../../../index.xhtml">
+
+            <ui:define name="title">
+                #{lbl['com.megagitel.sigecu.academico.ofertasComponentesEducativos']}
+            </ui:define>        
+            <ui:define name="content">
+                <h:form>
+                    <p:panel header="#{lbl['com.megagitel.sigecu.academico.ofertasComponentesEducativos']}" toggleable="true">
+                        <p:messages id="msg"/>
+                        <p:dataTable var="componenteEducativo" 
+                                     value="#{componenteEducativoController.dataModel}" 
+                                     paginator="true" rows="#{componenteEducativoController.tableRows}" 
+                                     sortOrder="DESCENDING"
+                                     reflow="true" 
+                                     rowKey="#{componenteEducativo.id}" 
+                                     resizableColumns="true" 
+                                     id="dataTable" lazy="true">
+                            <p:column headerText="#{lbl['nombre']}" sortBy="#{componenteEducativo.nombre}">
+                                <h:outputText value="#{componenteEducativo.nombre}"/>
+                            </p:column>
+                            <p:column headerText="#{lbl['com.megagitel.sigecu.academico.creditos']}" sortBy="#{componenteEducativo.creditos}"
+                                      >
+                                <h:outputText value="#{componenteEducativo.creditos}"/>
+                            </p:column>  
+                            <p:column headerText="#{lbl['com.megagitel.sigecu.academico.duracion']}" sortBy="#{componenteEducativo.duracion}"
+                                      >
+                                <h:outputText value="#{componenteEducativo.duracion}"/>
+                            </p:column>  
+                            <p:column headerText="#{lbl['com.megagitel.sigecu.matricula.costo']}" sortBy="#{componenteEducativo.costo}">
+                                <h:outputText value="#{componenteEducativo.costo}"/>
+                            </p:column>  
+                            <p:column headerText="#{lbl['accion']}">
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank">
+                                    <p:button outcome="pretty:componenteEducativo" icon="fa fa-edit" >
+                                        <f:param name="componenteEducativoId" value="#{componenteEducativo.id}" />
+                                    </p:button>
+                                    <p:commandButton icon="fa fa-trash" onclick="if (!confirm('#{msg['remove.confirm']}'))
+                                                return false;" update="@form"
+                                                     onstart="PF('dlgLoading').show()" action="#{componenteEducativoController.eliminar(componenteEducativo)}" oncomplete="PF('dlgLoading').hide()"/>
+                                </p:panelGrid>
+                            </p:column>
+                        </p:dataTable>
+                        <f:facet name="footer">
+                            <p:commandButton value="#{btn['crear']}" update="@form" process="@form"  icon="fa fa-file-text" immediate="true"
+                                             onstart="PF('dlgLoading').show()" action="#{componenteEducativoController.crear()}" oncomplete="PF('dlgLoading').hide()"/>
+                        </f:facet>
+                    </p:panel>
+                    <ui:include src="./../../../dialogLoading.xhtml"></ui:include>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

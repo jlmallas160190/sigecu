@@ -311,7 +311,7 @@ public class RegistroMatriculaController extends SigecuController implements Ser
     public String getPatternDecimal() {
         Parametrizacion parametrizacion = this.parametrizacionService.getParametrizacion();
         for (DetalleParametrizacion detalleParametrizacion : parametrizacion.getDetalleParametrizacions()) {
-            if (detalleParametrizacion.getCodigo().equals(SigecuEnum.DETALLE_PARAM_PATTERN_COSTO_MATRICULA.getTipo())) {
+            if (detalleParametrizacion.getCodigo().equals(SigecuEnum.DETALLE_PARAM_CURRENCY.getTipo())) {
                 this.patternDecimal = detalleParametrizacion.getValor();
             }
         }

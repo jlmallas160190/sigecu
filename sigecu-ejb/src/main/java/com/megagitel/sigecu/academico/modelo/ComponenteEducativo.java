@@ -76,6 +76,7 @@ public class ComponenteEducativo implements Serializable {
     private List<OfertaComponenteEducativo> ofertaComponenteEducativos;
 
     public ComponenteEducativo() {
+        this.eliminar=Boolean.FALSE;
     }
 
     public ComponenteEducativo(String nombre, String descripcion, Boolean eliminado,
