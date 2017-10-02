@@ -26,9 +26,9 @@ public class MatriculaService extends AbstractDao<Matricula> implements Serializ
         String tipoCodigoBarra = tipoCodigo;
         long limite = 1000;
         int limiteSubStr = 0;
-        if (tipoCodigoBarra.equals(SigecuEnum.TIPO_CODIGO_BARRA_UPCA.getTipo())) {
+        if (tipoCodigoBarra.equals(SigecuEnum.TIPO_CODIGO_BARRA_EAN13.getTipo())) {
             limite = 100000;
-            limiteSubStr = 11;
+            limiteSubStr = 12;
         }
         long timeSeed = System.nanoTime();
         double randSeed = Math.random() * limite;

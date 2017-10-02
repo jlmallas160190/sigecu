@@ -9,6 +9,9 @@ import com.megagitel.sigecu.dao.AbstractDao;
 import com.megagitel.sigecu.seguridad.modelo.Usuario;
 import java.io.Serializable;
 import javax.ejb.Stateless;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 
 /**
  *
@@ -19,5 +22,17 @@ public class UsuarioService extends AbstractDao<Usuario> implements Serializable
 
     public UsuarioService() {
         super(Usuario.class);
+    }
+
+    public Boolean autenticar(String username, String clave) {
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, clave);
+        subject.login(usernamePasswordToken);
+        return subject.isAuthenticated();
+    }
+
+    public void logout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
     }
 }

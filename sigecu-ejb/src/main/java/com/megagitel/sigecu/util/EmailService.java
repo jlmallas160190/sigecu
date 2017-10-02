@@ -33,7 +33,7 @@ import javax.mail.internet.MimeMultipart;
  * @author jorgemalla
  */
 public class EmailService implements Serializable {
-    
+
     public static boolean enviar(final MailDto mailDto) {
         Properties properties = EmailService.getProporties();
         Properties props = new Properties();
@@ -49,12 +49,12 @@ public class EmailService implements Serializable {
         // Se inicia una nueva sesion  
         Session session = Session.getDefaultInstance(props);
         MimeMessage mimeMessage = new MimeMessage(session);
-        
+
         try {
             BodyPart text = new MimeBodyPart();
             text.setContent(mailDto.getMensaje(), "text/html");
             MimeMultipart correo = new MimeMultipart();
-            correo.addBodyPart(text);            
+            correo.addBodyPart(text);
             agregarArchivos(!mailDto.getArchivos().isEmpty() ? mailDto.getArchivos() : new ArrayList<String>(), correo);
             mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(mailDto.getDestino()));
             mimeMessage.setSubject(properties.getProperty("subjectEmail"));
@@ -73,7 +73,7 @@ public class EmailService implements Serializable {
         }
         return true;
     }
-    
+
     private static void agregarArchivos(List<String> archivos, MimeMultipart correo) {
         try {
             for (String archivo : archivos) {
@@ -81,13 +81,16 @@ public class EmailService implements Serializable {
                 DataSource source = new FileDataSource(archivo);
                 messageBodyPart.setDataHandler(new DataHandler(source));
                 messageBodyPart.setFileName(source.getName());
+                Integer index = source.getName().indexOf(".");
+                String contentId = source.getName().substring(0, index);
+                messageBodyPart.setHeader("Content-ID", "<" + contentId + ">");
                 correo.addBodyPart(messageBodyPart);
             }
         } catch (MessagingException e) {
         }
-        
+
     }
-    
+
     private static Properties getProporties() {
         Properties properties = new Properties();
         InputStream input = null;

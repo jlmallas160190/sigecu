@@ -579,7 +579,10 @@ public class SetupService implements Serializable {
 
     private void crearMenu(String[] menu) {
         try {
-            Menu padre = this.buscarMenu(menu[3]);
+            Menu padre = null;
+            if (menu.length > 3 && !menu[3].equals("")) {
+                padre = this.buscarMenu(menu[3]);
+            }
             Menu m = new Menu();
             m.setCodigo(menu[0]);
             m.setNombre(menu[2]);

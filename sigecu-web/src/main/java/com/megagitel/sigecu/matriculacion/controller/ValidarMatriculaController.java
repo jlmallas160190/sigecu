@@ -5,6 +5,7 @@ import com.megagitel.sigecu.academico.modelo.MatriculaComponenteEducativo;
 import com.megagitel.sigecu.core.ejb.CatalogoItemService;
 import com.megagitel.sigecu.core.modelo.CatalogoItem;
 import com.megagitel.sigecu.enumeration.SigecuEnum;
+import com.megagitel.sigecu.util.BarCodeService;
 import com.megagitel.sigecu.util.SigecuController;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
@@ -53,15 +54,23 @@ public class ValidarMatriculaController extends SigecuController implements Seri
 
     public void validarMatricula() {
         try {
-            List<MatriculaComponenteEducativo> matriculaComponenteEducativos = this.matriculaComponenteEducativoService.findByNamedQueryWithLimit("MatriculaComponenteEducativo.findCodigoEstado", 0, codigoBarra, getEstadoMatriculado().getId());
+            if (!BarCodeService.verifiyCodeEan13(codigoBarra)) {
+                agregarMensajeError("com.megagitel.sigecu.matriculacion.codigobarraerror");
+                this.matriculaComponenteEducativo = new MatriculaComponenteEducativo();
+                return;
+            }
+            List<MatriculaComponenteEducativo> matriculaComponenteEducativos = this.matriculaComponenteEducativoService.findByNamedQueryWithLimit("MatriculaComponenteEducativo.findCodigoEstado", 0, codigoBarra.substring(0, 12), getEstadoMatriculado().getId());
             matriculaComponenteEducativo = !matriculaComponenteEducativos.isEmpty() ? matriculaComponenteEducativos.get(0) : null;
             if (matriculaComponenteEducativo != null && matriculaComponenteEducativo.getId() != null) {
                 matriculaComponenteEducativo.setEstadoMatricula(getEstadoMatriculado().getNombre());
                 agregarMensajeExitoso("com.megagitel.sigecu.matriculacion.codigobarraexitoso");
             } else {
                 agregarMensajeError("com.megagitel.sigecu.matriculacion.codigobarraerror");
+                this.matriculaComponenteEducativo = new MatriculaComponenteEducativo();
             }
         } catch (Exception e) {
+            this.matriculaComponenteEducativo = new MatriculaComponenteEducativo();
+            throw e;
         }
     }
 

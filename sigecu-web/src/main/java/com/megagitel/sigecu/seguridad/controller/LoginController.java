@@ -5,18 +5,16 @@
  */
 package com.megagitel.sigecu.seguridad.controller;
 
+import com.megagitel.sigecu.seguridad.ejb.UsuarioService;
 import com.megagitel.sigecu.seguridad.modelo.Usuario;
 import com.megagitel.sigecu.util.I18nUtil;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 
 /**
  *
@@ -28,6 +26,9 @@ public class LoginController implements Serializable {
 
     private Usuario usuario;
 
+    @EJB
+    private UsuarioService usuarioService;
+
     @PostConstruct
     public void init() {
         this.usuario = new Usuario();
@@ -35,13 +36,10 @@ public class LoginController implements Serializable {
 
     public String autenticar() {
         try {
-            Subject subject = SecurityUtils.getSubject();
-            UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(this.usuario.getNombre(), this.usuario.getClave());
-            subject.login(usernamePasswordToken);
-            if (subject.isAuthenticated()) {
+            if (usuarioService.autenticar(this.usuario.getNombre(), this.usuario.getClave())) {
                 return "pretty:inicio";
             }
-        } catch (AuthenticationException e) {
+        } catch (Exception e) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, I18nUtil.getMessages("apache.shiro.authenticationException"), null);
             FacesContext.getCurrentInstance().addMessage(null, message);
             return "";
@@ -53,8 +51,7 @@ public class LoginController implements Serializable {
 
     public String logout() {
         try {
-            Subject subject = SecurityUtils.getSubject();
-            subject.logout();
+            this.usuarioService.logout();
         } catch (Exception e) {
             throw e;
         }
